@@ -1,0 +1,9 @@
+@import '../../../styles/theme/index.scss';
+.menu-side {
+  width: 12.5rem;
+  background: $primary-color;
+  &-content {
+    background: $primary-color;
+    border-right: none;
+  }
+}

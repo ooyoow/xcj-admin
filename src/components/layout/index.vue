@@ -1,0 +1,33 @@
+<template>
+  <div class="app-frame">
+    <!-- 顶拦 -->
+    <navbar :show="true"></navbar>
+    <!-- 主体 -->
+    <div class="main-container">
+      <!-- 侧边菜单栏 -->
+      <menu-aside :show="true"></menu-aside>
+      <!-- 主题内容 -->
+      <div class="main-container-body">
+        <transition name="fade-transverse">
+          <keep-alive>
+            <router-view/>
+          </keep-alive>
+        </transition>
+      </div>
+    </div>
+  </div>
+</template>
+
+<script>
+import './layout.scss'
+import navbar from './navbar/index'
+import menuAside from './menuAside/index'
+export default {
+  name: 'appMain',
+  components: {
+    navbar,
+    menuAside
+  }
+}
+</script>
+
