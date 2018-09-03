@@ -1,6 +1,5 @@
 @import '@/styles/theme/index.scss';
 .navbar {
-  background-color: $primary-color;
   color: #fff;
   min-height: 3.25rem;
   position: relative;
@@ -46,6 +45,9 @@
     align-items: stretch;
     justify-content: flex-end;
     margin-left: auto;
+    .btn-text {
+      color: #fff;
+    }
     .img-user {
       width: 24px;
       height: 24px;

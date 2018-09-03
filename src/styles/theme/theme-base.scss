@@ -1,0 +1,15 @@
+// 主题公用样式
+.app-frame {
+  // 主体内容
+  .main-container {
+    &-body {
+      background-color: #fff;
+    } // 侧栏菜单
+    .menu-side {
+      .el-menu {
+        background-color: transparent;
+        border-right: none;
+      }
+    }
+  }
+}

@@ -26,11 +26,22 @@
           </el-button>
         </li>
         <li class="navbar-item">
-          <el-tooltip effect="dark" content="主题" placement="bottom">
-            <el-button class="btn-text can-hover" type="text" @click="dialogVisible = true">
+          <!-- <el-tooltip effect="dark" content="主题" placement="bottom"> -->
+          <el-dropdown>
+            <!-- <el-button class="btn-text can-hover" type="text" @click="dialogVisible = true">
+                <icon name="delicious" style="font-size: 16px" />
+              </el-button> -->
+            <span class="el-dropdown-link">
               <icon name="delicious" style="font-size: 16px" />
-            </el-button>
-          </el-tooltip>
+            </span>
+            <el-dropdown-menu slot="dropdown">
+              <el-dropdown-item v-for="theme in themeList" :key="theme.key" @click.native="setTheme(theme.key)">
+                <icon name="circle" :style="{color: theme.color}" />&nbsp;&nbsp;{{theme.name}}
+              </el-dropdown-item>
+            </el-dropdown-menu>
+          </el-dropdown>
+
+          <!-- </el-tooltip> -->
         </li>
         <li class="navbar-item">
           <el-dropdown>
@@ -66,11 +77,16 @@ export default {
     ...mapState({
       isFullScreen: state => state.app.isFullScreen,
       menuHeader: state => state.app.menuHeader,
-      userInfo: state => state.app.userInfo
+      userInfo: state => state.app.userInfo,
+      themeList: state => state.theme.themeList
     })
   },
   methods: {
-    ...mapActions(['appToggleFullScreen', 'logout']),
+    ...mapActions(['appToggleFullScreen', 'logout', 'setTheme']),
+    handleTheme(key) {
+      this.setTheme(key)
+      console.log(key, 'key')
+    },
     logOff() {
       const callback = () => {
         this.$router.push({ path: '/login' })

@@ -1,27 +1,22 @@
-export default [
+const themeList = [
   {
-    name: '经典',
-    key: 'classic',
+    name: '清新绿',
+    key: 'green',
+    color: '#00d1b2',
     backgroundImage: ''
   },
   {
     name: '紫罗兰',
     key: 'violet',
-    backgroundImage: 'image/theme/line/bg.jpg'
-  },
-  {
-    title: '简约线条',
-    name: 'line',
+    color: '#bc00e3',
     backgroundImage: ''
   },
   {
-    name: '流星',
-    key: 'star',
-    backgroundImage: ''
-  },
-  {
-    name: 'Tomorrow Night Blue (vsCode)',
-    key: 'tomorrow-night-blue',
+    name: '星空蓝',
+    key: 'blue',
+    color: '#002253',
     backgroundImage: ''
   }
 ]
+
+export default themeList
