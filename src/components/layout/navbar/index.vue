@@ -26,28 +26,21 @@
           </el-button>
         </li>
         <li class="navbar-item">
-          <!-- <el-tooltip effect="dark" content="主题" placement="bottom"> -->
           <el-dropdown>
-            <!-- <el-button class="btn-text can-hover" type="text" @click="dialogVisible = true">
-                <icon name="delicious" style="font-size: 16px" />
-              </el-button> -->
-            <span class="el-dropdown-link">
+            <el-button class="btn-text can-hover" type="text">
               <icon name="delicious" style="font-size: 16px" />
-            </span>
+            </el-button>
             <el-dropdown-menu slot="dropdown">
               <el-dropdown-item v-for="theme in themeList" :key="theme.key" @click.native="setTheme(theme.key)">
                 <icon name="circle" :style="{color: theme.color}" />&nbsp;&nbsp;{{theme.name}}
               </el-dropdown-item>
             </el-dropdown-menu>
           </el-dropdown>
-
-          <!-- </el-tooltip> -->
         </li>
         <li class="navbar-item">
           <el-dropdown>
             <div>
               <img class="img-user" src="@/assets/images/user.png" alt="用户">
-              <!-- <icon name="user-o" style="font-size: 16px" /> -->
               <span class="btn-text">{{userInfo.name}}</span>
             </div>
             <el-dropdown-menu slot="dropdown">
@@ -61,7 +54,6 @@
   </nav>
 </template>
 <script>
-import './navbar.scss'
 import { mapState, mapActions } from 'vuex'
 import mixin from '../mixin'
 export default {

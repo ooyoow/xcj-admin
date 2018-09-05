@@ -17,9 +17,7 @@
     </div>
   </div>
 </template>
-
 <script>
-import './layout.scss'
 import navbar from './navbar/index'
 import menuAside from './menuAside/index'
 export default {

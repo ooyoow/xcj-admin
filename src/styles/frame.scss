@@ -1,0 +1,91 @@
+html,
+body,
+.app,
+.app-frame {
+  width: 100%;
+  height: 100%;
+}
+
+/* 主框架结构 */
+
+.app-frame {
+  display: flex;
+  flex-flow: column nowrap;
+  /* 顶部导航 */
+  .navbar {
+    color: #fff;
+    min-height: 3.25rem;
+    position: relative;
+    display: flex;
+    z-index: 30;
+    &-brand {
+      align-items: stretch;
+      display: flex;
+      flex-shrink: 0;
+      width: 12.5rem;
+      min-height: 3.25rem;
+    }
+    &-menu {
+      display: flex;
+      align-items: stretch;
+      flex-grow: 1;
+      flex-shrink: 0;
+    }
+    &-item {
+      display: flex;
+      align-items: center;
+      flex-grow: 0;
+      flex-shrink: 0;
+      padding: 0.5rem 0.75rem;
+      position: relative;
+      cursor: pointer;
+      &:hover {
+        color: #fff;
+      }
+    }
+    &-start {
+      display: flex;
+      justify-content: flex-start;
+      align-items: stretch;
+      margin-right: auto;
+      ul {
+        display: flex;
+      }
+    }
+    &-end {
+      display: flex;
+      align-items: stretch;
+      justify-content: flex-end;
+      margin-left: auto;
+      .btn-text {
+        color: #fff;
+      }
+      .img-user {
+        width: 1.5rem;
+        height: 1.5rem;
+        margin: 0 0.5rem 0 0.75rem;
+        border-radius: 4px;
+      }
+    }
+  }
+  /* 内容 */
+  .main-container {
+    display: flex;
+    flex-flow: row nowrap;
+    flex: 1;
+    &-body {
+      flex: 1;
+      overflow: auto;
+      background-color: #fff;
+    }
+    /* 侧边栏菜单 */
+    .menu-side {
+      width: 12.5rem;
+      .el-menu,
+      .el-menu-item {
+        background-color: transparent;
+        border-right: none;
+      }
+    }
+  }
+}

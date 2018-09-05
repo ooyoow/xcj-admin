@@ -1,8 +1,110 @@
-$primary-color: #00d1b2;
-$violet-color: #7f00ff;
+@import '../mixins.scss';
+
+// 每个主题特有的设置
 .theme-#{$theme-name} {
+  // 菜单项目
+  @mixin theme-menu-hover-style {
+    color: $theme-menu-item-color-hover;
+    i.fa {
+      color: $theme-menu-item-color-hover;
+    }
+    background: $theme-menu-item-background-color-hover;
+  }
+  el-menu-icon {
+    i {
+      display: inline-block;
+      width: 15px;
+      text-align: center;
+      margin-right: 5px;
+      svg {
+        height: 14px;
+        width: 14px;
+      }
+    }
+  } // 菜单
+  .el-submenu__title {
+    @include unable-select;
+  }
+  .el-submenu__title:hover {
+    @include theme-menu-hover-style;
+  }
+  .el-menu-item:hover {
+    @include theme-menu-hover-style;
+  }
+  .el-menu--horizontal .el-menu-item:not(.is-disabled):hover {
+    @include theme-menu-hover-style;
+  }
+  .el-menu--horizontal .el-menu .el-submenu__title:hover {
+    @include theme-menu-hover-style;
+  }
+
+  // 主体
   .app-frame {
     // 背景色
-    background-color: $theme-bg-color;
+    background-color: $theme-bg-color; // 顶栏菜单
+    .el-menu {
+      .el-menu-item {
+        transition: border-top-color 0s;
+        color: $theme-header-item-color;
+        background: $theme-header-item-background-color;
+        i.fa {
+          color: inherit;
+        }
+        &:hover {
+          color: $theme-header-item-color-hover;
+          background: $theme-header-item-background-color-hover;
+          i.fa {
+            color: inherit;
+          }
+        }
+        &:focus {
+          color: $theme-header-item-color-focus;
+          background: $theme-header-item-background-color-focus;
+          i.fa {
+            color: inherit;
+          }
+        }
+        &.is-active {
+          color: $theme-header-item-color-active;
+          background: $theme-header-item-background-color-active;
+          i.fa {
+            color: inherit;
+          }
+        }
+      }
+      .el-submenu {
+        .el-submenu__title {
+          transition: border-top-color 0s;
+          color: $theme-header-item-color;
+          background: $theme-header-item-background-color;
+          i.fa {
+            color: inherit;
+          }
+          .el-submenu__icon-arrow {
+            color: $theme-header-item-color;
+          }
+          &:hover {
+            color: $theme-header-item-color-hover;
+            background: $theme-header-item-background-color-hover;
+            i.fa {
+              color: inherit;
+            }
+            .el-submenu__icon-arrow {
+              color: $theme-header-item-color-hover;
+            }
+          }
+          &:focus {
+            color: $theme-header-item-color-focus;
+            background: $theme-header-item-background-color-focus;
+            i.fa {
+              color: inherit;
+            }
+            .el-submenu__icon-arrow {
+              color: $theme-header-item-color-focus;
+            }
+          }
+        }
+      }
+    }
   }
 }

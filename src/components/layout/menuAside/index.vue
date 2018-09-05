@@ -18,7 +18,6 @@ import { mapState } from 'vuex'
 import menuMixin from '../mixin'
 import menuSubAside from './menu-sub'
 import menuItemAside from './menu-item'
-import './menu-aside.scss'
 export default {
   name: 'layout-header-aside-menu-side',
   mixins: [menuMixin],

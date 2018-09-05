@@ -2,11 +2,18 @@
 $theme-name: 'violet';
 // 主题背景颜色
 $theme-bg-color: #bc00e3;
-
 // 顶栏和侧边栏中展开的菜单 hover 状态
 $theme-menu-item-color-hover: #293849;
 $theme-menu-item-background-color-hover: #ecf5ff;
-
 // 顶栏上的文字颜色
 $theme-header-item-color: #FFF;
 $theme-header-item-background-color: transparent;
+// 顶栏上的项目在 hover 时
+$theme-header-item-color-hover: #FFF;
+$theme-header-item-background-color-hover: linear-gradient(-180deg, rgba(255, 255, 255, 0.18) 0%, rgba(255, 255, 255, 0.12) 100%);
+// 顶栏上的项目在 focus 时
+$theme-header-item-color-focus: #FFF;
+$theme-header-item-background-color-focus: linear-gradient(-180deg, rgba(255, 255, 255, 0.18) 0%, rgba(255, 255, 255, 0.12) 100%);
+// 顶栏上的项目在 active 时
+$theme-header-item-color-active: #FFF;
+$theme-header-item-background-color-active: linear-gradient(-180deg, rgba(255, 255, 255, 0.18) 0%, rgba(255, 255, 255, 0.12) 100%);
