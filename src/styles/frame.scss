@@ -30,6 +30,12 @@ body,
       align-items: stretch;
       flex-grow: 1;
       flex-shrink: 0;
+      /* 顶部菜单 */
+      .el-menu,
+      .el-menu-item {
+        background-color: transparent;
+        border-right: none;
+      }
     }
     &-item {
       display: flex;

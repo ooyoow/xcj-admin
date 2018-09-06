@@ -34,7 +34,7 @@ const login = {
           callback(resultObj)
         })
         .catch(err => {
-          console.log('err: ', err)
+          console.error('err: ', err)
         })
     },
 
@@ -56,18 +56,16 @@ const login = {
       }
       // 判断是否需要确认
       if (confirm) {
-        commit('appSetGrayMode', true)
         MessageBox.confirm('注销当前账户吗?  打开的标签页和用户设置将会被保存。', '确认操作', {
           confirmButtonText: '确定注销',
           cancelButtonText: '放弃',
           type: 'warning'
         })
           .then(() => {
-            commit('appSetGrayMode', false)
             next()
           })
-          .catch(() => {
-            commit('appSetGrayMode', false)
+          .catch(err => {
+            console.error(err)
           })
       } else {
         next()

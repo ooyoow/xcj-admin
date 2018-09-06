@@ -1,7 +1,7 @@
 import Vue from 'vue'
 import VueRouter from 'vue-router'
 Vue.use(VueRouter)
-import AppMain from '@/components/layout/index'
+import AppMain from '@/views/layout/index'
 
 const meta = { requiresAuth: true }
 

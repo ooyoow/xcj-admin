@@ -18,8 +18,9 @@
   </div>
 </template>
 <script>
-import navbar from './navbar/index'
-import menuAside from './menuAside/index'
+import navbar from './components/navbar/index'
+import menuAside from './components/menuAside/index'
+// import Tabs from './tabs/index'
 export default {
   name: 'appMain',
   components: {

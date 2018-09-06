@@ -13,7 +13,7 @@
 
 <script>
 import uniqueid from 'lodash.uniqueid'
-import menuItemAside from './menu-item'
+import menuItemAside from '@/components/menuItem'
 
 export default {
   name: 'menuSubAside',

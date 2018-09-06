@@ -6,11 +6,12 @@
       </div>
     </div>
     <div class="navbar-menu">
-      <ul class="navbar-start">
-        <li class="navbar-item" v-for="menu in menuHeader" :key="menu.path" @click="handleMenuSelect(menu.path)">
-          {{menu.meta.title}}
-        </li>
-      </ul>
+      <el-menu class="navbar-start" mode="horizontal" @select="handleMenuSelect">
+        <template v-for="(menu, menuIndex) in menuHeader">
+          <menu-item v-if="menu.children === undefined" :menu="menu" :key="menuIndex" />
+          <menu-sub v-else :menu="menu" :key="menuIndex" />
+        </template>
+      </el-menu>
       <ul class="navbar-end">
         <li class="navbar-item">
           <el-tooltip effect="dark" :content="isFullScreen ? '退出全屏' : '全屏'" placement="bottom">
@@ -55,13 +56,19 @@
 </template>
 <script>
 import { mapState, mapActions } from 'vuex'
-import mixin from '../mixin'
+import mixin from '@/views/layout/mixin'
+import MenuSub from '@/components/menuSub'
+import MenuItem from '@/components/menuItem'
 export default {
   name: 'aside-menu',
   data() {
     return {}
   },
   mixins: [mixin],
+  components: {
+    MenuSub,
+    MenuItem
+  },
   props: {
     show: { type: Boolean, default: false }
   },

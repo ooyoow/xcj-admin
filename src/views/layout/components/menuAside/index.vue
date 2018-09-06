@@ -2,8 +2,8 @@
   <div class="menu-side">
     <el-menu class="menu-side-content" :collapse="isMenuAsideCollapse" :unique-opened="true" :default-active="active" ref="menu" @select="handleMenuSelect">
       <template v-for="(menu, menuIndex) in menuAside">
-        <menu-item-aside v-if="menu.children === undefined" :menu="menu" :key="menuIndex" />
-        <menu-sub-aside v-else :menu="menu" :key="menuIndex" />
+        <menu-item v-if="menu.children === undefined" :menu="menu" :key="menuIndex" />
+        <menu-sub v-else :menu="menu" :key="menuIndex" />
       </template>
     </el-menu>
     <div v-if="menuAside.length === 0 && !isMenuAsideCollapse" class="layout-header-aside-menu-empty">
@@ -15,15 +15,15 @@
 
 <script>
 import { mapState } from 'vuex'
-import menuMixin from '../mixin'
-import menuSubAside from './menu-sub'
-import menuItemAside from './menu-item'
+import mixin from '@/views/layout/mixin'
+import MenuSub from '@/components/menuSub'
+import MenuItem from '@/components/menuItem'
 export default {
-  name: 'layout-header-aside-menu-side',
-  mixins: [menuMixin],
+  name: 'menu-side',
+  mixins: [mixin],
   components: {
-    menuSubAside,
-    menuItemAside
+    MenuSub,
+    MenuItem
   },
   data() {
     return {
