@@ -17,13 +17,20 @@ body,
     min-height: 3.25rem;
     position: relative;
     display: flex;
+    box-shadow: 0 2px 3px rgba(10,10,10,.1);
     z-index: 30;
     &-brand {
-      align-items: stretch;
+      align-items: center;
+      justify-content: center;
       display: flex;
       flex-shrink: 0;
       width: 12.5rem;
       min-height: 3.25rem;
+      .logo {
+        font-size: 1.75rem;
+        font-weight: 500;
+        white-space: nowrap;
+      }
     }
     &-menu {
       display: flex;
@@ -34,7 +41,7 @@ body,
       .el-menu,
       .el-menu-item {
         background-color: transparent;
-        border-right: none;
+        border-bottom: none;
       }
     }
     &-item {

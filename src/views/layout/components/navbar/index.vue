@@ -1,9 +1,7 @@
 <template>
   <nav class="navbar">
     <div class="navbar-brand">
-      <div class="navbar-item">
-        App name
-      </div>
+      <div class="logo">福瑞道</div>
     </div>
     <div class="navbar-menu">
       <el-menu class="navbar-start" mode="horizontal" @select="handleMenuSelect">
@@ -22,9 +20,11 @@
           </el-tooltip>
         </li>
         <li class="navbar-item">
-          <el-button class="btn-text can-hover" type="text">
-            <icon name="bell-o" style="font-size: 1rem" />
-          </el-button>
+          <el-tooltip effect="dark" content="通知" placement="bottom">
+            <el-button class="btn-text can-hover" type="text">
+              <icon name="bell-o" style="font-size: 1rem" />
+            </el-button>
+          </el-tooltip>
         </li>
         <li class="navbar-item">
           <el-dropdown>
@@ -34,6 +34,9 @@
             <el-dropdown-menu slot="dropdown">
               <el-dropdown-item v-for="theme in themeList" :key="theme.key" @click.native="setTheme(theme.key)">
                 <icon name="circle" :style="{color: theme.color}" />&nbsp;&nbsp;{{theme.name}}
+              </el-dropdown-item>
+              <el-dropdown-item>
+                <theme-picker class="theme-switch right-menu-item"></theme-picker>
               </el-dropdown-item>
             </el-dropdown-menu>
           </el-dropdown>

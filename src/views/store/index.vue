@@ -277,7 +277,7 @@ export default {
       $axios({
         url: '/api/v1/store/deleteStore',
         method: 'post',
-        params: { storeId }
+        data: { storeId }
       }).then(response => {
         for (const v of this.storeList) {
           if (v.storeId === storeId) {

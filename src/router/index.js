@@ -137,6 +137,53 @@ const mainFrame = [
         ]
       }
     ]
+  },
+  {
+    path: '/oc',
+    name: 'oc',
+    redirect: '/oc/user/list',
+    component: AppMain,
+    meta: { meta, title: '运营中心' },
+    children: [
+      {
+        path: 'user',
+        name: 'user',
+        icon: 'map',
+        redirect: '/oc/user/list',
+        component: () => import('@/views/operation'),
+        meta: { meta, title: '用户管理' },
+        children: [
+          {
+            path: '/oc/user/list',
+            name: 'list',
+            icon: 'map',
+            component: () => import('@/views/operation/user'),
+            meta: { meta, title: '用户数据' }
+          },
+          {
+            path: '/oc/user/portrait',
+            name: 'portrait',
+            icon: 'map',
+            component: () => import('@/views/test'),
+            meta: { meta, title: '会员画像' }
+          },
+          {
+            path: '/oc/user/customer',
+            name: 'customer',
+            icon: 'map',
+            component: () => import('@/views/test'),
+            meta: { meta, title: '集团客户' }
+          },
+          {
+            path: '/oc/user/service',
+            name: 'service',
+            icon: 'map',
+            component: () => import('@/views/test'),
+            meta: { meta, title: '客服管理' }
+          }
+        ]
+      }
+    ]
   }
 ]
 

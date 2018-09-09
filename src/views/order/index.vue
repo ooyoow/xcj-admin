@@ -1,73 +1,89 @@
 <template>
-  <div class="overview">
-    <el-row>
-      <el-col :span="12">
-        <div class='card-panel'>
-          <el-row>
-            <el-col :span="12">
-              <div class="box">
-                <div class="title">订单（笔）</div>
-                <div class="today">今日
-                  <span>{{orderInfo.todayPayRecd||0}}</span>
-                </div>
-                <div class="yesterday">昨日
-                  <span>{{orderInfo.yesterdayPayRecd||0}}</span>
-                </div>
-                <div class="seven-days">近7天
-                  <span>{{orderInfo.last7DayPayRecd||0}}</span>
-                </div>
+  <div class="overview xcj-order">
+    <el-row :gutter="12">
+      <el-col :span="6">
+        <el-card shadow="always">
+          <div class="order-overview">
+            <div class="icon">
+              <icon name="list" />
+            </div>
+            <div class=" content">
+              <div class="title ">订单（笔）</div>
+              <div class="today">今日
+                <span>{{orderInfo.todayPayRecd||0}}</span>
               </div>
-            </el-col>
-            <el-col :span="12">
-              <div class="box">
-                <div class="title">洗车量（辆）</div>
-                <div class="today">今日
-                  <span>{{orderInfo.todayWash||0}}</span>
-                </div>
-                <div class="yesterday">昨日
-                  <span>{{orderInfo.yesterdayWash||0}}</span>
-                </div>
-                <div class="seven-days">近7天
-                  <span>{{orderInfo.last7DayWash||0}}</span>
-                </div>
+              <div class="yesterday">昨日
+                <span>{{orderInfo.yesterdayPayRecd||0}}</span>
               </div>
-            </el-col>
-          </el-row>
-        </div>
+              <div class="seven-days">近7天
+                <span>{{orderInfo.last7DayPayRecd||0}}</span>
+              </div>
+            </div>
+          </div>
+        </el-card>
       </el-col>
-      <el-col :span="12">
-        <div class='card-panel'>
-          <el-row>
-            <el-col :span="12">
-              <div class="box">
-                <div class="title">销售额（元）</div>
-                <div class="today">今日
-                  <span>{{orderInfo.salesToday||0}}</span>
-                </div>
-                <div class="yesterday">昨日
-                  <span>{{orderInfo.salesYesterday||0}}</span>
-                </div>
-                <div class="seven-days">近7天
-                  <span>{{orderInfo.salesLast7Day||0}}</span>
-                </div>
+      <el-col :span="6">
+        <el-card shadow="always">
+          <div class="order-overview">
+            <div class="icon">
+              <icon name="list" />
+            </div>
+            <div class=" content">
+              <div class="title">洗车量（辆）</div>
+              <div class="today">今日
+                <span>{{orderInfo.todayPayRecd||0}}</span>
               </div>
-            </el-col>
-            <el-col :span="12">
-              <div class="box">
-                <div class="title">服务额（元）</div>
-                <div class="today">今日
-                  <span>{{orderInfo.serveToday||0}}</span>
-                </div>
-                <div class="yesterday">昨日
-                  <span>{{orderInfo.serveYesterday||0}}</span>
-                </div>
-                <div class="seven-days">近7天
-                  <span>{{orderInfo.serveLast7Day||0}}</span>
-                </div>
+              <div class="yesterday">昨日
+                <span>{{orderInfo.yesterdayPayRecd||0}}</span>
               </div>
-            </el-col>
-          </el-row>
-        </div>
+              <div class="seven-days">近7天
+                <span>{{orderInfo.last7DayPayRecd||0}}</span>
+              </div>
+            </div>
+          </div>
+        </el-card>
+      </el-col>
+      <el-col :span="6">
+        <el-card shadow="always">
+          <div class="order-overview">
+            <div class="icon">
+              <icon name="list" />
+            </div>
+            <div class="content">
+              <div class="title">销售额（元）</div>
+              <div class="today">今日
+                <span>{{orderInfo.salesToday||0}}</span>
+              </div>
+              <div class="yesterday">昨日
+                <span>{{orderInfo.salesYesterday||0}}</span>
+              </div>
+              <div class="seven-days">近7天
+                <span>{{orderInfo.salesLast7Day||0}}</span>
+              </div>
+            </div>
+          </div>
+        </el-card>
+      </el-col>
+      <el-col :span="6 ">
+        <el-card shadow="always">
+          <div class="order-overview">
+            <div class="icon">
+              <icon name="list" />
+            </div>
+            <div class="content">
+              <div class="title">服务额（元）</div>
+              <div class="today">今日
+                <span>{{orderInfo.serveToday||0}}</span>
+              </div>
+              <div class="yesterday">昨日
+                <span>{{orderInfo.serveYesterday||0}}</span>
+              </div>
+              <div class="seven-days">近7天
+                <span>{{orderInfo.serveLast7Day||0}}</span>
+              </div>
+            </div>
+          </div>
+        </el-card>
       </el-col>
     </el-row>
     <el-row>
