@@ -1,12 +1,9 @@
 <template>
-  <div>
-    <div ref="line" :class="className" :xAxisData="seriesData" :style="{height:height,width:width}"></div>
-  </div>
+  <div ref="line" :class="className" :xAxisData="seriesData" :style="{height: height,width: width}"></div>
 </template>
 
 <script>
 import echarts from 'echarts'
-
 export default {
   // mixins: [resize],
   props: {

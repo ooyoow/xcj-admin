@@ -19,7 +19,7 @@
             <el-form-item class="form-item" label="产品名称" prop="pname">
               <el-input v-model="fromProduct.pname" placeholder="请输入商品名称"></el-input>
             </el-form-item>
-            <el-form-item label="产品编号" prop="pnum ">
+            <el-form-item label="产品编号" prop="pnum">
               <el-input v-model="fromProduct.pnum" placeholder="请输入产品编号"></el-input>
             </el-form-item>
             <el-form-item label="售价" prop="price">

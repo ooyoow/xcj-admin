@@ -4,6 +4,7 @@ const MiniCssExtractPlugin = require('mini-css-extract-plugin')
 const VueLoaderPlugin = require('vue-loader/lib/plugin')
 const env = process.env.NODE_ENV
 const devMode = env !== 'production'
+const cssLoader = { loader: 'css-loader', options: { importLoaders: 1, minimize: !devMode } }
 
 module.exports = {
   entry: {
@@ -13,9 +14,9 @@ module.exports = {
     path: path.resolve(__dirname, './dist'),
     // publicPath: '/dist/',
     filename: '[name].js',
-    libraryTarget: 'umd' // 通用模块定义
+    libraryTarget: 'umd'
   },
-  devtool: '#source-map',
+  devtool: devMode ? '#source-map' : false,
   devServer: {
     port: 3001,
     historyApiFallback: true
@@ -44,7 +45,7 @@ module.exports = {
         use: [
           'vue-style-loader',
           devMode ? 'style-loader' : MiniCssExtractPlugin.loader,
-          'css-loader',
+          cssLoader,
           'postcss-loader',
           'sass-loader'
         ]

@@ -1,4 +1,5 @@
 import $axios from '@/utils/axios'
+
 const order = {
   state: {
     orderInfo: {},
@@ -6,8 +7,18 @@ const order = {
     orgOptions: [] // 机构
   },
   getters: {},
+  mutations: {
+    GET_ORDER_INFO: (state, orderInfo) => {
+      state.orderInfo = orderInfo
+    },
+    GET_MEMBER_INFO: (state, memberInfo) => {
+      state.memberInfo = memberInfo
+    },
+    GET_ORG_OPTIONS: (state, orgOptions) => {
+      state.orgOptions = orgOptions
+    }
+  },
   actions: {
-
     // 查询机构下拉选项
     getOrgOptions({ commit }) {
       $axios({
@@ -53,17 +64,6 @@ const order = {
           commit('GET_MEMBER_INFO', data.resultObj)
         }
       })
-    }
-  },
-  mutations: {
-    GET_ORDER_INFO: (state, orderInfo) => {
-      state.orderInfo = orderInfo
-    },
-    GET_MEMBER_INFO: (state, memberInfo) => {
-      state.memberInfo = memberInfo
-    },
-    GET_ORG_OPTIONS: (state, orgOptions) => {
-      state.orgOptions = orgOptions
     }
   }
 }

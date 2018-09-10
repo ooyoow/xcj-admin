@@ -236,7 +236,7 @@ export default {
       $axios({
         url: '/api/v1/driver/deleteDriverInfo',
         method: 'post',
-        params: { driverid }
+        data: { driverid }
       }).then(() => {
         for (const v of this.terminalList) {
           if (v.driverid === driverid) {

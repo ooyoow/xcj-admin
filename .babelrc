@@ -1,4 +1,4 @@
 {
   "presets": [["@babel/preset-env", { "modules": false }]],
-  "plugins": ["dynamic-import-node", "@babel/plugin-proposal-object-rest-spread"]
+  "plugins": ["syntax-dynamic-import", "@babel/plugin-proposal-object-rest-spread"]
 }

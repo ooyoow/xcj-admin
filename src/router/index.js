@@ -164,7 +164,7 @@ const mainFrame = [
             path: '/oc/user/portrait',
             name: 'portrait',
             icon: 'map',
-            component: () => import('@/views/test'),
+            component: () => import('@/views/operation/portrait'),
             meta: { meta, title: '会员画像' }
           },
           {
