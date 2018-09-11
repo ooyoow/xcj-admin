@@ -14,3 +14,20 @@ export const getDateByInterval = (beginTime, endTime) => {
   }
   return result
 }
+
+/**
+ * @description 根据年生成本年所有年月数据
+ * @param {String} year 年
+ * @return {Array} 当年12个月年月数组
+ */
+export const createMonthByYear = year => {
+  const result = []
+  for (let index = 1; index < 13; index++) {
+    if (index < 10) {
+      result.push(`${year}-0${index}`)
+      continue
+    }
+    result.push(`${year}-${index}`)
+  }
+  return result
+}
