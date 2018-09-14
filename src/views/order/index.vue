@@ -1,6 +1,6 @@
 <template>
   <div class="overview xcj-order">
-    <el-row :gutter="12">
+    <el-row class="group-card" :gutter="12">
       <el-col :span="6">
         <el-card shadow="always">
           <div class="order-overview">
@@ -93,29 +93,77 @@
           <el-col :span="6">
             <div class="order-data">
               <div>已付款订单</div>
-              <div>（
-                <span class="number">{{orderView.paidOrder||0}}</span>）</div>
-            </div>
-          </el-col>
-          <el-col :span="6">
-            <div class="order-data">
-              <div>已完成订单</div>
-              <div>（
-                <span class="number">{{orderView.completedOrder||0}}</span>）</div>
+              <div>
+                <el-popover placement="right" trigger="hover" @show="loadOrderDetail('paidOrder')">
+                  <el-table :data="[]">
+                    <el-table-column property="date" label="账户"></el-table-column>
+                    <el-table-column property="name" label="车牌"></el-table-column>
+                    <el-table-column property="address" label="产品名称"></el-table-column>
+                    <el-table-column property="address" label="市场价"></el-table-column>
+                    <el-table-column property="address" label="售价"></el-table-column>
+                    <el-table-column property="address" label="下单时间"></el-table-column>
+                    <el-table-column property="address" label="备注"></el-table-column>˝
+                  </el-table>
+                  <span slot="reference" class="number">{{orderView.paidOrder||0}}</span>
+                </el-popover>
+              </div>
             </div>
           </el-col>
           <el-col :span="6">
             <div class="order-data">
               <div>待付款订单</div>
-              <div>（
-                <span class="number">{{orderView.unpaymentOrder||0}}</span>）</div>
+              <div>
+                <el-popover placement="right" width="400" trigger="hover" @show="loadOrderDetail('unpaymentOrder')">
+                  <el-table :data="[]">
+                    <el-table-column property="date" label="账户"></el-table-column>
+                    <el-table-column property="name" label="车牌"></el-table-column>
+                    <el-table-column property="address" label="产品名称"></el-table-column>
+                    <el-table-column property="address" label="市场价"></el-table-column>
+                    <el-table-column property="address" label="售价"></el-table-column>
+                    <el-table-column property="address" label="下单时间"></el-table-column>
+                    <el-table-column property="address" label="备注"></el-table-column>
+                  </el-table>
+                  <span class="number" slot="reference">{{orderView.unpaymentOrder||0}}</span>
+                </el-popover>
+              </div>
             </div>
           </el-col>
           <el-col :span="6">
             <div class="order-data">
-              <div>已退款订单</div>
-              <div>（
-                <span class="number">{{orderView.refundedOrder||0}}</span>）</div>
+              <div>服务订单</div>
+              <div>
+                <el-popover placement="right" trigger="hover" @show="loadOrderDetail('completedOrder')">
+                  <el-table :data="[]">
+                    <el-table-column property="date" label="账户"></el-table-column>
+                    <el-table-column property="name" label="车牌"></el-table-column>
+                    <el-table-column property="address" label="产品名称"></el-table-column>
+                    <el-table-column property="address" label="市场价"></el-table-column>
+                    <el-table-column property="address" label="售价"></el-table-column>
+                    <el-table-column property="address" label="洗车时间"></el-table-column>
+                    <el-table-column property="address" label="洗车门店"></el-table-column>
+                  </el-table>
+                  <span slot="reference" class="number">{{orderView.completedOrder||0}}</span>
+                </el-popover>
+              </div>
+            </div>
+          </el-col>
+          <el-col :span="6">
+            <div class="order-data">
+              <div>已取消订单</div>
+              <div>
+                <el-popover placement="right" width="400" trigger="hover" @show="loadOrderDetail('refundedOrder')">
+                  <el-table :data="[]">
+                    <el-table-column property="date" label="账户"></el-table-column>
+                    <el-table-column property="name" label="车牌"></el-table-column>
+                    <el-table-column property="address" label="产品名称"></el-table-column>
+                    <el-table-column property="address" label="市场价"></el-table-column>
+                    <el-table-column property="address" label="售价"></el-table-column>
+                    <el-table-column property="address" label="退款额"></el-table-column>
+                    <el-table-column property="address" label="取消时间"></el-table-column>
+                  </el-table>
+                  <span class="number" slot="reference">{{orderView.refundedOrder||0}}</span>
+                </el-popover>
+              </div>
             </div>
           </el-col>
         </div>
@@ -150,7 +198,14 @@
       <el-card class="box-card">
         <div class="header">产品实时销量</div>
         <div class="content" style="margin-bottom:20px;">
-
+          <el-radio-group>
+            <el-radio-button :label="1">套餐卡</el-radio-button>
+            <el-radio-button :label="2">次卡</el-radio-button>
+            <el-radio-button :label="3">优惠券</el-radio-button>
+          </el-radio-group>
+          <div>
+            产品实时销量
+          </div>
         </div>
       </el-card>
     </el-row>
@@ -188,8 +243,8 @@
       <el-card class="box-card">
         <div class="header">洗车量统计</div>
         <el-form class="search-form" :inline="true" :model="formWashSearch">
-          <el-form-item label="机构">
-            <el-select v-model="formWashSearch.organizationId" placeholder="请选择机构" @change="onOrgOptionChange('wash', formWashSearch.organizationId)">
+          <el-form-item label="所有者">
+            <el-select v-model="formWashSearch.organizationId" placeholder="请选择所有者" @change="onOrgOptionChange('wash', formWashSearch.organizationId)">
               <el-option v-for="item in orgOptions" :key="item.value" :label="item.label" :value="item.value"></el-option>
             </el-select>
           </el-form-item>
@@ -215,8 +270,8 @@
       <el-card class="box-card">
         <div class="header">服务额统计</div>
         <el-form class="search-form" :inline="true" :model="formServiceSearch">
-          <el-form-item label="机构">
-            <el-select v-model="formServiceSearch.organizationId" placeholder="请选择机构" @change="onOrgOptionChange('service', formServiceSearch.organizationId)">
+          <el-form-item label="所有者">
+            <el-select v-model="formServiceSearch.organizationId" placeholder="请选择所有者" @change="onOrgOptionChange('service', formServiceSearch.organizationId)">
               <el-option v-for="item in orgOptions" :key="item.value" :label="item.label" :value="item.value"></el-option>
             </el-select>
           </el-form-item>
@@ -242,8 +297,8 @@
       <el-card class="box-card">
         <div class="header">分润统计</div>
         <el-form class="search-form" :inline="true" :model="formProfitSearch">
-          <el-form-item label="机构">
-            <el-select v-model="formProfitSearch.organizationId" placeholder="请选择机构" @change="onOrgOptionChange('profit', formProfitSearch.organizationId)">
+          <el-form-item label="所有者">
+            <el-select v-model="formProfitSearch.organizationId" placeholder="请选择所有者" @change="onOrgOptionChange('profit', formProfitSearch.organizationId)">
               <el-option v-for="item in orgOptions" :key="item.value" :label="item.label" :value="item.value"></el-option>
             </el-select>
           </el-form-item>
@@ -377,17 +432,17 @@ export default {
       }
     },
 
-    // 监听机构选择组件值变更事件
+    // 监听所有者选择组件值变更事件
     onOrgOptionChange(type, organizationId) {
       this.getStoreOptions(organizationId, data => {
         switch (type) {
-          case 'wash': // 洗车量统计 -> 机构
+          case 'wash': // 洗车量统计 -> 所有者
             this.formWashSearch.storeOptions = data
             break
-          case 'service': // 服务额统计 -> 机构
+          case 'service': // 服务额统计 -> 所有者
             this.formServiceSearch.storeOptions = data
             break
-          case 'profit': // 分润统计 -> 机构
+          case 'profit': // 分润统计 -> 所有者
             console.log(data)
             this.formProfitSearch.storeOptions = data
             break
@@ -546,6 +601,17 @@ export default {
           })
         }
         callback(storeOptions)
+      })
+    },
+
+    // 查询订单详情
+    loadOrderDetail(orderStatus) {
+      $axios({
+        url: '/api/v1/summary/orderDetail',
+        method: 'get',
+        params: { orderStatus }
+      }).then(result => {
+        console.log(result, 'result')
       })
     },
 

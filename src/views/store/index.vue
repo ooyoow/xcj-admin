@@ -16,7 +16,7 @@
         <el-button type="primary" @click="handleCreate">添加</el-button>
       </el-form-item>
     </el-form>
-    <el-table :class="`${prefixCls}-table`" ref="multipleTable" :data="storeList" tooltip-effect="dark" style="width: 100%">
+    <el-table :class="`${prefixCls}-table`" ref="multipleTable" :data="storeList" v-loading="listLoading" tooltip-effect="dark" style="width: 100%">
       <el-table-column type="selection" width="55"></el-table-column>
       <el-table-column prop="storeName" label="站点名" show-overflow-tooltip></el-table-column>
       <el-table-column prop="storeCity" label="城市" show-overflow-tooltip></el-table-column>
@@ -107,194 +107,212 @@
 </template>
 
 <script>
-import moment from 'moment'
-import $axios from '@/utils/axios'
-import './style.scss'
+import moment from "moment";
+import $axios from "@/utils/axios";
+import "./style.scss";
 export default {
-  name: 'store',
+  name: "store",
   data() {
     return {
-      prefixCls: 'cw-store',
+      prefixCls: "xcj-store",
       formSearch: {
-        storeName: '',
-        state: '',
-        sort: ''
+        storeName: "",
+        state: "",
+        sort: ""
       },
       listQuery: {
         currentPage: 1,
-        size: 20
+        size: 10
       },
+      listLoading: false,
       storeList: [],
       total: 0,
 
       // 新增/编辑对话框相关
       dialogFormVisible: false,
-      dialogStatus: 'create',
+      dialogStatus: "create",
       dialogType: {
-        create: '新增',
-        update: '编辑'
+        create: "新增",
+        update: "编辑"
       },
       statusOptions: [
         {
-          label: '营业',
-          value: 'business'
+          label: "营业",
+          value: "business"
         },
         {
-          label: '暂停营业',
-          value: 'suspend'
+          label: "暂停营业",
+          value: "suspend"
         }
       ],
       rules: {
-        storeName: [{ required: true, message: '门店名称不能为空', trigger: 'change' }],
+        storeName: [
+          { required: true, message: "门店名称不能为空", trigger: "change" }
+        ],
         storeId: [
           {
             required: true,
-            message: '门店ID不能为空',
-            trigger: 'change'
+            message: "门店ID不能为空",
+            trigger: "change"
           }
         ],
-        storePro: [{ required: true, message: '省份不能为空', trigger: 'change' }],
-        storeManager: [{ required: true, message: '店长不能为空', trigger: 'change' }],
-        state: [{ required: true, message: '门店状态不能为空', trigger: 'change' }],
+        storePro: [
+          { required: true, message: "省份不能为空", trigger: "change" }
+        ],
+        storeManager: [
+          { required: true, message: "店长不能为空", trigger: "change" }
+        ],
+        state: [
+          { required: true, message: "门店状态不能为空", trigger: "change" }
+        ],
         createTime: [
           {
-            type: 'date',
+            type: "date",
             required: true,
-            message: '门店ID不能为空',
-            trigger: 'change'
+            message: "门店ID不能为空",
+            trigger: "change"
           }
         ]
       },
       storeTemp: this.defaultStoreTemp()
-    }
+    };
   },
   created() {
-    this.getStore(Object.assign({}, this.formSearch, this.listQuery))
+    this.getStore();
   },
   methods: {
     handleSizeChange() {},
     handleCurrentChange() {},
-    getStore(params) {
+    getStore() {
+      this.listLoading = true;
+      const params = Object.assign({}, this.formSearch, this.listQuery);
       $axios({
-        url: '/api/v1/store/queryStoreList',
-        method: 'get',
+        url: "/api/v1/store/queryStoreList",
+        method: "get",
         params: params
-      }).then(response => {
-        const { resultObj, totalSize } = response.data
-        this.storeList = resultObj
-        this.total = totalSize
       })
+        .then(response => {
+          this.listLoading = false;
+          const { resultObj, totalSize } = response.data;
+          this.storeList = resultObj;
+          this.total = totalSize;
+        })
+        .catch(error => {
+          this.listLoading = false;
+        });
     },
-    handleSearch() {},
+    handleSearch() {
+      this.getStore();
+    },
     handleCreate() {
-      this.storeTemp = this.defaultStoreTemp()
-      this.dialogStatus = 'create'
-      this.dialogFormVisible = true
+      this.storeTemp = this.defaultStoreTemp();
+      this.dialogStatus = "create";
+      this.dialogFormVisible = true;
       this.$nextTick(() => {
-        this.$refs['dataForm'].clearValidate()
-      })
+        this.$refs["dataForm"].clearValidate();
+      });
     },
     handleUpdate(row) {
-      this.storeTemp = Object.assign({}, row)
-      this.dialogStatus = 'update'
-      this.dialogFormVisible = true
+      this.storeTemp = Object.assign({}, row);
+      this.dialogStatus = "update";
+      this.dialogFormVisible = true;
       this.$nextTick(() => {
-        this.$refs['dataForm'].clearValidate()
-      })
+        this.$refs["dataForm"].clearValidate();
+      });
     },
     createStore() {
-      this.$refs['dataForm'].validate(valid => {
+      this.$refs["dataForm"].validate(valid => {
         if (valid) {
           $axios({
-            url: '/api/v1/store/addStore',
-            method: 'post',
+            url: "/api/v1/store/addStore",
+            method: "post",
             data: this.storeTemp
           }).then(response => {
-            this.storeList.unshift(this.temp)
-            this.dialogFormVisible = false
+            this.storeList.unshift(this.temp);
+            this.dialogFormVisible = false;
             this.$notify({
-              title: '成功',
-              message: '添加成功',
-              type: 'success',
+              title: "成功",
+              message: "添加成功",
+              type: "success",
               duration: 2000
-            })
+            });
             // this.$message({
             //   message: "操作成功",
             //   type: "success"
             // });
-          })
+          });
         }
-      })
+      });
     },
     updateStore() {
-      this.$refs['dataForm'].validate(valid => {
+      this.$refs["dataForm"].validate(valid => {
         if (valid) {
-          const data = Object.assign({}, this.storeTemp)
+          const data = Object.assign({}, this.storeTemp);
           $axios({
-            url: '/api/v1/store/editStore',
-            method: 'post',
+            url: "/api/v1/store/editStore",
+            method: "post",
             data: data
           }).then(response => {
             for (const v of this.storeList) {
               if (v.storeId === data.storeId) {
-                const index = this.storeList.indexOf(v)
-                this.storeList.splice(index, 1, data)
-                break
+                const index = this.storeList.indexOf(v);
+                this.storeList.splice(index, 1, data);
+                break;
               }
             }
-            this.dialogFormVisible = false
+            this.dialogFormVisible = false;
             this.$notify({
-              title: '成功',
-              message: '更新成功',
-              type: 'success',
+              title: "成功",
+              message: "更新成功",
+              type: "success",
               duration: 2000
-            })
-          })
+            });
+          });
         }
-      })
+      });
     },
     defaultStoreTemp() {
       return {
-        address: '',
-        advertisement: '',
-        createTime: '',
+        address: "",
+        advertisement: "",
+        createTime: "",
         organizationId: 0,
-        remarks: '',
-        state: '',
-        storeCity: '',
-        storeDesc: '',
-        storeLogo: '',
-        storeImg: '',
-        storeLocationX: '',
-        storeLocationY: '',
-        storeManager: '',
-        storeName: '',
-        storeId: '',
-        storePro: ''
-      }
+        remarks: "",
+        state: "",
+        storeCity: "",
+        storeDesc: "",
+        storeLogo: "",
+        storeImg: "",
+        storeLocationX: "",
+        storeLocationY: "",
+        storeManager: "",
+        storeName: "",
+        storeId: "",
+        storePro: ""
+      };
     },
     handleDelete(storeId) {
       $axios({
-        url: '/api/v1/store/deleteStore',
-        method: 'post',
+        url: "/api/v1/store/deleteStore",
+        method: "post",
         data: { storeId }
       }).then(response => {
         for (const v of this.storeList) {
           if (v.storeId === storeId) {
-            const index = this.storeList.indexOf(v)
-            this.storeList.splice(index, 1)
+            const index = this.storeList.indexOf(v);
+            this.storeList.splice(index, 1);
             this.$message({
-              message: '删除成功',
-              type: 'success'
-            })
-            break
+              message: "删除成功",
+              type: "success"
+            });
+            break;
           }
         }
-      })
+      });
     },
     formatTime(row, column, cellValue) {
-      return cellValue ? moment(cellValue).format('YYYY-MM-DD HH:mm:ss') : ''
+      return cellValue ? moment(cellValue).format("YYYY-MM-DD HH:mm:ss") : "";
     }
   }
-}
+};
 </script>

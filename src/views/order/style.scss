@@ -1,4 +1,8 @@
 .xcj-order {
+  .group-card {
+    margin: 0;
+    padding: 1rem;
+  }
   .order-overview {
     display: flex;
     flex-flow: row nowrap;
@@ -77,6 +81,7 @@
       border-bottom: 1px solid #ebeef5;
       .number {
         color: #f40;
+        cursor: pointer;
       }
     }
     .user-data {

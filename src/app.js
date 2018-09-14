@@ -8,6 +8,7 @@ import router, { mainRoutes } from '@/router'
 import store from '@/store'
 import App from './App'
 import '@/components'
+import '@/permission'
 
 // 权限控制
 // import permission from '@/permission'
@@ -20,6 +21,8 @@ new Vue({
   store,
   render: h => h(App),
   created() {
+    // 处理路由 得到每一级的路由设置
+    this.$store.dispatch('initPage', mainRoutes)
     // 设置顶部导航菜单
     this.$store.dispatch('setMenuHeader', mainRoutes)
 

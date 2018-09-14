@@ -108,39 +108,39 @@
 </template>
 
 <script>
-import moment from 'moment'
-import $axios from '@/utils/axios'
-import { removeEmptyValue } from '@/utils/general'
-import './user.scss'
+import moment from "moment";
+import $axios from "@/utils/axios";
+import { removeEmptyValue } from "@/utils/general";
+import "./user.scss";
 export default {
-  name: 'user',
+  name: "user",
   data() {
     return {
-      prefixCls: 'xcj-user',
+      prefixCls: "xcj-user",
       sourceOptions: [
         {
           value: 1,
-          label: '微信'
+          label: "微信"
         },
         {
           value: 2,
-          label: '小程序'
+          label: "小程序"
         },
         {
           value: 3,
-          label: '共享联盟'
+          label: "共享联盟"
         },
         {
           value: 4,
-          label: '集团客户'
+          label: "集团客户"
         }
       ],
       showMoreFilter: false,
       formSimpleFilter: {
-        search: '',
-        registrationDays: '',
-        nickName: '',
-        source: '',
+        search: "",
+        registrationDays: "",
+        nickName: "",
+        source: "",
         currentPage: 1,
         size: 10
       },
@@ -163,33 +163,33 @@ export default {
         rules: {},
         temp: {}
       }
-    }
+    };
   },
   created() {
-    this.getUserList()
+    this.getUserList();
   },
   methods: {
     // 查询用户
     getUserList() {
-      const { formSimpleFilter, formMoreFilter, getUserList } = this
-      const params = Object.assign({}, formSimpleFilter, formMoreFilter)
-      this.user.loading = true
+      const { formSimpleFilter, formMoreFilter, getUserList } = this;
+      const params = Object.assign({}, formSimpleFilter, formMoreFilter);
+      this.user.loading = true;
       $axios({
-        url: '/api/v1/user/queryUserList',
-        method: 'get',
+        url: "/api/v1/user/queryUserList",
+        method: "get",
         params: removeEmptyValue(params)
       })
         .then(response => {
-          const { resultObj, totalSize } = response.data
+          const { resultObj, totalSize } = response.data;
           this.user = {
             loading: false,
             list: resultObj || [],
             total: totalSize
-          }
+          };
         })
         .catch(err => {
-          this.user.loading = false
-        })
+          this.user.loading = false;
+        });
     },
     // 查询消费详情
     getConsumeList(userId) {
@@ -197,58 +197,58 @@ export default {
         ...this.consume,
         visible: true,
         loading: true
-      }
+      };
       $axios({
-        url: '/api/v1/user/queryUseRecdList',
-        method: 'get',
+        url: "/api/v1/user/queryUseRecdList",
+        method: "get",
         params: { userId }
       })
         .then(response => {
-          const { resultObj, totalSize } = response.data
+          const { resultObj, totalSize } = response.data;
           this.consume = {
             ...this.consume,
             loading: false,
             list: resultObj || [],
             total: totalSize
-          }
+          };
         })
         .catch(err => {
-          this.consume.loading = false
-        })
+          this.consume.loading = false;
+        });
     },
     handleSearch() {
-      this.getUserList()
+      this.getUserList();
     },
     handleMoreFilter() {
-      this.showMoreFilter = !this.showMoreFilter
+      this.showMoreFilter = !this.showMoreFilter;
     },
     handleSizeChange(value) {
-      this.formSimpleFilter.size = value
-      this.getUserList()
+      this.formSimpleFilter.size = value;
+      this.getUserList();
     },
     handleCurrentChange(value) {
-      this.formSimpleFilter.currentPage = value
-      this.getUserList()
+      this.formSimpleFilter.currentPage = value;
+      this.getUserList();
     },
     handleConsumeList(row) {
-      this.getConsumeList(row.userId)
+      this.getConsumeList(row.userId);
     },
     handleUpdate(row) {
       this.editDialog = {
         ...this.editDialog,
         visible: true,
         temp: Object.assign({}, row)
-      }
+      };
       this.$nextTick(() => {
-        this.$refs['editForm'].clearValidate()
-      })
+        this.$refs["editForm"].clearValidate();
+      });
     },
     handleDelete() {},
     updateUser() {},
     formatDate(row, column, cellValue) {
-      return cellValue ? moment(cellValue).format('YYYY-MM-DD HH:mm:ss') : ''
+      return cellValue ? moment(cellValue).format("YYYY-MM-DD HH:mm:ss") : "";
     }
   }
-}
+};
 </script>
 

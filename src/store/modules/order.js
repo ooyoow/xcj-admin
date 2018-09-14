@@ -4,7 +4,7 @@ const order = {
   state: {
     orderInfo: {},
     memberInfo: {},
-    orgOptions: [] // 机构
+    orgOptions: [] // 所有者
   },
   getters: {},
   mutations: {
@@ -19,7 +19,7 @@ const order = {
     }
   },
   actions: {
-    // 查询机构下拉选项
+    // 查询所有者下拉选项
     getOrgOptions({ commit }) {
       $axios({
         method: 'get',

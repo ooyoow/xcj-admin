@@ -1,71 +1,69 @@
 <template>
-  <div class="d2-multiple-page-control-group" flex>
-    <div class="d2-multiple-page-control-content" flex-box="1">
-      <div class="d2-multiple-page-control-content-inner">
-        <d2-contextmenu :visible.sync="contextmenuFlag" :x="contentmenuX" :y="contentmenuY">
-          <d2-contextmenu-list :menulist="tagName === 'index' ? contextmenuListIndex : contextmenuList" @rowClick="contextmenuClick" />
-        </d2-contextmenu>
-        <el-tabs class="d2-multiple-page-control" :value="current" type="card" :closable="true" @tab-click="handleClick" @edit="handleTabsEdit" @contextmenu.native="handleContextmenu">
+  <div class="tabs">
+    <div class="tabs-content" flex-box="1">
+      <div class="tabs-content-inner">
+        <content-menu :visible.sync="contentmenuFlag" :x="contentmenuX" :y="contentmenuY">
+          <content-menu-list :menulist="tagName === 'index' ? contentmenuListIndex : contentmenuList" @rowClick="contentmenuClick" />
+        </content-menu>
+        <el-tabs class="page-control" :value="current" type="card" :closable="true" @tab-click="handleClick" @edit="handleTabsEdit" @contentmenu.native="handlecontentmenu">
           <el-tab-pane v-for="(page, index) in opened" :key="index" :label="page.meta.title || '未命名'" :name="page.name" />
         </el-tabs>
       </div>
     </div>
-    <div class="d2-multiple-page-control-btn" flex-box="0">
-      <el-dropdown split-button @click="handleControlBtnClick" @command="command => handleControlItemClick(command)">
-        <d2-icon name="times-circle" />
+    <div class="page-control-btn" flex-box="0">
+      <el-tooltip class="item" effect="dark" content="关闭所有" placement="bottom">
+        <el-button type="primary" icon="el-icon-circle-close-outline" @click="handleControlItemClick('all')"></el-button>
+      </el-tooltip>
+      <!-- <el-dropdown split-button @click="handleControlBtnClick" @command="command => handleControlItemClick(command)">
+        <icon name="times-circle" />
         <el-dropdown-menu slot="dropdown">
           <el-dropdown-item command="left">
-            <d2-icon name="arrow-left" class="d2-mr-10" /> 关闭左侧
+            <icon name="arrow-left" class="d2-mr-10" /> 关闭左侧
           </el-dropdown-item>
           <el-dropdown-item command="right">
-            <d2-icon name="arrow-right" class="d2-mr-10" /> 关闭右侧
+            <icon name="arrow-right" class="d2-mr-10" /> 关闭右侧
           </el-dropdown-item>
           <el-dropdown-item command="other">
-            <d2-icon name="times" class="d2-mr-10" /> 关闭其它
+            <icon name="times" class="d2-mr-10" /> 关闭其它
           </el-dropdown-item>
           <el-dropdown-item command="all">
-            <d2-icon name="times-circle" class="d2-mr-10" /> 全部关闭
+            <icon name="times-circle" class="d2-mr-10" /> 全部关闭
           </el-dropdown-item>
         </el-dropdown-menu>
-      </el-dropdown>
+      </el-dropdown> -->
     </div>
   </div>
 </template>
 
 <script>
-import { mapState, mapMutations } from 'vuex'
+import { mapState, mapActions } from 'vuex'
 export default {
   components: {
-    D2Contextmenu: () => import('../contextmenu'),
-    D2ContextmenuList: () => import('../contextmenu/components/contentmenuList')
+    ContentMenu: () => import('./ContentMenu'),
+    ContentMenuList: () => import('./ContentMenuList')
   },
   data() {
     return {
-      contextmenuFlag: false,
+      contentmenuFlag: false,
       contentmenuX: 0,
       contentmenuY: 0,
-      contextmenuListIndex: [{ icon: 'times-circle', title: '关闭全部', value: 'all' }],
-      contextmenuList: [
-        { icon: 'arrow-left', title: '关闭左侧', value: 'left' },
-        { icon: 'arrow-right', title: '关闭右侧', value: 'right' },
-        { icon: 'times', title: '关闭其它', value: 'other' },
-        { icon: 'times-circle', title: '关闭全部', value: 'all' }
-      ],
+      contentmenuListIndex: [{ icon: 'times-circle', title: '关闭全部', value: 'all' }],
+      contentmenuList: [{ icon: 'times-circle', title: '关闭全部', value: 'all' }],
       tagName: 'index'
     }
   },
   computed: {
-    ...mapState('d2admin/page', ['opened', 'current'])
+    ...mapState({
+      opened: state => state.page.opened,
+      current: state => state.page.current
+    })
   },
   methods: {
-    ...mapMutations('d2admin/page', ['close', 'closeLeft', 'closeRight', 'closeOther', 'closeAll']),
-    /**
-     * @description 右键菜单功能点击
-     */
-    handleContextmenu(event) {
-      let target = event.target
+    ...mapActions(['closePage', 'closeAllPage']),
 
-      // 解决 https://github.com/d2-projects/d2-admin/issues/54
+    // 右键菜单功能点击
+    handlecontentmenu(event) {
+      let target = event.target
       let flag = false
       if (target.className.indexOf('el-tabs__item') > -1) flag = true
       else if (target.parentNode.className.indexOf('el-tabs__item') > -1) {
@@ -79,21 +77,17 @@ export default {
         this.contentmenuX = event.clientX
         this.contentmenuY = event.clientY
         this.tagName = target.getAttribute('aria-controls').slice(5)
-        this.contextmenuFlag = true
+        this.contentmenuFlag = true
       }
     },
-    /**
-     * @description 右键菜单的row-click事件
-     */
-    contextmenuClick(command) {
+    // 右键菜单的row-click事件
+    contentmenuClick(command) {
       this.handleControlItemClick(command, this.tagName)
     },
-    /**
-     * @description 接收点击关闭控制上选项的事件
-     */
+    // 接收点击关闭控制上选项的事件
     handleControlItemClick(command, tagName = null) {
       if (tagName) {
-        this.contextmenuFlag = false
+        this.contentmenuFlag = false
       }
       const params = {
         pageSelect: tagName,
@@ -110,33 +104,27 @@ export default {
           this.closeOther(params)
           break
         case 'all':
-          this.closeAll(this)
+          this.closeAllPage(this)
           break
         default:
           this.$message.error('无效的操作')
           break
       }
     },
-    /**
-     * @description 接收点击关闭控制上按钮的事件
-     */
+
+    // 接收点击关闭控制上按钮的事件
     handleControlBtnClick() {
-      this.closeAll(this)
+      this.closeAllPage(this)
     },
-    /**
-     * @description 接收点击 tab 标签的事件
-     */
+
+    // 接收点击 tab 标签的事件
     handleClick(tab, event) {
-      // 找到点击的页面在 tag 列表里是哪个
-      const page = this.opened.find(page => page.name === tab.name)
+      const page = this.opened.find(page => page.name === tab.name) // 找到点击的页面在 tag 列表里是哪个
       const { name, params, query } = page
-      if (page) {
-        this.$router.push({ name, params, query })
-      }
+      if (page) this.$router.push({ name, params, query })
     },
-    /**
-     * @description 点击 tab 上的删除按钮触发这里 首页的删除按钮已经隐藏 因此这里不用判断是 index
-     */
+
+    // 点击 tab 上的删除按钮触发这里 首页的删除按钮已经隐藏 因此这里不用判断是 index
     handleTabsEdit(tagName, action) {
       if (action === 'remove') {
         this.close({
