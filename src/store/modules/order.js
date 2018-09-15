@@ -28,9 +28,9 @@ const order = {
         const { resultObj } = response.data
         if (resultObj && Array.isArray(resultObj)) {
           const orgOptions = resultObj.map(item => {
-            const { organizationId, name, ...anyprops } = item
+            const { organizationId, ownerName, ...anyprops } = item
             return {
-              label: name,
+              label: ownerName,
               value: organizationId,
               ...anyprops
             }

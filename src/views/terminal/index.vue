@@ -2,10 +2,10 @@
   <div :class="prefixCls">
     <el-form :inline="true" :model="formSearch">
       <el-form-item label="终端名称">
-        <el-input v-model="formSearch.search" placeholder="请输入终端名称/ID搜索"></el-input>
+        <el-input clearable v-model="formSearch.search" placeholder="请输入终端名称/ID搜索"></el-input>
       </el-form-item>
       <el-form-item label="所属门店">
-        <el-select v-model="formSearch.storeId" placeholder="请选择所属门店">
+        <el-select clearable v-model="formSearch.storeId" placeholder="请选择所属门店">
           <el-option v-for="item in storeOptions" :key="item.value" :label="item.label" :value="item.value"></el-option>
         </el-select>
       </el-form-item>
@@ -16,8 +16,7 @@
         <el-button type="primary" @click="handleCreate">添加</el-button>
       </el-form-item>
     </el-form>
-    <el-table :class="`${prefixCls}-table`" ref="multipleTable" :data="terminalList" tooltip-effect="dark" v-loading="listLoading">
-      <el-table-column type="selection" width="55"></el-table-column>
+    <el-table :class="`${prefixCls}-table`" :data="terminalList" tooltip-effect="dark" v-loading="listLoading">
       <el-table-column prop="driverName" label="终端名称" show-overflow-tooltip></el-table-column>
       <el-table-column prop="driverid" label="终端ID" show-overflow-tooltip></el-table-column>
       <el-table-column prop="manufactor" label="厂家" show-overflow-tooltip></el-table-column>
@@ -81,7 +80,8 @@
 <script>
 import moment from "moment";
 import $axios from "@/utils/axios";
-import { mapState } from "vuex";
+import { expandParams } from "@/utils/general";
+import { formatTimeStamp } from "@/utils/date";
 import "./style.scss";
 export default {
   name: "store",
@@ -94,12 +94,12 @@ export default {
       },
       listQuery: {
         currentPage: 1,
-        size: 20
+        size: 10
       },
       listLoading: false,
       terminalList: [],
       total: 0,
-
+      storeOptions: [],
       // 新增/编辑对话框相关
       dialogFormVisible: false,
       dialogStatus: "create",
@@ -147,16 +147,22 @@ export default {
     };
   },
   created() {
+    this.getStoreByLoginUser();
     this.getTerminal();
-  },
-  computed: {
-    ...mapState({
-      storeOptions: state => state.app.storeOptions
-    })
   },
   methods: {
     handleSizeChange() {},
     handleCurrentChange() {},
+    // 查询所属门店
+    getStoreByLoginUser() {
+      $axios({
+        url: "/api/v1/store/queryStoreByUser",
+        method: "get"
+      }).then(response => {
+        const { resultObj } = response.data;
+      });
+    },
+    // 查询终端
     getTerminal() {
       const params = Object.assign({}, this.formSearch, this.listQuery);
       this.listLoading = true;
@@ -271,7 +277,7 @@ export default {
       });
     },
     formatTime(row, column, cellValue) {
-      return cellValue ? moment(cellValue).format("YYYY-MM-DD HH:mm:ss") : "";
+      return formatTimeStamp(cellValue);
     }
   }
 };

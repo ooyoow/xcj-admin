@@ -110,7 +110,6 @@
 <script>
 import moment from "moment";
 import $axios from "@/utils/axios";
-import { removeEmptyValue } from "@/utils/general";
 import "./user.scss";
 export default {
   name: "user",
@@ -177,7 +176,7 @@ export default {
       $axios({
         url: "/api/v1/user/queryUserList",
         method: "get",
-        params: removeEmptyValue(params)
+        params: params
       })
         .then(response => {
           const { resultObj, totalSize } = response.data;

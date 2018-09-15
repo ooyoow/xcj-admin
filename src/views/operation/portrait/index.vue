@@ -37,7 +37,7 @@
             <el-option v-for="item in queryOptions" :key="item.value" :label="item.label" :value="item.value">
             </el-option>
           </el-select>
-          <el-date-picker v-model="queryUserConsume.date" :clearable="false" :type="queryUserPortSource.type === 1 ? 'month' : 'year'" placeholder="选择年" @input="onQueryUserConsume" />
+          <el-date-picker v-model="queryUserConsume.date" :clearable="false" :type="queryUserConsume.type === 1 ? 'month' : 'year'" placeholder="选择年" @input="onQueryUserConsume" />
         </div>
       </div>
       <bar height='300px' width='100%' :option="userConsumeChartOption"></bar>

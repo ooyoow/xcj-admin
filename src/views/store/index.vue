@@ -1,11 +1,11 @@
 <template>
   <div :class="prefixCls">
     <el-form :inline="true" :model="formSearch">
-      <el-form-item label="站点名">
-        <el-input v-model="formSearch.storeName" placeholder="请输入站点名搜索"></el-input>
+      <el-form-item label="门店名称">
+        <el-input clearable v-model="formSearch.storeName" placeholder="请输入门店名称搜索"></el-input>
       </el-form-item>
       <el-form-item label="门店状态">
-        <el-select v-model="formSearch.state" placeholder="请选择门店状态">
+        <el-select clearable v-model="formSearch.state" placeholder="请选择门店状态">
           <el-option v-for="item in statusOptions" :key="item.value" :label="item.label" :value="item.value"></el-option>
         </el-select>
       </el-form-item>
@@ -16,20 +16,20 @@
         <el-button type="primary" @click="handleCreate">添加</el-button>
       </el-form-item>
     </el-form>
-    <el-table :class="`${prefixCls}-table`" ref="multipleTable" :data="storeList" v-loading="listLoading" tooltip-effect="dark" style="width: 100%">
-      <el-table-column type="selection" width="55"></el-table-column>
-      <el-table-column prop="storeName" label="站点名" show-overflow-tooltip></el-table-column>
-      <el-table-column prop="storeCity" label="城市" show-overflow-tooltip></el-table-column>
-      <el-table-column prop="address" label="地址" show-overflow-tooltip></el-table-column>
-      <el-table-column prop="storeManager" label="店长" show-overflow-tooltip></el-table-column>
-      <el-table-column prop="storeId" label="编号" show-overflow-tooltip></el-table-column>
-      <el-table-column prop="storePro" label="省份" show-overflow-tooltip></el-table-column>
-      <el-table-column prop="organizationId" label="终端ID" show-overflow-tooltip></el-table-column>
-      <el-table-column prop="storeImg" label="图片" show-overflow-tooltip></el-table-column>
-      <el-table-column prop="createTime" label="添加时间" show-overflow-tooltip :formatter="formatTime"></el-table-column>
-      <el-table-column prop="storeDesc" label="描述" show-overflow-tooltip></el-table-column>
-      <el-table-column prop="remarks" label="备注" show-overflow-tooltip></el-table-column>
-      <el-table-column prop="state" label="门店状态" show-overflow-tooltip></el-table-column>
+    <el-table :class="`${prefixCls}-table`" border :data="storeList" v-loading="listLoading" tooltip-effect="dark" style="width: 100%">
+      <el-table-column prop="storeName" label="门店名称" show-overflow-tooltip/>
+      <el-table-column prop="storeCity" label="城市" show-overflow-tooltip/>
+      <el-table-column prop="address" label="地址" show-overflow-tooltip/>
+      <el-table-column prop="storeManager" label="店长" show-overflow-tooltip/>
+      <el-table-column prop="storeId" label="编号" show-overflow-tooltip/>
+      <el-table-column prop="storePro" label="省份" show-overflow-tooltip/>
+      <el-table-column prop="driverid" label="终端ID" show-overflow-tooltip/>
+      <el-table-column prop="storeImg" label="图片" show-overflow-tooltip/>
+      <el-table-column prop="storeDesc" label="描述" show-overflow-tooltip/>
+      <el-table-column prop="remarks" label="备注" show-overflow-tooltip/>
+      <el-table-column prop="stateName" label="门店状态" show-overflow-tooltip/>
+      <el-table-column prop="createTime" label="添加时间" show-overflow-tooltip :formatter="formatTime" />
+      <el-table-column prop="updateTime" label="更新时间" show-overflow-tooltip :formatter="formatTime" />
       <el-table-column fixed="right" label="操作" width="150">
         <template slot-scope="scope">
           <el-button type="text" size="small" @click="handleUpdate(scope.row)">编辑</el-button>
@@ -46,9 +46,6 @@
       <el-form :rules="rules" ref="dataForm" :model="storeTemp" label-position="right" label-width="100px">
         <el-form-item label="门店名称" prop="storeName">
           <el-input v-model="storeTemp.storeName"></el-input>
-        </el-form-item>
-        <el-form-item label="门店ID" prop="storeId">
-          <el-input v-model="storeTemp.storeId"></el-input>
         </el-form-item>
         <el-form-item label="省份" prop="storePro">
           <el-input v-model="storeTemp.storePro"></el-input>
@@ -73,11 +70,13 @@
         <el-form-item label="地址" prop="address">
           <el-input v-model="storeTemp.address"></el-input>
         </el-form-item>
-        <el-form-item label="终端ID" prop="organizationId">
-          <el-input v-model="storeTemp.organizationId"></el-input>
+        <el-form-item label="终端ID" prop="driverid">
+          <el-select class="filter-item" v-model="storeTemp.driverid" multiple placeholder="请选择终端名称">
+            <el-option v-for="item in terminalUnboundOptios" :key="item" :label="item" :value="item"></el-option>
+          </el-select>
         </el-form-item>
         <el-form-item label="店铺图标" prop="storeLogo">
-          <el-input v-model="storeTemp.storeImg"></el-input>
+          <el-input v-model="storeTemp.storeLogo"></el-input>
         </el-form-item>
         <el-form-item label="店铺图片" prop="storeImg">
           <el-input v-model="storeTemp.storeImg"></el-input>
@@ -109,7 +108,8 @@
 <script>
 import moment from "moment";
 import $axios from "@/utils/axios";
-import "./style.scss";
+import { formatTimeStamp } from "@/utils/date";
+import "./store.scss";
 export default {
   name: "store",
   data() {
@@ -127,7 +127,7 @@ export default {
       listLoading: false,
       storeList: [],
       total: 0,
-
+      terminalUnboundOptios: [],
       // 新增/编辑对话框相关
       dialogFormVisible: false,
       dialogStatus: "create",
@@ -143,6 +143,10 @@ export default {
         {
           label: "暂停营业",
           value: "suspend"
+        },
+        {
+          label: "在建",
+          value: "build"
         }
       ],
       rules: {
@@ -181,8 +185,7 @@ export default {
     this.getStore();
   },
   methods: {
-    handleSizeChange() {},
-    handleCurrentChange() {},
+    // 查询门店
     getStore() {
       this.listLoading = true;
       const params = Object.assign({}, this.formSearch, this.listQuery);
@@ -201,6 +204,26 @@ export default {
           this.listLoading = false;
         });
     },
+    //  查询未绑定的门店
+    getTerminalUnbound(callback) {
+      $axios({
+        url: "/api/v1/driver/queryDriverUnbound",
+        method: "get"
+      }).then(response => {
+        const { resultObj } = response.data;
+        let data = [];
+        if (resultObj && Array.isArray(resultObj)) {
+          data = resultObj.map(item => {
+            return item.driverid;
+          });
+        }
+        if (callback && typeof callback === "function") {
+          callback(data);
+        }
+      });
+    },
+    handleSizeChange() {},
+    handleCurrentChange() {},
     handleSearch() {
       this.getStore();
     },
@@ -211,24 +234,54 @@ export default {
       this.$nextTick(() => {
         this.$refs["dataForm"].clearValidate();
       });
+      this.getTerminalUnbound(data => {
+        this.terminalUnboundOptios = data;
+      });
     },
     handleUpdate(row) {
-      this.storeTemp = Object.assign({}, row);
+      const { driverid } = row;
+      const arrDriverid = driverid ? driverid.split(",") : [];
+      this.storeTemp = Object.assign({}, row, { driverid: arrDriverid });
       this.dialogStatus = "update";
       this.dialogFormVisible = true;
       this.$nextTick(() => {
         this.$refs["dataForm"].clearValidate();
       });
+      this.getTerminalUnbound(data => {
+        this.terminalUnboundOptios = arrDriverid.concat(data);
+      });
+    },
+    handleDelete(storeId) {
+      $axios({
+        url: "/api/v1/store/deleteStore",
+        method: "post",
+        data: { storeId }
+      }).then(response => {
+        for (const v of this.storeList) {
+          if (v.storeId === storeId) {
+            const index = this.storeList.indexOf(v);
+            this.storeList.splice(index, 1);
+            this.$message({
+              message: "删除成功",
+              type: "success"
+            });
+            break;
+          }
+        }
+      });
     },
     createStore() {
       this.$refs["dataForm"].validate(valid => {
         if (valid) {
+          const data = Object.assign({}, this.storeTemp, {
+            driverid: this.storeTemp.driverid.toString()
+          });
           $axios({
             url: "/api/v1/store/addStore",
             method: "post",
-            data: this.storeTemp
+            data: data
           }).then(response => {
-            this.storeList.unshift(this.temp);
+            this.storeList.unshift(data);
             this.dialogFormVisible = false;
             this.$notify({
               title: "成功",
@@ -247,7 +300,9 @@ export default {
     updateStore() {
       this.$refs["dataForm"].validate(valid => {
         if (valid) {
-          const data = Object.assign({}, this.storeTemp);
+          const data = Object.assign({}, this.storeTemp, {
+            driverid: this.storeTemp.driverid.toString()
+          });
           $axios({
             url: "/api/v1/store/editStore",
             method: "post",
@@ -276,7 +331,7 @@ export default {
         address: "",
         advertisement: "",
         createTime: "",
-        organizationId: 0,
+        driverid: "",
         remarks: "",
         state: "",
         storeCity: "",
@@ -291,27 +346,8 @@ export default {
         storePro: ""
       };
     },
-    handleDelete(storeId) {
-      $axios({
-        url: "/api/v1/store/deleteStore",
-        method: "post",
-        data: { storeId }
-      }).then(response => {
-        for (const v of this.storeList) {
-          if (v.storeId === storeId) {
-            const index = this.storeList.indexOf(v);
-            this.storeList.splice(index, 1);
-            this.$message({
-              message: "删除成功",
-              type: "success"
-            });
-            break;
-          }
-        }
-      });
-    },
     formatTime(row, column, cellValue) {
-      return cellValue ? moment(cellValue).format("YYYY-MM-DD HH:mm:ss") : "";
+      return formatTimeStamp(cellValue);
     }
   }
 };

@@ -8,7 +8,7 @@ import moment from 'moment'
 export const getDateByInterval = (beginTime, endTime) => {
   const oneDayTime = 24 * 60 * 60 * 1000
   const result = []
-  for (let i = beginTime; i <= endTime; ) {
+  for (let i = beginTime; i <= endTime;) {
     result.push(moment(i).format('YYYY-MM-DD'))
     i += oneDayTime
   }
@@ -30,4 +30,13 @@ export const createMonthByYear = year => {
     result.push(`${year}-${index}`)
   }
   return result
+}
+
+/**
+ * @description 时间戳格式化
+ * @param {Number} date 时间戳
+ * @return {String} "YYYY-MM-DD HH:mm:ss"
+ */
+export const formatTimeStamp = (date) => {
+  return (date && typeof date === 'number') ? moment(date).format("YYYY-MM-DD HH:mm:ss") : "";
 }

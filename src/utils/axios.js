@@ -2,6 +2,7 @@ import axios from 'axios'
 import { Message } from 'element-ui'
 // import store from '@/store'
 import { getCookie } from '@/utils/cookie'
+import { deleteObjectEmptyValue } from '@/utils/general'
 import BASE_URL from '../../config/serve'
 
 const $axios = axios.create({
@@ -16,6 +17,9 @@ $axios.interceptors.request.use(
     if (token) {
       // 让每个请求携带token-- ['X-Token']为自定义key 请根据实际情况自行修改
       config.headers['Authorization'] = token
+    }
+    if (config.method.toLocaleLowerCase() === 'get' && config.params) {
+      config.params = deleteObjectEmptyValue(config.params)
     }
     return config
   },

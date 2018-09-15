@@ -11,7 +11,7 @@ const defaultPage = [
 export default {
   state: {
     pool: [], // 可以在多页 tab 模式下显示的页面
-    opened: defaultPage, // 当前显示的多页面列表
+    opened: [], // 当前显示的多页面列表
     current: '' // 当前页面
   },
   getters: {},
@@ -30,12 +30,13 @@ export default {
       newTag.query = query || newTag.query
       // 添加进当前显示的页面数组
       state.opened.push(newTag)
-      console.log(state.opened, 'state.opened')
     },
     CURRENT_SET: (state, name) => {
       state.current = name
     },
-    CLOSE_PAGE: () => {},
+    CLOSE_PAGE: (state, index) => {
+      state.opened.splice(index, 1)
+    },
     CLOSE_ALL_PAGE: state => {
       state.opened.splice(1)
     },
@@ -45,7 +46,6 @@ export default {
   },
   actions: {
     openPage({ state, commit }, { name, params, query }) {
-      console.log(name, 'name')
       // 已经打开的页面
       let opened = state.opened
       // 判断此页面是否已经打开 并且记录位置
@@ -71,7 +71,41 @@ export default {
       }
       commit('CURRENT_SET', name)
     },
-    closePage() {},
+    closePage({ state, commit }, { tagName, vm }) {
+      // 下个新的页面
+      let newPage = state.opened[0]
+      const isCurrent = state.current === tagName
+      // 如果关闭的页面就是当前显示的页面
+      if (isCurrent) {
+        // 去找一个新的页面
+        let len = state.opened.length
+        for (let i = 1; i < len; i++) {
+          if (state.opened[i].name === tagName) {
+            if (i < len - 1) {
+              newPage = state.opened[i + 1]
+            } else {
+              newPage = state.opened[i - 1]
+            }
+            break
+          }
+        }
+      }
+      // 找到这个页面在已经打开的数据里是第几个
+      const index = state.opened.findIndex(page => page.name === tagName)
+      if (index >= 0) {
+        commit('CLOSE_PAGE', index)
+      }
+      // 最后需要判断是否需要跳到首页
+      if (isCurrent) {
+        const { name = '', params = {}, query = {} } = newPage
+        let routerObj = {
+          name,
+          params,
+          query
+        }
+        vm.$router.push(routerObj)
+      }
+    },
     closeAllPage({ commit }) {
       commit('CLOSE_ALL_PAGE')
     },

@@ -1,14 +1,12 @@
 html,
 body,
-.app,
-.app-frame {
+.app {
   width: 100%;
   height: 100%;
 }
 
-/* 主框架结构 */
-
-.app-frame {
+// 主框架结构
+.app {
   display: flex;
   flex-flow: column nowrap;
   /* 顶部导航 */
@@ -81,21 +79,21 @@ body,
       }
     }
   }
-  /* 内容 */
-  .main-container {
+  /* 主体 */
+  &-container {
     display: flex;
     flex-flow: row nowrap;
     flex: 1;
-    &-body {
+    &-main {
       flex: 1;
-      overflow: auto;
+      display: flex;
+      flex-direction: column;
       background-color: #fff;
-      .tabs {
-        display: flex;
-        &-content {
-          flex-grow: 1;
-          flex-shrink: 1;
-        }
+      &-tabs {}
+      &-body {
+        flex: 1;
+        flex-grow: 1;
+        overflow: auto;
       }
     }
     /* 侧边栏菜单 */

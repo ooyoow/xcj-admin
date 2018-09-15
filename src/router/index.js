@@ -69,73 +69,103 @@ const mainFrame = [
     meta: { meta, title: '产品中心' },
     children: [
       {
-        path: 'car',
-        name: 'car',
+        path: '/product/car/package',
+        name: 'package',
         icon: 'map',
-        redirect: '/product/car/package',
-        component: () => import('@/views/product'),
-        meta: { meta, title: '洗车产品线' },
-        children: [
-          {
-            path: '/product/car/package',
-            name: 'package',
-            icon: 'map',
-            component: () => import('@/views/product/package'),
-            meta: { meta, title: '套餐列表' }
-          },
-          {
-            path: '/product/car/card',
-            name: 'card',
-            icon: 'map',
-            component: () => import('@/views/product/card'),
-            meta: { meta, title: '限次卡' }
-          },
-          {
-            path: '/product/car/coupon',
-            name: 'coupon',
-            icon: 'map',
-            component: () => import('@/views/product/coupon'),
-            meta: { meta, title: '优惠券' }
-          }
-        ]
+        component: () => import('@/views/product/package'),
+        meta: { meta, title: '套餐列表' }
       },
       {
-        path: '/product/beauty',
-        name: 'beauty',
+        path: '/product/car/card',
+        name: 'card',
         icon: 'map',
-        component: () => import('@/views/product'),
-        meta: { meta, title: '美容产品线' }
+        component: () => import('@/views/product/card'),
+        meta: { meta, title: '限次卡' }
       },
       {
-        path: '/product/vas',
-        name: 'vas',
+        path: '/product/car/coupon',
+        name: 'coupon',
         icon: 'map',
-        component: () => import('@/views/product'),
-        meta: { meta, title: '增值服务' }
+        component: () => import('@/views/product/coupon'),
+        meta: { meta, title: '优惠券' }
       },
       {
-        path: '/product/mall',
-        name: 'mall',
+        path: '/product/develop/configure',
+        name: 'configure',
         icon: 'map',
-        component: () => import('@/views/product'),
-        meta: { meta, title: '商城' }
-      },
-      {
-        path: 'develop',
-        name: 'develop',
-        icon: 'map',
-        component: () => import('@/views/product'),
-        meta: { meta, title: '产品研发' },
-        children: [
-          {
-            path: '/product/develop/configure',
-            name: 'configure',
-            icon: 'map',
-            component: () => import('@/views/product/configure'),
-            meta: { meta, title: '产品配置' }
-          }
-        ]
+        component: () => import('@/views/product/configure'),
+        meta: { meta, title: '产品配置' }
       }
+
+
+      // {
+      //   path: 'car',
+      //   name: 'car',
+      //   icon: 'map',
+      //   redirect: '/product/car/package',
+      //   component: () => import('@/views/product'),
+      //   meta: { meta, title: '洗车产品线' },
+      //   children: [
+      //     {
+      //       path: '/product/car/package',
+      //       name: 'package',
+      //       icon: 'map',
+      //       component: () => import('@/views/product/package'),
+      //       meta: { meta, title: '套餐列表' }
+      //     },
+      //     {
+      //       path: '/product/car/card',
+      //       name: 'card',
+      //       icon: 'map',
+      //       component: () => import('@/views/product/card'),
+      //       meta: { meta, title: '限次卡' }
+      //     },
+      //     {
+      //       path: '/product/car/coupon',
+      //       name: 'coupon',
+      //       icon: 'map',
+      //       component: () => import('@/views/product/coupon'),
+      //       meta: { meta, title: '优惠券' }
+      //     }
+      //   ]
+      // },
+      // {
+      //   path: '/product/beauty',
+      //   name: 'beauty',
+      //   icon: 'map',
+      //   component: () => import('@/views/product'),
+      //   meta: { meta, title: '美容产品线' }
+      // },
+      // {
+      //   path: '/product/vas',
+      //   name: 'vas',
+      //   icon: 'map',
+      //   component: () => import('@/views/product'),
+      //   meta: { meta, title: '增值服务' }
+      // },
+      // {
+      //   path: '/product/mall',
+      //   name: 'mall',
+      //   icon: 'map',
+      //   component: () => import('@/views/product'),
+      //   meta: { meta, title: '商城' }
+      // },
+      // {
+      //   path: 'develop',
+      //   name: 'develop',
+      //   icon: 'map',
+      //   component: () => import('@/views/product'),
+      //   meta: { meta, title: '产品研发' },
+      //   children: [
+      //     {
+      //       path: '/product/develop/configure',
+      //       name: 'configure',
+      //       icon: 'map',
+      //       component: () => import('@/views/product/configure'),
+      //       meta: { meta, title: '产品配置' }
+      //     }
+      //   ]
+      // }
     ]
   },
   {
@@ -146,45 +176,62 @@ const mainFrame = [
     meta: { meta, title: '运营中心' },
     children: [
       {
-        path: 'user',
-        name: 'user',
+        path: '/oc/user/list',
+        name: 'list',
         icon: 'map',
-        redirect: '/oc/user/list',
-        component: () => import('@/views/operation'),
-        meta: { meta, title: '用户管理' },
-        children: [
-          {
-            path: '/oc/user/list',
-            name: 'list',
-            icon: 'map',
-            component: () => import('@/views/operation/user'),
-            meta: { meta, title: '用户数据' }
-          },
-          {
-            path: '/oc/user/portrait',
-            name: 'portrait',
-            icon: 'map',
-            component: () => import('@/views/operation/portrait'),
-            meta: { meta, title: '会员画像' }
-          },
-          {
-            path: '/oc/user/customer',
-            name: 'customer',
-            icon: 'map',
-            component: () => import('@/views/test'),
-            meta: { meta, title: '集团客户' }
-          },
-          {
-            path: '/oc/user/service',
-            name: 'service',
-            icon: 'map',
-            component: () => import('@/views/test'),
-            meta: { meta, title: '客服管理' }
-          }
-        ]
-      }
+        component: () => import('@/views/operation/user'),
+        meta: { meta, title: '用户数据' }
+      },
+      {
+        path: '/oc/user/portrait',
+        name: 'portrait',
+        icon: 'map',
+        component: () => import('@/views/operation/portrait'),
+        meta: { meta, title: '会员画像' }
+      },
+      // {
+      //   path: '/oc/user/customer',
+      //   name: 'customer',
+      //   icon: 'map',
+      //   component: () => import('@/views/test'),
+      //   meta: { meta, title: '集团客户' }
+      // },
+      // {
+      //   path: '/oc/user/service',
+      //   name: 'service',
+      //   icon: 'map',
+      //   component: () => import('@/views/test'),
+      //   meta: { meta, title: '客服管理' }
+      // }
     ]
-  }
+    // children: [
+    //   {
+    //     path: 'user',
+    //     name: 'user',
+    //     icon: 'map',
+    //     redirect: '/oc/user/list',
+    //     component: () => import('@/views/operation'),
+    //     meta: { meta, title: '用户管理' },
+
+    //   }
+    // ]
+  },
+  // {
+  //   path: '/fd',
+  //   name: 'fd',
+  //   redirect: '/fd/comprehensive',
+  //   component: AppMain,
+  //   meta: { meta, title: '财务中心' },
+  //   children: [
+  //     {
+  //   path: '/oc/user/service',
+  //   name: 'service',
+  //   icon: 'map',
+  //   component: () => import('@/views/test'),
+  //   meta: { meta, title: '客服管理' }
+  // }
+  //   ]
+  // }
 ]
 
 const routes = [...loginFrame, ...mainFrame, ...errorPage]

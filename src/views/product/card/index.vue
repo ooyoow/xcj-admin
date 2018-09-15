@@ -1,39 +1,38 @@
 <template>
   <div :class="prefixCls">
-    <div :class="`${prefixCls}-type`">
-      <el-radio-group v-model="listQuery.type" @change="onRadioChange">
-        <el-radio-button :label="1">全部套餐
-          <span>(1000)</span>
-        </el-radio-button>
-        <el-radio-button :label="2">今日在线
-          <span></span>
-        </el-radio-button>
-        <el-radio-button :label="3">仓库
-          <span></span>
-        </el-radio-button>
-      </el-radio-group>
+    <div class="filter-container">
+      <div class="filter-item">
+        <el-input v-model="listQuery.search" clearable @input="handleSearch" placeholder="输入套餐名称/产品ID搜索"></el-input>
+      </div>
+      <div class="filter-item">
+        <el-radio-group v-model="listQuery.productStatus" @change="onRadioChange">
+          <el-radio-button label="">全部
+            <span>({{stats.count}})</span>
+          </el-radio-button>
+          <el-radio-button label="online">今日在线
+            <span>({{stats.onlineNumber}})</span>
+          </el-radio-button>
+          <el-radio-button label="warehouse">仓库
+            <span>({{stats.warehouseNumber}})</span>
+          </el-radio-button>
+        </el-radio-group>
+      </div>
     </div>
-    <el-form :class="`${prefixCls}-form-search`" :inline="true" :model="listQuery">
-      <el-form-item label="输入搜索">
-        <el-input v-model="listQuery.search" placeholder="套餐名称/产品ID搜索"></el-input>
-      </el-form-item>
-    </el-form>
-    <el-table :class="`${prefixCls}-table`" :data="cardList" tooltip-effect="dark">
-      <el-table-column type=" selection" width="55"></el-table-column>
-      <el-table-column prop="driverName" label="套餐名称" show-overflow-tooltip></el-table-column>
-      <el-table-column prop="driverid" label="产品ID" show-overflow-tooltip></el-table-column>
+    <el-table :class="`${prefixCls}-table`" :data="packageList" tooltip-effect="dark">
+      <el-table-column prop="pName" label="限次卡名称" show-overflow-tooltip></el-table-column>
       <el-table-column prop="manufactor" label="产品图片" show-overflow-tooltip></el-table-column>
-      <el-table-column prop="currCardno" label="集团客户" show-overflow-tooltip></el-table-column>
-      <el-table-column prop="storeId" label="市场价" show-overflow-tooltip></el-table-column>
-      <el-table-column prop="state" label="次数" show-overflow-tooltip></el-table-column>
-      <el-table-column prop="createTime" label="广告语" show-overflow-tooltip></el-table-column>
-      <el-table-column prop="remarks" label="发行量" show-overflow-tooltip></el-table-column>
+      <el-table-column prop="marketPrice" label="市场价" show-overflow-tooltip></el-table-column>
+      <el-table-column prop="pNum" label="次数" show-overflow-tooltip></el-table-column>
+      <el-table-column prop="advertisement" label="广告语" show-overflow-tooltip></el-table-column>
+      <el-table-column prop="pAllnum" label="发行量" show-overflow-tooltip></el-table-column>
       <el-table-column prop="remarks" label="备注" show-overflow-tooltip></el-table-column>
       <el-table-column prop="remarks" label="状态"></el-table-column>
+      <el-table-column prop="pContent" label="简介"></el-table-column>
+      <!-- <el-table-column prop="groupCustomer" label="集团客户" show-overflow-tooltip></el-table-column> -->
       <el-table-column fixed="right" label="操作" width="150 ">
         <template slot-scope="scope">
-          <el-button type="text " size="small " @click="handleUpdate(scope.row) ">编辑</el-button>
-          <el-button type="text " size="small " @click="handleDelete(scope.row.driverid) ">删除</el-button>
+          <el-button type="text" @click="handleUpdate(scope.row) ">编辑</el-button>
+          <el-button type="text" @click="handleDelete(scope.row.id) ">删除</el-button>
         </template>
       </el-table-column>
     </el-table>
@@ -41,39 +40,79 @@
 </template>
 
 <script>
-import $axios from '@/utils/axios'
-import './card.scss'
+import { mapActions } from "vuex";
+import $axios from "@/utils/axios";
+import "./card.scss";
 export default {
-  name: 'card',
+  name: "card",
   data() {
     return {
-      prefixCls: 'product-card',
+      prefixCls: "xcj-product-card",
       listQuery: {
-        search: '',
-        type: 1,
+        search: "",
+        type: 2,
         currentPage: 1,
         size: 10,
-        sort: ''
+        productStatus: "",
+        sort: ""
       },
-      cardList: []
-    }
+      stats: {
+        onlineNumber: 0,
+        warehouseNumber: 0,
+        count: 0
+      },
+      packageList: []
+    };
   },
   created() {
-    this.getPackage(this.listQuery)
+    this.getPackageList();
+    this.getProductStatsByType({
+      params: { type: 2 },
+      callback: data => {
+        const { onlineNumber, warehouseNumber } = data;
+        this.stats = {
+          onlineNumber: onlineNumber,
+          warehouseNumber: warehouseNumber,
+          count: onlineNumber + warehouseNumber
+        };
+      }
+    });
   },
   methods: {
-    getPackage(params) {
-      $axios({
-        url: '/api/v1/product/queryProductList',
-        method: 'get',
-        params: params
-      }).then(result => {
-        console.log(result)
-      })
+    ...mapActions(["getProduct", "getProductStatsByType", "deleteProduct"]),
+    getPackageList() {
+      this.getProduct({
+        params: this.listQuery,
+        callback: data => {
+          this.packageList = data;
+        }
+      });
     },
     onRadioChange() {
-      this.getPackage(this.listQuery)
+      this.getPackageList();
+    },
+    handleSearch(value) {
+      this.getPackageList();
+    },
+    handleUpdate() {},
+    handleDelete(id) {
+      this.deleteProduct({
+        params: { id },
+        callback: result => {
+          for (const p of this.packageList) {
+            if (p.id === id) {
+              const index = this.packageList.indexOf(p);
+              this.packageList.splice(index, 1);
+              this.$message({
+                message: "删除成功",
+                type: "success"
+              });
+              break;
+            }
+          }
+        }
+      });
     }
   }
-}
+};
 </script>

@@ -38,7 +38,7 @@
     @include theme-menu-hover-style;
   }
   /* 主体 */
-  .app-frame {
+  .app {
     // 背景色
     background-color: $theme-bg-color;
     /* 菜单 */
@@ -128,7 +128,7 @@
       }
     }
     /* 内容 */
-    .main-container {
+    .app-container {
       .menu-side {
         border-right: 1px solid $theme-menu-side-border-color;
       }

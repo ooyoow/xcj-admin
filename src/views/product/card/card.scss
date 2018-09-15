@@ -1,9 +1,8 @@
-.product-card {
-  &-type {
+.xcj-product-card {
+  .filter-container {
+    display: flex;
+    flex-flow: row nowrap;
+    justify-content: space-between;
     padding: 1rem;
-    text-align: right;
-  }
-  &-form-search {
-    padding: 0 1rem;
   }
 }

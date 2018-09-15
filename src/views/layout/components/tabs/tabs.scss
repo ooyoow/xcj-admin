@@ -1,0 +1,11 @@
+.tabs {
+  display: flex;
+  align-items: center;
+  &-content {
+    flex-grow: 1;
+    flex-shrink: 1;
+  }
+  .page-control .el-tabs__header.is-top {
+    margin: 0;
+  }
+}

@@ -19,9 +19,9 @@
     </baidu-map>
     <div :class="[`${prefixCls}-actions`]">
       <el-radio-group v-model="type" @change="onRadioChange">
-        <el-radio-button label="1">本日</el-radio-button>
-        <el-radio-button label="2">本周</el-radio-button>
-        <el-radio-button label="3">本月</el-radio-button>
+        <el-radio-button :label="1">本日</el-radio-button>
+        <el-radio-button :label="3">本周</el-radio-button>
+        <el-radio-button :label="4">本月</el-radio-button>
       </el-radio-group>
       <el-button type="primary" size="mini" @click="handleBtnStore">{{showStore ? '隐藏' : '门店' }}列表</el-button>
     </div>
@@ -33,7 +33,7 @@
             <span>{{store.servieAmount||0}}</span> 元</div>
           <div class="wash-amount">洗车量：
             <span>{{store.washAmount||0}}</span> 辆</div>
-          <div class="store-address">{{`${store.storePro}${store.storeCity}${store.address}`}}</div>
+          <div class="store-address">{{`${store.storePro||""}${store.storeCity||""}${store.address||""}`}}</div>
         </li>
       </ul>
     </div>
@@ -41,19 +41,19 @@
 </template>
 
 <script>
-import { mapState, mapActions } from 'vuex'
-import Overlay from './overlay'
-import './style.scss'
+import { mapState, mapActions } from "vuex";
+import Overlay from "./overlay";
+import "./style.scss";
 export default {
   data() {
     return {
-      prefixCls: 'cw-map',
+      prefixCls: "cw-map",
       center: { lng: 110.301309, lat: 20.016001 }, // 丘海大道19号
       zoom: 18,
       show: true,
       showStore: false,
       active: true,
-      type: '1'
+      type: "1"
       // storeList: [
       //   {
       //     storeName: '海口丘海店海口丘海店海口丘海店',
@@ -61,13 +61,13 @@ export default {
       //     storeLocationY: 20.016001
       //   }
       // ]
-    }
+    };
   },
   components: {
     Overlay
   },
   mounted() {
-    this.getStore(1)
+    this.getStore(1);
   },
   computed: {
     ...mapState({
@@ -75,14 +75,14 @@ export default {
     })
   },
   methods: {
-    ...mapActions(['getStore']),
+    ...mapActions(["getStore"]),
     onRadioChange(value) {
-      this.getStore(+value)
+      this.getStore(+value);
     },
     handleBtnStore() {
-      this.showStore = !this.showStore
+      this.showStore = !this.showStore;
     },
     handleMarker() {}
   }
-}
+};
 </script>

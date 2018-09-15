@@ -16,9 +16,10 @@ export const expandParams = params => {
 
 /**
  * @description 对象空值去取
- * @param {Object} obj 对象
+ * @param {Object} object 对象
+ * @return {Object} object
  */
-export const removeEmptyValue = obj => {
+export const deleteObjectEmptyValue = obj => {
   const newObj = {}
   Object.keys(obj).forEach(key => {
     obj[key].toString() ? (newObj[key] = obj[key]) : newObj
@@ -34,8 +35,8 @@ export const newPage = url => {
   const a = document.createElement('a')
   a.setAttribute('href', url)
   a.setAttribute('target', '_blank')
-  a.setAttribute('id', 'd2admin-menu-link')
+  a.setAttribute('id', 'menu-link')
   document.body.appendChild(a)
   a.click()
-  document.body.removeChild(document.getElementById('d2admin-menu-link'))
+  document.body.removeChild(document.getElementById('menu-link'))
 }
