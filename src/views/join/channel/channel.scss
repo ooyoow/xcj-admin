@@ -1,0 +1,13 @@
+.xcj-join-channel {
+  padding: 0 1.25rem;
+  .item {
+    margin-top: 1rem;
+    .header {
+      display: flex;
+      flex-flow: row;
+      justify-content: space-between;
+      align-items: center;
+      background-color: #f8f8f8;
+    }
+  }
+}

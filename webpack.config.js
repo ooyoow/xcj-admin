@@ -13,7 +13,7 @@ module.exports = {
   output: {
     path: path.resolve(__dirname, './dist'),
     // publicPath: '/dist/',
-    filename: '[name].js',
+    filename: '[name].[hash:8].js',
     libraryTarget: 'umd'
   },
   devtool: devMode ? '#source-map' : false,
@@ -75,8 +75,8 @@ module.exports = {
   plugins: [
     new VueLoaderPlugin(),
     new MiniCssExtractPlugin({
-      filename: '[name].css',
-      chunkFilename: '[id].css'
+      filename: '[name].[hash:8].css',
+      chunkFilename: '[id].[hash:8].css'
     }),
     new HtmlWebpackPlugin({
       filename: 'index.html',

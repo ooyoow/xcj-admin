@@ -97,7 +97,6 @@ const mainFrame = [
         meta: { meta, title: '产品配置' }
       }
 
-
       // {
       //   path: 'car',
       //   name: 'car',
@@ -189,6 +188,13 @@ const mainFrame = [
         component: () => import('@/views/operation/portrait'),
         meta: { meta, title: '会员画像' }
       },
+      {
+        path: '/oc/join/channel',
+        name: 'channel',
+        icon: 'map',
+        component: () => import('@/views/join/channel'),
+        meta: { meta, title: '渠道开发' }
+      }
       // {
       //   path: '/oc/user/customer',
       //   name: 'customer',
@@ -216,22 +222,45 @@ const mainFrame = [
     //   }
     // ]
   },
-  // {
-  //   path: '/fd',
-  //   name: 'fd',
-  //   redirect: '/fd/comprehensive',
-  //   component: AppMain,
-  //   meta: { meta, title: '财务中心' },
-  //   children: [
-  //     {
-  //   path: '/oc/user/service',
-  //   name: 'service',
-  //   icon: 'map',
-  //   component: () => import('@/views/test'),
-  //   meta: { meta, title: '客服管理' }
-  // }
-  //   ]
-  // }
+  {
+    path: '/fd',
+    name: 'fd',
+    redirect: '/fd/comprehensive',
+    component: AppMain,
+    meta: { meta, title: '财务中心' },
+    children: [
+      {
+        path: '/fd/comprehensive',
+        name: 'comprehensive',
+        icon: 'map',
+        component: () => import('@/views/test'),
+        meta: { meta, title: '综合统计' }
+      },
+      {
+        path: '/fd/sale',
+        name: 'sale',
+        icon: 'map',
+        component: () => import('@/views/test'),
+        meta: { meta, title: '销售统计' }
+      }
+    ]
+  },
+  {
+    path: '/system',
+    name: 'system',
+    redirect: '/system/account',
+    component: AppMain,
+    meta: { meta, title: '系统管理' },
+    children: [
+      {
+        path: '/system/account',
+        name: 'account',
+        icon: 'map',
+        component: () => import('@/views/system/account'),
+        meta: { meta, title: '账户管理' }
+      }
+    ]
+  }
 ]
 
 const routes = [...loginFrame, ...mainFrame, ...errorPage]

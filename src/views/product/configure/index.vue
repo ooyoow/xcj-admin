@@ -1,13 +1,13 @@
 <template>
   <div class="product-develop-configure">
-    <el-steps :active="1" finish-status="success">
+    <el-steps active="1" finish-status="success">
       <el-step title="选择产品分类"></el-step>
       <el-step title="填写产品信息"></el-step>
       <el-step title="配置成功"></el-step>
     </el-steps>
     <div>
       <el-form ref="formProduct" :rules="rules" :model="fromProduct" label-width="90px">
-        <el-form-item label="产品分类" prop="type">
+        <el-form-item label="产品分类" prop="ptype">
           <el-select v-model="fromProduct.type" placeholder="请选择活动区域">
             <el-option label="套餐" :value="1"></el-option>
             <el-option label="次卡" :value="2"></el-option>
@@ -114,143 +114,109 @@
 </template>
 
 <script>
-import $axios from "@/utils/axios";
-import "./configure.scss";
+import $axios from '@/utils/axios'
+import './configure.scss'
 export default {
-  name: "configure",
+  name: 'configure',
   data() {
     return {
       couponTempOptions: [],
       fromProduct: {
-        type: 1, // 产品类别 （1:套餐卡，2:次卡，3:限次卡）
-        advertisement: "", // 广告语
-        pAllnum: "", // 预备发行量
-        brand: "", // 商品品牌
-        details: "", // 产品详情
-        discountRate: "", // 折扣率
-        upTime: "", // 上架时间
-        downTime: "", // 下架时间
-        groupCustomer: "", // 集团客户
-        marketPrice: "", // 市场价
-        model: "", // 模式
-        navigation: "", //  导航
-        pcode: "", // 产品编码
-        pcontent: "", // 简介
+        ptype: 1, // 产品类别 （1:套餐卡，2:次卡，3:限次卡）
+        advertisement: '', // 广告语
+        pAllnum: '', // 预备发行量
+        brand: '', // 商品品牌
+        details: '', // 产品详情
+        discountRate: '', // 折扣率
+        upTime: '', // 上架时间
+        downTime: '', // 下架时间
+        groupCustomer: '', // 集团客户
+        marketPrice: '', // 市场价
+        model: '', // 模式
+        navigation: '', //  导航
+        pcode: '', // 产品编码
+        pcontent: '', // 简介
         pcouponId: 0, // 优惠券Id
-        pimg: "", // 产品图片
-        pname: "", // 产品名称
-        pnum: "", // 次数
-        price: "", // 售价
+        pimg: '', // 产品图片
+        pname: '', // 产品名称
+        pnum: '', // 次数
+        price: '', // 售价
         psendNum: 0, // 赠送数量
-        pvalidateTime: "", // 有效期
-        recommend: "", // 推荐指数 0-100
-        style: "" // 样式
+        pvalidateTime: '', // 有效期
+        recommend: '', // 推荐指数 0-100
+        style: '' // 样式
       },
       rules: {
-        type: [
-          { required: true, message: "终端名称不能为空", trigger: "change" }
-        ],
-        advertisement: [
-          { required: true, message: "广告语不能为空", trigger: "change" }
-        ],
-        pAllnum: [
-          { required: true, message: "发行量不能为空", trigger: "change" }
-        ],
-        brand: [
-          { required: true, message: "商品品牌不能为空", trigger: "change" }
-        ],
-        details: [
-          { required: true, message: "产品详情不能为空", trigger: "change" }
-        ],
-        discountRate: [
-          { required: true, message: "折扣率不能为空", trigger: "change" }
-        ],
-        upTime: [
-          { required: true, message: "上架时间不能为空", trigger: "change" }
-        ],
-        downTime: [
-          { required: true, message: "下架时间不能为空", trigger: "change" }
-        ],
+        ptype: [{ required: true, message: '终端名称不能为空', trigger: 'change' }],
+        advertisement: [{ required: true, message: '广告语不能为空', trigger: 'change' }],
+        pAllnum: [{ required: true, message: '发行量不能为空', trigger: 'change' }],
+        brand: [{ required: true, message: '商品品牌不能为空', trigger: 'change' }],
+        details: [{ required: true, message: '产品详情不能为空', trigger: 'change' }],
+        discountRate: [{ required: true, message: '折扣率不能为空', trigger: 'change' }],
+        upTime: [{ required: true, message: '上架时间不能为空', trigger: 'change' }],
+        downTime: [{ required: true, message: '下架时间不能为空', trigger: 'change' }],
         // groupCustomer: [
         //   { required: true, message: "集团客户不能为空", trigger: "change" }
         // ],
-        marketPrice: [
-          { required: true, message: "市场价不能为空", trigger: "change" }
-        ],
-        model: [{ required: true, message: "请选择模式", trigger: "change" }],
-        navigation: [
-          { required: true, message: "导航不能为空", trigger: "change" }
-        ],
-        pcode: [
-          { required: true, message: "请输入产品编号", trigger: "change" }
-        ],
-        pcontent: [
-          { required: true, message: "请输入简介", trigger: "change" }
-        ],
-        pcouponId: [
-          { required: true, message: "请选择优惠券模板", trigger: "change" }
-        ],
-        pimg: [{ required: true, message: "请选择风格", trigger: "change" }],
-        pname: [
-          { required: true, message: "请输入产品名称", trigger: "change" }
-        ],
-        pnum: [{ required: true, message: "请输入次数", trigger: "change" }],
-        price: [{ required: true, message: "售价不能为空", trigger: "change" }],
-        psendNum: [
-          { required: true, message: "请输入赠送次数", trigger: "change" }
-        ],
-        pvalidateTime: [
-          { required: true, message: "请选择有效期", trigger: "change" }
-        ],
-        recommend: [
-          { required: true, message: "请输入推荐指数", trigger: "change" }
-        ],
-        style: [{ required: true, message: "请选择样式", trigger: "change" }]
+        marketPrice: [{ required: true, message: '市场价不能为空', trigger: 'change' }],
+        model: [{ required: true, message: '请选择模式', trigger: 'change' }],
+        navigation: [{ required: true, message: '导航不能为空', trigger: 'change' }],
+        pcode: [{ required: true, message: '请输入产品编号', trigger: 'change' }],
+        pcontent: [{ required: true, message: '请输入简介', trigger: 'change' }],
+        pcouponId: [{ required: true, message: '请选择优惠券模板', trigger: 'change' }],
+        pimg: [{ required: true, message: '请选择风格', trigger: 'change' }],
+        pname: [{ required: true, message: '请输入产品名称', trigger: 'change' }],
+        pnum: [{ required: true, message: '请输入次数', trigger: 'change' }],
+        price: [{ required: true, message: '售价不能为空', trigger: 'change' }],
+        psendNum: [{ required: true, message: '请输入赠送次数', trigger: 'change' }],
+        pvalidateTime: [{ required: true, message: '请选择有效期', trigger: 'change' }],
+        recommend: [{ required: true, message: '请输入推荐指数', trigger: 'change' }],
+        style: [{ required: true, message: '请选择样式', trigger: 'change' }]
       }
-    };
+    }
   },
   created() {
-    this.getCouponTemp();
+    this.getCouponTemp()
   },
   methods: {
     submitForm(formName) {
       this.$refs[formName].validate(valid => {
         if (valid) {
           $axios({
-            url: "/api/v1/product/addProduct",
-            method: "post",
+            url: '/api/v1/product/addProduct',
+            method: 'post',
             data: this.fromProduct
           }).then(result => {
             this.$notify({
-              title: "成功",
-              message: "保存成功",
-              type: "success",
+              title: '成功',
+              message: '保存成功',
+              type: 'success',
               duration: 2000
-            });
-          });
+            })
+          })
         } else {
-          return false;
+          return false
         }
-      });
+      })
     },
     resetForm(formName) {
-      this.$refs[formName].resetFields();
+      this.$refs[formName].resetFields()
     },
     getCouponTemp() {
       $axios({
-        url: "api/v1/templet/queryTemplet",
-        method: "get"
+        url: 'api/v1/templet/queryTemplet',
+        method: 'get'
       }).then(result => {
-        const { resultObj } = result.data;
+        const { resultObj } = result.data
         this.couponTempOptions = resultObj.map(item => {
           return {
             label: item.couponName,
             value: item.id
-          };
-        });
-      });
+          }
+        })
+      })
     }
   }
-};
+}
 </script>
 

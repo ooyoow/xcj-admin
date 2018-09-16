@@ -9,6 +9,5 @@ module.exports = {
     node: true,
     es6: true
   },
-  extends: 'eslint:recommended',
-  "no-debugger": process.env.NODE_ENV === "production" ? 2 : 0
+  extends: 'eslint:recommended'
 }

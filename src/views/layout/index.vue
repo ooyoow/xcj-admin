@@ -6,7 +6,6 @@
     <div class="app-container">
       <!-- 侧边菜单栏 -->
       <menu-aside :show="true"></menu-aside>
-      <!-- <tabs/> -->
       <!-- 主体 -->
       <div class="app-container-main">
         <!-- 页面tabs -->
@@ -24,16 +23,16 @@
   </div>
 </template>
 <script>
-import Navbar from "./components/navbar/index";
-import MenuAside from "./components/menuAside/index";
-import Tabs from "./components/tabs/index";
+import Navbar from './components/navbar/index'
+import MenuAside from './components/menuAside/index'
+import Tabs from './components/tabs/index'
 export default {
-  name: "appMain",
+  name: 'appMain',
   components: {
     Navbar,
     MenuAside,
     Tabs
   }
-};
+}
 </script>
 

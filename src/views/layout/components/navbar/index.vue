@@ -35,9 +35,9 @@
               <el-dropdown-item v-for="theme in themeList" :key="theme.key" @click.native="setTheme(theme.key)">
                 <icon name="circle" :style="{color: theme.color}" />&nbsp;&nbsp;{{theme.name}}
               </el-dropdown-item>
-              <el-dropdown-item>
+              <!-- <el-dropdown-item>
                 <theme-picker class="theme-switch right-menu-item"></theme-picker>
-              </el-dropdown-item>
+              </el-dropdown-item> -->
             </el-dropdown-menu>
           </el-dropdown>
         </li>

@@ -98,11 +98,20 @@ body,
     }
     /* 侧边栏菜单 */
     .menu-side {
-      width: 12.5rem;
+      &-content:not(.el-menu--collapse) {
+        width: 12.5rem;
+      }
       .el-menu,
       .el-menu-item {
         background-color: transparent;
         border-right: none;
+      }
+      .collapse-btn {
+        cursor: pointer;
+        display: block;
+        width: 100%;
+        text-align: center;
+        margin: 0.75rem 0;
       }
     }
   }

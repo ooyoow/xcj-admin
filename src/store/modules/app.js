@@ -42,6 +42,9 @@ const app = {
     },
     APP_SET_MENU_ASIDE: (state, menuList) => {
       state.menuAside = menuList
+    },
+    APP_SET_MENU_ASIDE_COLLAPSE: state => {
+      state.isMenuAsideCollapse = !state.isMenuAsideCollapse
     }
   },
   actions: {
@@ -76,6 +79,12 @@ const app = {
      */
     appSetMenuAside({ commit }, menuList) {
       commit('APP_SET_MENU_ASIDE', menuList)
+    },
+    /**
+     *  @description 设置侧边栏展开或者收缩
+     */
+    appSetAsideCollapse({ commit }) {
+      commit('APP_SET_MENU_ASIDE_COLLAPSE')
     }
   }
 }
