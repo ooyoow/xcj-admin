@@ -16,16 +16,15 @@
         <el-button type="primary" @click="handleCreate">添加</el-button>
       </el-form-item>
     </el-form>
-    <el-table :class="`${prefixCls}-table`" :data="terminalList" tooltip-effect="dark" v-loading="listLoading">
-      <el-table-column prop="driverName" label="终端名称" show-overflow-tooltip></el-table-column>
-      <el-table-column prop="driverid" label="终端ID" show-overflow-tooltip></el-table-column>
-      <el-table-column prop="manufactor" label="厂家" show-overflow-tooltip></el-table-column>
-      <el-table-column prop="currCardno" label="型号" show-overflow-tooltip></el-table-column>
-      <el-table-column prop="storeId" label="所属门店" show-overflow-tooltip></el-table-column>
-      <el-table-column prop="state" label="工作状态" show-overflow-tooltip></el-table-column>
-      <el-table-column prop="createTime" label="添加时间" show-overflow-tooltip :formatter="formatTime"></el-table-column>
-      <el-table-column prop="remarks" label="备注" show-overflow-tooltip></el-table-column>
-      <el-table-column fixed="right" label="操作" width="150">
+    <el-table :class="`${prefixCls}-table`" :data="terminalList" tooltip-effect="dark" border v-loading="listLoading">
+      <el-table-column prop="driverName" label="终端名称" align="center" show-overflow-tooltip />
+      <el-table-column prop="driverid" label="终端ID" align="center" show-overflow-tooltip />
+      <el-table-column prop="manufactor" label="厂家" align="center" show-overflow-tooltip />
+      <el-table-column prop="currCardno" label="型号" align="center" show-overflow-tooltip />
+      <el-table-column prop="storeName" label="所属门店" align="center" show-overflow-tooltip />
+      <el-table-column prop="state" label="工作状态" align="center" show-overflow-tooltip :formatter="formatState" />
+      <el-table-column prop="createTime" label="添加时间" align="center" show-overflow-tooltip :formatter="formatTime" />
+      <el-table-column fixed="right" label="操作" align="center" width="100">
         <template slot-scope="scope">
           <el-button type="text" size="small" @click="handleUpdate(scope.row)">编辑</el-button>
           <el-button type="text" size="small" @click="handleDelete(scope.row.driverid)">删除</el-button>
@@ -62,10 +61,6 @@
         </el-form-item>
         <el-form-item label="添加时间" prop="createTime">
           <el-date-picker v-model="terminalTemp.createTime" type="datetime" placeholder="请选择时间"></el-date-picker>
-        </el-form-item>
-        <el-form-item label="备注" prop="remarks">
-          <el-input v-model="terminalTemp.remarks" type="textarea" :autosize="{ minRows: 2, maxRows: 4} " placeholder="请输入备注">
-          </el-input>
         </el-form-item>
       </el-form>
       <div slot="footer" class="dialog-footer">
@@ -123,8 +118,7 @@ export default {
         currCardno: [{ required: true, message: '型号不能为空', trigger: 'change' }],
         storeId: [{ required: true, message: '所属门店不能为空', trigger: 'change' }],
         state: [{ required: true, message: '工作状态不能为空', trigger: 'change' }],
-        createTime: [{ required: true, message: '添加时间不能为空', trigger: 'change' }],
-        remarks: [{ required: true, message: '备注不能为空', trigger: 'change' }]
+        createTime: [{ required: true, message: '添加时间不能为空', trigger: 'change' }]
       },
       terminalTemp: this.defaultTerminalTemp()
     }
@@ -134,15 +128,29 @@ export default {
     this.getTerminal()
   },
   methods: {
-    handleSizeChange() {},
-    handleCurrentChange() {},
-    // 查询所属门店
+    handleCurrentChange(value) {
+      this.listQuery.currentPage = value
+      this.getTerminal()
+    },
+    handleSizeChange(value) {
+      this.listQuery.size = value
+      this.getTerminal()
+    },
+    // 查询当前登录账户所属门店
     getStoreByLoginUser() {
       $axios({
         url: '/api/v1/store/queryStoreByUser',
         method: 'get'
       }).then(response => {
         const { resultObj } = response.data
+        if (resultObj && Array.isArray(resultObj)) {
+          this.storeOptions = resultObj.map(item => {
+            return {
+              label: item.storeName,
+              value: item.storeId
+            }
+          })
+        }
       })
     },
     // 查询终端
@@ -211,10 +219,6 @@ export default {
               type: 'success',
               duration: 2000
             })
-            // this.$message({
-            //   message: "操作成功",
-            //   type: "success"
-            // });
           })
         }
       })
@@ -261,6 +265,13 @@ export default {
     },
     formatTime(row, column, cellValue) {
       return formatTimeStamp(cellValue)
+    },
+    formatState(row, column, cellValue) {
+      const stateMap = {
+        free: '空闲',
+        run: '运行中'
+      }
+      return stateMap[cellValue]
     }
   }
 }

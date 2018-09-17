@@ -1,8 +1,21 @@
 .xcj-product-card {
+  padding: 1.25rem;
   .filter-container {
     display: flex;
     flex-flow: row nowrap;
     justify-content: space-between;
-    padding: 1rem;
+    .filter-item {
+      .txt {
+        width: 200px;
+        margin-right: 1rem;
+      }
+    }
+  }
+  &-table {
+    margin-top: 1rem;
+    width: 100%;
+  }
+  &-pagination {
+    margin-top: 1.25rem;
   }
 }

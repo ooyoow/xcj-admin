@@ -13,8 +13,11 @@ const product = {
         url: '/api/v1/product/queryProductList',
         params: params
       }).then(response => {
-        const { resultObj } = response.data
-        callback(resultObj || [])
+        const { resultObj, totalSize } = response.data
+        callback({
+          list: resultObj || [],
+          total: totalSize
+        })
       })
     },
     /**
@@ -32,11 +35,40 @@ const product = {
         callback(resultObj || {})
       })
     },
-    deleteProduct({}, { params, callback }) {
+    /**
+     * @description // 新增产品
+     * @param {Object} params 产品参数
+     * @param {Function} callback
+     */
+    createProduct({}, { params, callback }) {
+      $axios({
+        url: '/api/v1/product/addProduct',
+        method: 'post',
+        data: params
+      }).then(callback)
+    },
+    /**
+     * @description // 新增产品
+     * @param {Object} params 产品参数
+     * @param {Function} callback
+     */
+    updateProduct({}, { params, callback }) {
+      $axios({
+        url: '/api/v1/product/editProduct',
+        method: 'post',
+        data: params
+      }).then(callback)
+    },
+    /**
+     * @description // 删除产品
+     * @param {Number} id 产品id
+     * @param {Function} callback
+     */
+    deleteProduct({}, { id, callback }) {
       $axios({
         url: '/api/v1/product/deleteProduct',
         method: 'post',
-        data: params
+        params: { id }
       }).then(callback)
     }
   }

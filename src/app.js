@@ -1,17 +1,16 @@
 import 'babel-polyfill'
 import Vue from 'vue'
-import screenfull from 'screenfull'
 import ElementUI from 'element-ui'
-import BaiduMap from 'vue-baidu-map'
 import 'element-ui/lib/theme-chalk/index.css'
+import BaiduMap from 'vue-baidu-map'
 import router, { mainRoutes } from '@/router'
 import store from '@/store'
+import BASE_URL from '../config/serve'
 import App from './App'
 import '@/components'
 import '@/permission'
 
-// 权限控制
-// import permission from '@/permission'
+Vue.prototype.$base_url = BASE_URL
 // 注册组件
 Vue.use(ElementUI, { size: 'small' })
 Vue.use(BaiduMap, { ak: 'ccL3AHgm0R1prHkC8XsrH9Vo16wf5V1W' })
@@ -25,22 +24,10 @@ new Vue({
     this.$store.dispatch('initPage', mainRoutes)
     // 设置顶部导航菜单
     this.$store.dispatch('setMenuHeader', mainRoutes)
-
-    // 初始化全屏监听
-    this.fullscreenListener()
   },
-  mounted() {},
-  methods: {
-    //  全屏监听
-    fullscreenListener() {
-      if (screenfull.enabled) {
-        screenfull.on('change', () => {
-          // if (!screenfull.isFullscreen) {
-          //   this.$store.commit('appSetFullScreen', false)
-          // }
-        })
-      }
-    }
+  mounted() {
+    // 初始化全屏监听
+    this.$store.dispatch('fullscreenListener')
   },
   watch: {
     // 监听路由 控制侧边栏显示

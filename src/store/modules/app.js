@@ -49,6 +49,18 @@ const app = {
   },
   actions: {
     /**
+    * @description 全屏监听
+    */
+    fullscreenListener({ commit }) {
+      if (screenfull.enabled) {
+        screenfull.on('change', () => {
+          if (!screenfull.isFullscreen) {
+            commit('APP_SET_FULL_SCREEN', false)
+          }
+        })
+      }
+    },
+    /**
      * @class isFullScreen
      * @description 切换全屏
      * @param {vuex state} state vuex state
@@ -61,7 +73,7 @@ const app = {
         screenfull.request()
         isFullscreen = true
       }
-      this.commit('APP_SET_FULL_SCREEN', isFullscreen)
+      commit('APP_SET_FULL_SCREEN', isFullscreen)
     },
     /**
      * @description 设置顶栏菜单

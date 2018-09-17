@@ -4,12 +4,7 @@
       <div class="logo">福瑞道</div>
     </div>
     <div class="navbar-menu">
-      <el-menu class="navbar-start" mode="horizontal" @select="handleMenuSelect">
-        <template v-for="(menu, menuIndex) in menuHeader">
-          <menu-item v-if="menu.children === undefined" :menu="menu" :key="menuIndex" />
-          <menu-sub v-else :menu="menu" :key="menuIndex" />
-        </template>
-      </el-menu>
+      <menu-nav class="navbar-start"></menu-nav>
       <ul class="navbar-end">
         <li class="navbar-item">
           <el-tooltip effect="dark" :content="isFullScreen ? '退出全屏' : '全屏'" placement="bottom">
@@ -48,7 +43,7 @@
               <span class="btn-text">{{userInfo.name}}</span>
             </div>
             <el-dropdown-menu slot="dropdown">
-              <el-dropdown-item @click.native="logOff">
+              <el-dropdown-item @click.native="handleLogout">
                 <icon name="power-off" />注销</el-dropdown-item>
             </el-dropdown-menu>
           </el-dropdown>
@@ -59,27 +54,17 @@
 </template>
 <script>
 import { mapState, mapActions } from 'vuex'
-import mixin from '@/views/layout/mixin'
-import MenuSub from '@/components/menuSub'
-import MenuItem from '@/components/menuItem'
+import { MessageBox } from 'element-ui'
+import MenuNav from './MenuNav'
 export default {
   name: 'aside-menu',
-  data() {
-    return {}
-  },
-  mixins: [mixin],
-  components: {
-    MenuSub,
-    MenuItem
-  },
-  props: {
-    show: { type: Boolean, default: false }
-  },
+  components: { MenuNav },
+  props: { show: { type: Boolean, default: false } },
   computed: {
     ...mapState({
       isFullScreen: state => state.app.isFullScreen,
       menuHeader: state => state.app.menuHeader,
-      userInfo: state => state.app.userInfo,
+      userInfo: state => state.login.userInfo,
       themeList: state => state.theme.themeList
     })
   },
@@ -87,16 +72,24 @@ export default {
     ...mapActions(['appToggleFullScreen', 'logout', 'setTheme']),
     handleTheme(key) {
       this.setTheme(key)
-      console.log(key, 'key')
     },
-    logOff() {
-      const callback = () => {
-        this.$router.push({ path: '/login' })
+    handleLogout() {
+      if (confirm) {
+        const callback = () => {
+          this.$router.push({ path: '/login' })
+        }
+        MessageBox.confirm('确定注销当前账户吗?', '确认操作', {
+          confirmButtonText: '确定注销',
+          cancelButtonText: '放弃',
+          type: 'warning'
+        })
+          .then(() => {
+            this.logout(callback)
+          })
+          .catch(err => {
+            console.log(err)
+          })
       }
-      this.logout({
-        confirm: true,
-        callback: callback
-      })
     }
   }
 }

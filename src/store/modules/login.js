@@ -1,14 +1,18 @@
 import $axios from '@/utils/axios'
 import { setCookie, removeCookie } from '@/utils/cookie'
-import { MessageBox } from 'element-ui'
 
 const login = {
   state: {
     userInfo: {}
   },
+  mutations: {
+    SET_USER_INFO: (state, userInfo) => {
+      state.userInfo = userInfo
+    }
+  },
   actions: {
     /**
-     * 登录
+     * 账户名登录
      * @param {Object} param0 context
      * @param {Object} param1 { username, password }
      * @param {Function} param2
@@ -22,15 +26,12 @@ const login = {
       })
         .then(response => {
           const { resultObj } = response.data
-          const { adminId, token, name } = resultObj
-          setCookie('uuid', adminId)
+          const { adminId, token } = resultObj
+          setCookie('userId', adminId)
           setCookie('token', token)
-          // 设置 vuex 用户信息
-          commit('appSetUserInfo', {
-            name: name
-          })
-          // 用户登录后从数据库加载一系列的设置
-          commit('appLoadLoginSuccess')
+          // 设置用户信息
+          commit('SET_USER_INFO', resultObj)
+          console.log(resultObj, 'resultObj')
           callback(resultObj)
         })
         .catch(err => {
@@ -43,33 +44,26 @@ const login = {
      * @param {Object} param0 context
      * @param {Object} confirm need confirm ?
      */
-    logout({ commit }, { confirm, callback }) {
+    logout({ commit }, callback) {
       /**
        * @description 注销
        */
-      const next = () => {
-        // 删除cookie
-        removeCookie('token')
-        removeCookie('uuid')
-        // 执行回调
-        callback()
-      }
-      // 判断是否需要确认
-      if (confirm) {
-        MessageBox.confirm('注销当前账户吗?  打开的标签页和用户设置将会被保存。', '确认操作', {
-          confirmButtonText: '确定注销',
-          cancelButtonText: '放弃',
-          type: 'warning'
+      $axios({
+        method: 'post',
+        url: '/api/v1/logout'
+      })
+        .then(response => {
+          const { success } = response.data
+          if (success) {
+            removeCookie('userId')
+            removeCookie('token')
+            commit('SET_USER_INFO', {})
+            callback()
+          }
         })
-          .then(() => {
-            next()
-          })
-          .catch(err => {
-            console.error(err)
-          })
-      } else {
-        next()
-      }
+        .catch(err => {
+          console.error('err: ', err)
+        })
     }
   }
 }

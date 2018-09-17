@@ -1,12 +1,14 @@
 import Cookie from 'js-cookie'
 import { version } from '../../package'
 
+const tokenKey = 'XCJ-Token'
+
 /**
  * @description 获取 cookie 值
  * @param {String} name token name
  */
-export const getCookie = function (name = 'default') {
-  return Cookie.get(`cw-${version}-${name}`)
+export const getCookie = (name = tokenKey) => {
+  return Cookie.get(name)
 }
 
 /**
@@ -15,12 +17,12 @@ export const getCookie = function (name = 'default') {
  * @param {String} value token value
  * @param {Object} setting token setting
  */
-export const setCookie = (name = 'default', value = '', setting = {}) => {
+export const setCookie = (name = tokenKey, value = '', setting = {}) => {
   const Cookieetting = {
     expires: 1
   }
   Object.assign(Cookieetting, setting)
-  Cookie.set(`cw-${version}-${name}`, value, Cookieetting)
+  Cookie.set(name, value, Cookieetting)
 }
 
 /**
@@ -34,6 +36,6 @@ export const getAllCookie = () => {
  * @description 删除 token
  * @param {String} name token name
  */
-export const removeCookie = (name = 'default') => {
-  return Cookie.remove(`cw-${version}-${name}`)
+export const removeCookie = (name = tokenKey) => {
+  return Cookie.remove(name)
 }

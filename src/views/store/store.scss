@@ -1,7 +1,9 @@
 .xcj-store {
   padding: 16px;
-  &-table {}
+  &-table {
+    width: 100%;
+  }
   &-pagination {
-    margin-top: 20px;
+    margin-top: 1.25rem;
   }
 }
