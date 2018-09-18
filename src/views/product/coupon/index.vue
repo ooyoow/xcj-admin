@@ -114,7 +114,7 @@ export default {
       prefixCls: 'xcj-product-coupon',
       listQuery: {
         search: '',
-        type: 3,
+        type: 2,
         currentPage: 1,
         size: 10,
         productStatus: '',

@@ -1,14 +1,14 @@
 <template>
   <el-form class="login-form" status-icon :rules="loginRules" ref="loginForm" :model="loginForm" label-width="0">
-    <el-form-item prop="username">
+    <el-form-item prop="loginId">
       <el-input size="small" @keyup.enter.native="handleLogin" v-model="loginForm.loginId" auto-complete="off" placeholder="请输入用户名">
-        <i slot="prefix" class="icon-yonghu"></i>
+        <icon slot="prefix" name="user-o" />
       </el-input>
     </el-form-item>
     <el-form-item prop="password">
       <el-input size="small" @keyup.enter.native="handleLogin" :type="passwordType" v-model="loginForm.password" auto-complete="off" placeholder="请输入密码">
         <i class="el-icon-view el-input__icon" slot="suffix" @click="showPassword"></i>
-        <i slot="prefix" class="icon-mima"></i>
+        <icon slot="prefix" name="lock" />
       </el-input>
     </el-form-item>
     <div class="assist-options">
@@ -23,26 +23,41 @@
 
 <script>
 import { mapActions } from 'vuex'
+import { getAllCookie, setCookie, removeCookie } from '@/utils/cookie'
 export default {
   name: 'userLogin',
   data() {
-    const validateUsername = (rule, value, callback) => {
-      callback()
-    }
     return {
       loginForm: {
-        loginId: 'root',
-        password: 'root'
+        loginId: '',
+        password: ''
       },
       checked: false,
       loginRules: {
-        loginId: [{ required: true, trigger: 'blur', validator: validateUsername }],
+        loginId: [{ required: true, message: '请输入用户名', trigger: 'change' }],
         password: [
-          { required: true, message: '请输入密码', trigger: 'blur' },
-          { min: 4, message: '密码长度最少为4位', trigger: 'blur' }
+          { required: true, message: '请输入密码', trigger: 'change' }
+          // { min: 6, message: '密码长度最少为6位', trigger: 'change' }
         ]
       },
       passwordType: 'password'
+    }
+  },
+  created() {
+    const allCookie = getAllCookie()
+    const { loginInfo } = allCookie
+    if (loginInfo) {
+      try {
+        const data = JSON.parse(loginInfo)
+        const { loginId, password, checked } = data
+        this.loginForm = {
+          loginId: loginId || '',
+          password: password || ''
+        }
+        this.checked = true
+      } catch (error) {
+        console.error(error)
+      }
     }
   },
   methods: {
@@ -56,10 +71,17 @@ export default {
           const callback = () => {
             this.$router.push({ name: 'map' })
           }
-          this.loginByUserName({ param: this.loginForm, callback })
-        } else {
-          // 登录表单校验失败
-          this.$message.error('表单校验失败')
+          if (this.checked) {
+            const { loginId, password } = this.loginForm
+            const loginInfo = {
+              ...this.loginForm,
+              checked: this.checked
+            }
+            setCookie('loginInfo', JSON.stringify(loginInfo))
+          } else {
+            removeCookie('loginInfo')
+          }
+          this.loginByUserName({ params: this.loginForm, callback })
         }
       })
     }

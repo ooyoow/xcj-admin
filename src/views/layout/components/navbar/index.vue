@@ -44,7 +44,11 @@
             </div>
             <el-dropdown-menu slot="dropdown">
               <el-dropdown-item @click.native="handleLogout">
-                <icon name="power-off" />注销</el-dropdown-item>
+                <icon name="key" />&nbsp;修改密码
+              </el-dropdown-item>
+              <el-dropdown-item @click.native="handleLogout">
+                <icon name="power-off" />&nbsp;注销
+              </el-dropdown-item>
             </el-dropdown-menu>
           </el-dropdown>
         </li>

@@ -7,7 +7,7 @@ export const expandParams = params => {
   let urlParams = ''
   Object.keys(params).forEach(key => {
     if (params[key]) {
-      urlParams = `${flag ? '?' : '&'}${key}=${params[key]}`
+      urlParams += `${flag ? '?' : '&'}${key}=${params[key]}`
       flag = false
     }
   })

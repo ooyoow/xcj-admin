@@ -14,7 +14,7 @@ module.exports = {
     path: path.resolve(__dirname, './dist'),
     // publicPath: '/dist/',
     filename: '[name].[hash:8].js',
-    chunkFilename: '[id].[hash:8].css',
+    chunkFilename: '[id].[hash:8].js',
     libraryTarget: 'umd'
   },
   devtool: devMode ? '#source-map' : false,

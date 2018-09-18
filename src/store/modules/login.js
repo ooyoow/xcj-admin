@@ -14,15 +14,15 @@ const login = {
     /**
      * 账户名登录
      * @param {Object} param0 context
-     * @param {Object} param1 { username, password }
+     * @param {Object} param1 { loginId, password }
      * @param {Function} param2
      */
-    loginByUserName({ commit }, { param, callback }) {
+    loginByUserName({ commit }, { params, callback }) {
       $axios({
         method: 'post',
         url: '/api/v1/login',
         headers: { 'Content-Type': 'application/json;charset=UTF-8' },
-        data: JSON.stringify(param)
+        data: JSON.stringify(params)
       })
         .then(response => {
           const { resultObj } = response.data
@@ -31,7 +31,6 @@ const login = {
           setCookie('token', token)
           // 设置用户信息
           commit('SET_USER_INFO', resultObj)
-          console.log(resultObj, 'resultObj')
           callback(resultObj)
         })
         .catch(err => {
@@ -64,6 +63,16 @@ const login = {
         .catch(err => {
           console.error('err: ', err)
         })
+    },
+    /**
+     * 前端 登出
+     * @param {Object} param0 context
+     * @param {Object} confirm need confirm ?
+     */
+    fedLogOut({ commit }) {
+      removeCookie('userId')
+      removeCookie('token')
+      commit('SET_USER_INFO', {})
     }
   }
 }

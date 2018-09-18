@@ -1,11 +1,72 @@
 .app-login-frame {
+  display: flex;
+  align-items: center;
+  justify-content: space-around;
   position: relative;
-  padding-top: 10%; 
-  background: #4776e6;
-  // background: -webkit-linear-gradient(left,#8e54e9,#4776e6);
-  // background: -moz-linear-gradient(left,#8e54e9,#4776e6);
-  // background: -o-linear-gradient(left,#8e54e9,#4776e6);
-  background: linear-gradient(90deg,#8e54e9,#4776e6);
-  width: 100%;
   height: 100%;
+  &::before {
+    z-index: -999;
+    content: '';
+    position: absolute;
+    left: 0;
+    top: 0;
+    width: 100%;
+    height: 100%;
+    background: rgb(238, 238, 238);
+  }
+  .login-container {
+    display: flex;
+    justify-content: center;
+    flex-direction: column;
+    margin-top: -10%;
+    padding: 30px 50px 25px 50px;
+    background-color: #fff;
+    border-radius: 6px;
+    box-shadow: 1px 1px 2px #eee;
+    .app-name {
+      padding: 1rem;
+      text-align: center;
+      font-size: 1.5rem;
+      color: #666;
+    }
+  }
+  .login-main {
+    border-radius: 3px;
+    box-sizing: border-box;
+    background-color: #fff;
+    .tab-choose {
+      text-align: center;
+    }
+  }
+  .login-form {
+    margin: 10px 0;
+    .assist-options {
+      &::after {
+        clear: both;
+      }
+      .forget-pwd {
+        color: #606266;
+        float: right;
+        font-size: 14px;
+        cursor: pointer;
+      }
+    }
+    .el-input {
+      input {
+        text-indent: 5px;
+        border-color: #dcdcdc;
+        border-radius: 3px;
+      }
+      .el-input__prefix {
+        i {
+          padding: 0 5px;
+          font-size: 16px !important;
+        }
+      }
+    }
+  }
+  .login-submit {
+    margin-top: 0.5rem;
+    width: 100%;
+  }
 }

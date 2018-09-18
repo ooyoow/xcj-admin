@@ -21,9 +21,6 @@ export default {
     }
   },
   methods: {
-    handleClick() {
-      global.alert('Well done.')
-    },
     draw({ el, BMap, map }) {
       const { lng, lat } = this.position
       const pixel = map.pointToOverlayPixel(new BMap.Point(lng, lat))
@@ -35,44 +32,3 @@ export default {
   }
 }
 </script>
-
-<style lang="scss" scoped>
-.map-overlay {
-  position: absolute;
-  min-width: 200px;
-  .point-tip {
-    position: relative;
-    background: #fff;
-    box-shadow: 3px 3px 8px #888;
-    margin-bottom: 10px;
-    border-radius: 5px;
-    z-index: 10;
-    .text {
-      padding: 10px;
-    }
-    .arrow {
-      position: absolute;
-      left: 50%;
-      bottom: 0;
-      margin-top: -7px;
-      &:before,
-      &:after {
-        content: '';
-        width: 0;
-        height: 0;
-        top: 0;
-        left: 0;
-        margin-left: -7px;
-        position: absolute;
-        border: 7px solid transparent;
-        border-top: 8px solid rgba(51, 51, 51, 0.2);
-      }
-      &:after {
-        margin-left: -7px;
-        border: 7px solid transparent;
-        border-top: 8px solid rgba(255, 255, 255, 1);
-      }
-    }
-  }
-}
-</style>

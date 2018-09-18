@@ -84,17 +84,17 @@
           </el-form-item>
           <el-form-item label="风格" prop="pcode">
             <el-radio-group v-model="fromProduct.pcode ">
+              <el-radio :label="0">
+                <span>
+                  <img src="@/assets/images/style.png" />
+                </span>
+              </el-radio>
               <el-radio :label="1">
                 <span>
                   <img src="@/assets/images/style.png" />
                 </span>
               </el-radio>
               <el-radio :label="2">
-                <span>
-                  <img src="@/assets/images/style.png" />
-                </span>
-              </el-radio>
-              <el-radio :label="3">
                 <span>
                   <img src="@/assets/images/style.png" />
                 </span>
@@ -202,7 +202,7 @@ export default {
       this.$refs[formName].resetFields()
     },
     onInputType(value) {
-      this.stepActive = value ? 1 : 0
+      this.stepActive = value.toString() ? 1 : 0
     },
     getCouponTemp() {
       $axios({

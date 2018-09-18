@@ -114,7 +114,7 @@ export default {
       prefixCls: 'xcj-product-card',
       listQuery: {
         search: '',
-        type: 2,
+        type: 1,
         currentPage: 1,
         size: 10,
         productStatus: '',

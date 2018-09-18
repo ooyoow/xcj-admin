@@ -1,8 +1,8 @@
 <template>
   <div :class="prefixCls">
     <baidu-map :class="[`${prefixCls}-content`]" :center="center" :zoom="zoom" :scroll-wheel-zoom="true">
-      <bm-marker :key="key" v-for="(store, key) in storeList" :position="{lng: store.storeLocationX, lat: store.storeLocationY}" @click="handleMarker">
-        <overlay :position="{lng: store.storeLocationX, lat: store.storeLocationY}" @mouseover.native="active = true" @mouseleave.native="active = false">
+      <bm-marker :key="key" v-for="(store, key) in storeList" :position="{lng: store.storeLocationX, lat: store.storeLocationY}">
+        <overlay :position="{lng: store.storeLocationX, lat: store.storeLocationY}">
           <div>{{store.storeName}}</div>
           <div class="tips-box">
             <div class="item">
@@ -41,19 +41,19 @@
 </template>
 
 <script>
-import { mapState, mapActions } from "vuex";
-import Overlay from "./overlay";
-import "./style.scss";
+import { mapState, mapActions } from 'vuex'
+import Overlay from './overlay'
+import './style.scss'
 export default {
   data() {
     return {
-      prefixCls: "cw-map",
+      prefixCls: 'xcj-map',
       center: { lng: 110.301309, lat: 20.016001 }, // 丘海大道19号
       zoom: 18,
       show: true,
       showStore: false,
       active: true,
-      type: "1"
+      type: '1'
       // storeList: [
       //   {
       //     storeName: '海口丘海店海口丘海店海口丘海店',
@@ -61,13 +61,13 @@ export default {
       //     storeLocationY: 20.016001
       //   }
       // ]
-    };
+    }
   },
   components: {
     Overlay
   },
   mounted() {
-    this.getStore(1);
+    this.getStore(1)
   },
   computed: {
     ...mapState({
@@ -75,14 +75,13 @@ export default {
     })
   },
   methods: {
-    ...mapActions(["getStore"]),
+    ...mapActions(['getStore']),
     onRadioChange(value) {
-      this.getStore(+value);
+      this.getStore(+value)
     },
     handleBtnStore() {
-      this.showStore = !this.showStore;
-    },
-    handleMarker() {}
+      this.showStore = !this.showStore
+    }
   }
-};
+}
 </script>
