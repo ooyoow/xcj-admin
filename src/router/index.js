@@ -34,28 +34,28 @@ const mainFrame = [
       {
         path: '/map',
         name: 'map',
-        icon: 'map',
+        icon: 'folder-o',
         meta: { meta, title: '运营地图' },
         component: () => import('@/views/map')
       },
       {
         path: '/order',
         name: 'order',
-        icon: 'home',
+        icon: 'folder-o',
         component: () => import('@/views/order'),
         meta: { meta, title: '交易驾驶舱' }
       },
       {
         path: '/store',
         name: 'store',
-        icon: 'home',
+        icon: 'folder-o',
         component: () => import('@/views/store'),
         meta: { meta, title: '门店信息' }
       },
       {
         path: '/terminal',
         name: 'terminal',
-        icon: 'home',
+        icon: 'folder-o',
         component: () => import('@/views/terminal'),
         meta: { meta, title: '终端信息' }
       }
@@ -71,28 +71,28 @@ const mainFrame = [
       {
         path: '/product/car/package',
         name: 'package',
-        icon: 'map',
+        icon: 'folder-o',
         component: () => import('@/views/product/package'),
         meta: { meta, title: '套餐列表' }
       },
       {
         path: '/product/car/card',
         name: 'card',
-        icon: 'map',
+        icon: 'folder-o',
         component: () => import('@/views/product/card'),
         meta: { meta, title: '限次卡' }
       },
       {
         path: '/product/car/coupon',
         name: 'coupon',
-        icon: 'map',
+        icon: 'folder-o',
         component: () => import('@/views/product/coupon'),
         meta: { meta, title: '优惠券' }
       },
       {
         path: '/product/develop/configure',
         name: 'configure',
-        icon: 'map',
+        icon: 'folder-o',
         component: () => import('@/views/product/configure'),
         meta: { meta, title: '产品配置' }
       }
@@ -100,7 +100,7 @@ const mainFrame = [
       // {
       //   path: 'car',
       //   name: 'car',
-      //   icon: 'map',
+      //   icon: 'folder-o',
       //   redirect: '/product/car/package',
       //   component: () => import('@/views/product'),
       //   meta: { meta, title: '洗车产品线' },
@@ -108,21 +108,21 @@ const mainFrame = [
       //     {
       //       path: '/product/car/package',
       //       name: 'package',
-      //       icon: 'map',
+      //       icon: 'folder-o',
       //       component: () => import('@/views/product/package'),
       //       meta: { meta, title: '套餐列表' }
       //     },
       //     {
       //       path: '/product/car/card',
       //       name: 'card',
-      //       icon: 'map',
+      //       icon: 'folder-o',
       //       component: () => import('@/views/product/card'),
       //       meta: { meta, title: '限次卡' }
       //     },
       //     {
       //       path: '/product/car/coupon',
       //       name: 'coupon',
-      //       icon: 'map',
+      //       icon: 'folder-o',
       //       component: () => import('@/views/product/coupon'),
       //       meta: { meta, title: '优惠券' }
       //     }
@@ -131,35 +131,35 @@ const mainFrame = [
       // {
       //   path: '/product/beauty',
       //   name: 'beauty',
-      //   icon: 'map',
+      //   icon: 'folder-o',
       //   component: () => import('@/views/product'),
       //   meta: { meta, title: '美容产品线' }
       // },
       // {
       //   path: '/product/vas',
       //   name: 'vas',
-      //   icon: 'map',
+      //   icon: 'folder-o',
       //   component: () => import('@/views/product'),
       //   meta: { meta, title: '增值服务' }
       // },
       // {
       //   path: '/product/mall',
       //   name: 'mall',
-      //   icon: 'map',
+      //   icon: 'folder-o',
       //   component: () => import('@/views/product'),
       //   meta: { meta, title: '商城' }
       // },
       // {
       //   path: 'develop',
       //   name: 'develop',
-      //   icon: 'map',
+      //   icon: 'folder-o',
       //   component: () => import('@/views/product'),
       //   meta: { meta, title: '产品研发' },
       //   children: [
       //     {
       //       path: '/product/develop/configure',
       //       name: 'configure',
-      //       icon: 'map',
+      //       icon: 'folder-o',
       //       component: () => import('@/views/product/configure'),
       //       meta: { meta, title: '产品配置' }
       //     }
@@ -177,35 +177,35 @@ const mainFrame = [
       {
         path: '/oc/user/list',
         name: 'list',
-        icon: 'map',
+        icon: 'folder-o',
         component: () => import('@/views/operation/user'),
         meta: { meta, title: '用户数据' }
       },
       {
         path: '/oc/user/portrait',
         name: 'portrait',
-        icon: 'map',
+        icon: 'folder-o',
         component: () => import('@/views/operation/portrait'),
         meta: { meta, title: '会员画像' }
       },
       {
         path: '/oc/join/channel',
         name: 'channel',
-        icon: 'map',
+        icon: 'folder-o',
         component: () => import('@/views/join/channel'),
         meta: { meta, title: '渠道开发' }
       }
       // {
       //   path: '/oc/user/customer',
       //   name: 'customer',
-      //   icon: 'map',
+      //   icon: 'folder-o',
       //   component: () => import('@/views/test'),
       //   meta: { meta, title: '集团客户' }
       // },
       // {
       //   path: '/oc/user/service',
       //   name: 'service',
-      //   icon: 'map',
+      //   icon: 'folder-o',
       //   component: () => import('@/views/test'),
       //   meta: { meta, title: '客服管理' }
       // }
@@ -214,7 +214,7 @@ const mainFrame = [
     //   {
     //     path: 'user',
     //     name: 'user',
-    //     icon: 'map',
+    //     icon: 'folder-o',
     //     redirect: '/oc/user/list',
     //     component: () => import('@/views/operation'),
     //     meta: { meta, title: '用户管理' },
@@ -232,14 +232,14 @@ const mainFrame = [
       {
         path: '/fd/comprehensive',
         name: 'comprehensive',
-        icon: 'map',
+        icon: 'folder-o',
         component: () => import('@/views/test'),
         meta: { meta, title: '综合统计' }
       },
       {
         path: '/fd/sale',
         name: 'sale',
-        icon: 'map',
+        icon: 'folder-o',
         component: () => import('@/views/test'),
         meta: { meta, title: '销售统计' }
       }
@@ -255,7 +255,7 @@ const mainFrame = [
       {
         path: '/system/account',
         name: 'account',
-        icon: 'map',
+        icon: 'folder-o',
         component: () => import('@/views/system/account'),
         meta: { meta, title: '账户管理' }
       }

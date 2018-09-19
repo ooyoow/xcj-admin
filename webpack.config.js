@@ -19,7 +19,7 @@ module.exports = {
   },
   devtool: devMode ? '#source-map' : false,
   devServer: {
-    // host: "10.107.111.100",
+    host: '0.0.0.0',
     port: 3001,
     historyApiFallback: true
   },

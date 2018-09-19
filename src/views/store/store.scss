@@ -2,6 +2,11 @@
   padding: 16px;
   &-table {
     width: 100%;
+    .column-img {
+      color: #3385ff;
+      cursor: pointer;
+      border-style: none;
+    }
   }
   &-pagination {
     margin-top: 1.25rem;

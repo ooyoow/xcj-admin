@@ -68,16 +68,16 @@ export default {
     handleLogin() {
       this.$refs.loginForm.validate(valid => {
         if (valid) {
-          const callback = () => {
-            this.$router.push({ name: 'map' })
+          const callback = result => {
+            this.$router.push({ path: 'map' })
+            localStorage.setItem('userInfo', JSON.stringify(result)) // 保存用户信息
           }
           if (this.checked) {
-            const { loginId, password } = this.loginForm
             const loginInfo = {
               ...this.loginForm,
               checked: this.checked
             }
-            setCookie('loginInfo', JSON.stringify(loginInfo))
+            setCookie('loginInfo', JSON.stringify(loginInfo)) // 记录登录信息
           } else {
             removeCookie('loginInfo')
           }
@@ -88,5 +88,3 @@ export default {
   }
 }
 </script>
-<style>
-</style>

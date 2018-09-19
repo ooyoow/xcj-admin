@@ -24,8 +24,22 @@
       <el-table-column prop="storePro" align="center" label="省份" show-overflow-tooltip/>
       <el-table-column prop="storeCity" align="center" label="城市" show-overflow-tooltip/>
       <el-table-column prop="address" align="center" label="地址" show-overflow-tooltip/>
-      <el-table-column prop="storeIcon" align="center" label="店铺图标" show-overflow-tooltip/>
-      <el-table-column prop="storeImg" align="center" label="店铺图片" show-overflow-tooltip/>
+      <el-table-column prop="storeIcon" align="center" label="店铺图标" show-overflow-tooltip>
+        <template slot-scope="scope">
+          <el-popover placement="right" trigger="hover">
+            <img style="width: 150px; height: 150px" :src="`${$base_url}/${scope.row.storeIcon}`" />
+            <span slot="reference" class="column-img">预览</span>
+          </el-popover>
+        </template>
+      </el-table-column>
+      <el-table-column prop="storeImg" align="center" label="店铺图片" show-overflow-tooltip>
+        <template slot-scope="scope">
+          <el-popover placement="right" trigger="hover">
+            <img style="width: 150px; height: 150px" :src="`${$base_url}/${scope.row.storeImg}`" />
+            <span slot="reference" class="column-img">预览</span>
+          </el-popover>
+        </template>
+      </el-table-column>
       <el-table-column prop="storeDesc" label="描述" show-overflow-tooltip/>
       <el-table-column prop="remarks" label="备注" show-overflow-tooltip/>
       <el-table-column prop="createTime" align="center" label="添加时间" show-overflow-tooltip :formatter="formatTime" />
@@ -162,7 +176,14 @@ export default {
         state: [{ required: true, message: '门店状态不能为空', trigger: 'change' }],
         storePro: [{ required: true, message: '省份不能为空', trigger: 'change' }],
         storeCity: [{ required: true, message: '城市不能为空', trigger: 'change' }],
-        createTime: [{ type: 'date', required: true, message: '门店ID不能为空', trigger: 'change' }]
+        createTime: [
+          {
+            type: 'date',
+            required: true,
+            message: '门店ID不能为空',
+            trigger: 'change'
+          }
+        ]
       },
       storeTemp: this.defaultStoreTemp()
     }

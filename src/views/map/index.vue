@@ -19,9 +19,9 @@
     </baidu-map>
     <div :class="[`${prefixCls}-actions`]">
       <el-radio-group v-model="type" @change="onRadioChange">
-        <el-radio-button :label="1">本日</el-radio-button>
-        <el-radio-button :label="3">本周</el-radio-button>
-        <el-radio-button :label="4">本月</el-radio-button>
+        <el-radio-button :label="2">本日</el-radio-button>
+        <el-radio-button :label="1">本周</el-radio-button>
+        <el-radio-button :label="0">本月</el-radio-button>
       </el-radio-group>
       <el-button type="primary" size="mini" @click="handleBtnStore">{{showStore ? '隐藏' : '门店' }}列表</el-button>
     </div>
@@ -53,7 +53,7 @@ export default {
       show: true,
       showStore: false,
       active: true,
-      type: '1'
+      type: 2
       // storeList: [
       //   {
       //     storeName: '海口丘海店海口丘海店海口丘海店',

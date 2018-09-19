@@ -36,6 +36,10 @@
         </template>
       </el-table-column>
     </el-table>
+    <div :class="`${prefixCls}-pagination`">
+      <el-pagination background @size-change="handleSizeChange" @current-change="handleCurrentChange" :current-page="formSearch.currentPage" :page-sizes="[10,20,30, 50]" :page-size="formSearch.size" layout="total, sizes, prev, pager, next, jumper" :total="total">
+      </el-pagination>
+    </div>
 
     <el-dialog :title="dialogType[dialogStatus]" :visible.sync="dialogVisible">
       <el-form :rules="rules" ref="accountForm" :model="accountTemp" label-position="right" label-width="80px">
@@ -55,10 +59,10 @@
             <el-option v-for="item in businessOptions" :key="item.value" :label="item.label" :value="item.value"></el-option>
           </el-select>
         </el-form-item>
-        <el-form-item v-if="dialogType[dialogStatus]==='create'" label="密码" prop="password">
+        <el-form-item v-if="dialogStatus==='create'" label="密码" prop="password">
           <el-input v-model="accountTemp.password" type="password"></el-input>
         </el-form-item>
-        <el-form-item v-if="dialogType[dialogStatus]==='create'" label="确认密码" prop="confirmPassword">
+        <el-form-item v-if="dialogStatus==='create'" label="确认密码" prop="confirmPassword">
           <el-input v-model="accountTemp.confirmPassword" type="password"></el-input>
         </el-form-item>
         <el-form-item label="邮箱" prop="email">
@@ -81,6 +85,7 @@ import './account.scss'
 export default {
   data() {
     return {
+      prefixCls: 'xcj-system-account',
       formSearch: {
         loginId: '',
         name: '',
@@ -150,6 +155,14 @@ export default {
   methods: {
     handleSearch() {
       this.formSearch.currentPage = 1
+      this.getAccountList()
+    },
+    handleCurrentChange(value) {
+      this.formSearch.size = value
+      this.getAccountList()
+    },
+    handleSizeChange(value) {
+      this.formSearch.currentPage = value
       this.getAccountList()
     },
     handleCreate() {

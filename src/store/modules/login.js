@@ -54,6 +54,7 @@ const login = {
         .then(response => {
           const { success } = response.data
           if (success) {
+            localStorage.removeItem('userInfo')
             removeCookie('userId')
             removeCookie('token')
             commit('SET_USER_INFO', {})
@@ -65,14 +66,39 @@ const login = {
         })
     },
     /**
-     * 前端 登出
+     * @description 前端 登出
      * @param {Object} param0 context
      * @param {Object} confirm need confirm ?
      */
     fedLogOut({ commit }) {
+      localStorage.removeItem('userInfo')
       removeCookie('userId')
       removeCookie('token')
       commit('SET_USER_INFO', {})
+    },
+    /**
+     * @description 修改密码
+     * @param {Object} param0 context
+     * @param {Object} confirm need confirm ?
+     */
+    changePassword({ commit }, { params, callback }) {
+      $axios({
+        method: 'post',
+        url: '/api/v1/admin/modifyPassword',
+        data: params
+      })
+        .then(response => {
+          const { success } = response.data
+          if (success) {
+            removeCookie('userId')
+            removeCookie('token')
+            commit('SET_USER_INFO', {})
+            callback()
+          }
+        })
+        .catch(err => {
+          console.error('err: ', err)
+        })
     }
   }
 }

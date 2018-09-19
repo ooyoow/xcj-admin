@@ -4,11 +4,21 @@
  */
 import { getCookie } from '@/utils/cookie'
 import router from '@/router'
+import store from '@/store'
 
 router.beforeEach((to, from, next) => {
-  next()
   const token = getCookie('token')
   if (token) {
+    const userInfo = localStorage.getItem('userInfo')
+    if (userInfo) {
+      try {
+        const data = JSON.parse(userInfo)
+        store.commit('SET_USER_INFO', data)
+      } catch (error) {
+        next()
+        console.error(error)
+      }
+    }
     if (to.path === '/login') {
       next({ path: '/' })
     } else {

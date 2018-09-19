@@ -3,9 +3,6 @@ import themeList from '../../../config/theme'
 
 const app = {
   state: {
-    // 用户信息
-    userInfo: {},
-
     // 顶部菜单
     menuHeader: {},
 
@@ -49,8 +46,8 @@ const app = {
   },
   actions: {
     /**
-    * @description 全屏监听
-    */
+     * @description 全屏监听
+     */
     fullscreenListener({ commit }) {
       if (screenfull.enabled) {
         screenfull.on('change', () => {
