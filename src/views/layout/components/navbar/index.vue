@@ -106,18 +106,18 @@ export default {
     handleChangePassword() {
       this.showChangePassword = true
     },
-    handleSubmitPassword(data) {
-      const { adminId } = this.userInfo
+    handleSubmitPassword(data, callback) {
+      const { adminId, loginId } = this.userInfo
       const params = {
-        data,
-        adminId
+        ...data,
+        adminId,
+        loginId
       }
-      console.log(params, 'params')
-      return
       this.changePassword({
-        data,
+        params,
         callback: () => {
           this.$router.push({ path: '/login' })
+          callback()
         }
       })
     },

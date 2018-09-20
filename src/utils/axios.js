@@ -10,7 +10,6 @@ const $axios = axios.create({
   timeout: 30000 // 请求超时
 })
 
-
 // 让每个请求携带token
 // $axios.defaults.headers.common['Authorization'] = token || ''
 // 请求拦截器
@@ -34,13 +33,16 @@ $axios.interceptors.request.use(
 // 响应拦截器
 $axios.interceptors.response.use(
   response => {
-    const { success, message } = response.data
-    if (!success) {
-      Message({
-        message: message || '系统繁忙',
-        type: 'error',
-        duration: 5 * 1000
-      })
+    if (response) {
+      const { success, message } = response.data
+      if (!success) {
+        Message({
+          message: message || '系统繁忙',
+          type: 'error',
+          duration: 5 * 1000
+        })
+        Promise.resolve(() => {})
+      }
     }
     return response
   },

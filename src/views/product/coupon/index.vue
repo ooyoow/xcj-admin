@@ -22,7 +22,14 @@
     <el-table :class="`${prefixCls}-table`" border :data="dataList" tooltip-effect="dark">
       <el-table-column prop="pName" label="优惠券名称" show-overflow-tooltip />
       <el-table-column prop="pCode" label="产品编号" show-overflow-tooltip />
-      <el-table-column prop="manufactor" align="center" label="产品图片" show-overflow-tooltip />
+      <el-table-column prop="pImg" align="center" label="产品图片" show-overflow-tooltip>
+        <template slot-scope="scope">
+          <el-popover placement="right" trigger="hover">
+            <img style="width: 150px; height: 150px" :src="`${$base_url}/${scope.row.storeImg}`" />
+            <span slot="reference" class="column-img">预览</span>
+          </el-popover>
+        </template>
+      </el-table-column>
       <el-table-column prop="marketPrice" align="center" label="市场价" show-overflow-tooltip />
       <el-table-column prop="pRice" align="center" label="售价" show-overflow-tooltip />
       <el-table-column prop="pNum" label="次数" align="center" show-overflow-tooltip />
@@ -43,7 +50,7 @@
       <el-pagination background @size-change="handleSizeChange" @current-change="handleCurrentChange" :current-page="listQuery.currentPage" :page-sizes="[10,20,30, 50]" :page-size="listQuery.size" layout="total, sizes, prev, pager, next, jumper" :total="total">
       </el-pagination>
     </div>
-    <el-dialog :title="dialogType[dialogStatus]" :visible.sync="dialogVisible">
+    <el-dialog :class="`${prefixCls}-dialog`" :title="dialogType[dialogStatus]" :visible.sync="dialogVisible">
       <el-form :rules="rules" ref="dataForm" :model="dataTemp" label-position="right" label-width="100px">
         <el-form-item label="优惠券名称" prop="pName">
           <el-input v-model="dataTemp.pName"></el-input>
@@ -63,11 +70,11 @@
         <el-form-item label="发行量" prop="pAllnum">
           <el-input v-model="dataTemp.pAllnum"></el-input>
         </el-form-item>
-        <el-form-item label="推荐指数" prop="recommend">
-          <el-input v-model.number="dataTemp.recommend"></el-input>
+        <el-form-item label="推荐指数" prop="pRecommond">
+          <el-input v-model.number="dataTemp.pRecommond"></el-input>
         </el-form-item>
-        <el-form-item label="产品图片" prop="pImg">
-          <el-upload v-model="dataTemp.pImg" :action="`${$base_url}/api/v1/store/upload`" :limit="1" :on-success="onUploadSuccess" :on-error="this.onUploadError">
+        <el-form-item label="产品图片" prop="pImg" ref="pImg">
+          <el-upload v-model="dataTemp.pImg" :action="`${$base_url}/api/v1/store/upload`" :limit="1" :file-list="pImgList" :on-success="onUploadSuccess" :on-error="this.onUploadError">
             <el-button type="primary">点击上传</el-button>&nbsp;&nbsp;
             <span slot="tip">只能上传jpg/png文件，且不超过500kb</span>
           </el-upload>
@@ -84,8 +91,8 @@
         <el-form-item label="下架时间" prop="downTime">
           <el-date-picker v-model="dataTemp.downTime" type="datetime" placeholder="请下架时间" />
         </el-form-item>
-        <el-form-item label="有效期" prop="pvalidateTime">
-          <el-input v-model.number="dataTemp.pvalidateTime" placeholder="请输入有效期/天"></el-input>
+        <el-form-item label="有效期" prop="pValidateTime">
+          <el-input v-model.number="dataTemp.pValidateTime" placeholder="请输入有效期/天"></el-input>
         </el-form-item>
         <el-form-item label="简介" prop="pContent">
           <el-input v-model="dataTemp.pContent"></el-input>
@@ -108,7 +115,7 @@ import { mapActions } from 'vuex'
 import $axios from '@/utils/axios'
 import './coupon.scss'
 export default {
-  name: 'package',
+  name: 'coupon',
   data() {
     return {
       prefixCls: 'xcj-product-coupon',
@@ -133,6 +140,7 @@ export default {
         update: '编辑优惠券'
       },
       dialogVisible: false,
+      pImgList: [],
       dataTemp: this.defaultTemp(),
       rules: {
         pName: [{ required: true, message: '优惠券名称不能为空', trigger: 'change' }],
@@ -141,12 +149,12 @@ export default {
         pRice: [{ required: true, message: '产品售价不能为空', trigger: 'change' }],
         pNum: [{ required: true, message: '次数不能为空', trigger: 'change' }],
         pAllnum: [{ required: true, message: '发行量不能为空', trigger: 'change' }],
-        recommend: [{ required: true, message: '推荐指数不能为空', trigger: 'change' }],
+        pRecommond: [{ required: true, message: '推荐指数不能为空', trigger: 'change' }],
         pImg: [{ required: true, message: '产品图片不能为空', trigger: 'change' }],
         advertisement: [{ required: true, message: '广告语不能为空', trigger: 'change' }],
         upTime: [{ required: true, message: '上架时间不能为空', trigger: 'change' }],
         downTime: [{ required: true, message: '下架时间不能为空', trigger: 'change' }],
-        pvalidateTime: [{ required: true, message: '有效期不能为空', trigger: 'change' }],
+        pValidateTime: [{ required: true, message: '有效期不能为空', trigger: 'change' }],
         pContent: [{ required: true, message: '简介不能为空', trigger: 'change' }]
       }
     }
@@ -195,6 +203,8 @@ export default {
       this.setDialog('create', this.defaultTemp())
     },
     handleUpdate(row) {
+      const { pImg } = row
+      this.pImgList = pImg ? [{ name: 'pImg.jpg', url: pImg }] : []
       this.setDialog('update', row)
     },
     handleDelete(id) {
@@ -265,6 +275,7 @@ export default {
     },
     onUploadSuccess(response, file, fileList) {
       this.dataTemp.pImg = response.resultObj
+      this.$refs.pImg.clearValidate()
     },
     onUploadError() {
       this.$message({
@@ -289,12 +300,12 @@ export default {
         pRice: '',
         pNum: '',
         pAllnum: '',
-        recommend: '',
+        pRecommond: '',
         pImg: '',
         advertisement: '',
         upTime: '',
         downTime: '',
-        pvalidateTime: '',
+        pValidateTime: '',
         pContent: '',
         remarks: ''
       }
@@ -302,3 +313,4 @@ export default {
   }
 }
 </script>
+

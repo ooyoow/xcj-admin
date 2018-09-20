@@ -86,19 +86,15 @@ const login = {
         method: 'post',
         url: '/api/v1/admin/modifyPassword',
         data: params
+      }).then(response => {
+        const { success } = response.data
+        if (success) {
+          removeCookie('userId')
+          removeCookie('token')
+          commit('SET_USER_INFO', {})
+          callback()
+        }
       })
-        .then(response => {
-          const { success } = response.data
-          if (success) {
-            removeCookie('userId')
-            removeCookie('token')
-            commit('SET_USER_INFO', {})
-            callback()
-          }
-        })
-        .catch(err => {
-          console.error('err: ', err)
-        })
     }
   }
 }

@@ -1,11 +1,11 @@
 <template>
   <el-dialog title="修改密码" :visible="show" @close="onCancel">
     <el-form :model="pwdForm" status-icon :rules="rules" ref="pwdForm" label-width="100px">
-      <el-form-item label="旧密码" prop="currentPassword">
-        <el-input type="password" v-model="pwdForm.currentPassword" auto-complete="off"></el-input>
-      </el-form-item>
-      <el-form-item label="新密码" prop="password">
+      <el-form-item label="旧密码" prop="password">
         <el-input type="password" v-model="pwdForm.password" auto-complete="off"></el-input>
+      </el-form-item>
+      <el-form-item label="新密码" prop="currentPassword">
+        <el-input type="password" v-model="pwdForm.currentPassword" auto-complete="off"></el-input>
       </el-form-item>
       <el-form-item label="确认密码" prop="confirmPassword">
         <el-input type="password" v-model="pwdForm.confirmPassword" auto-complete="off"></el-input>
@@ -29,13 +29,13 @@ export default {
   data() {
     return {
       pwdForm: {
-        currentPassword: '',
         password: '',
+        currentPassword: '',
         confirmPassword: ''
       },
       rules: {
-        currentPassword: [{ required: true, message: '请输入旧密码', trigger: 'change' }],
-        password: [{ required: true, validator: this.validatePass, trigger: 'change' }],
+        password: [{ required: true, message: '请输入旧密码', trigger: 'change' }],
+        currentPassword: [{ required: true, validator: this.validatePass, trigger: 'change' }],
         confirmPassword: [{ required: true, validator: this.validateConfirmPass, trigger: 'change' }]
       }
     }
@@ -51,7 +51,7 @@ export default {
     validateConfirmPass(rule, value, callback) {
       if (value === '') {
         callback(new Error('请再次输入密码'))
-      } else if (value !== this.pwdForm.password) {
+      } else if (value !== this.pwdForm.currentPassword) {
         callback(new Error('两次输入密码不一致!'))
       } else {
         callback()
@@ -61,7 +61,7 @@ export default {
       this.$refs['pwdForm'].validate(valid => {
         if (valid) {
           const { confirmPassword, ...anyProps } = this.pwdForm
-          this.onSubmit(anyProps)
+          this.onSubmit(anyProps, this.$refs['pwdForm'].resetFields)
         }
       })
     },

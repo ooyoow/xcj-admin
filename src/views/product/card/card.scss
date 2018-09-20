@@ -14,8 +14,20 @@
   &-table {
     margin-top: 1rem;
     width: 100%;
+    .column-img {
+      color: #3385ff;
+      cursor: pointer;
+      border-style: none;
+      user-select: none;
+    }
   }
   &-pagination {
     margin-top: 1.25rem;
+  }
+  &-dialog {
+    .el-dialog__body {
+      max-height: 31.25rem;
+      overflow: auto;
+    }
   }
 }
