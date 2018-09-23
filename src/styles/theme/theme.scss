@@ -2,12 +2,35 @@
 // 每个主题特有的设置
 .theme-#{$theme-name} {
   // 菜单项目
+  @mixin theme-menu-font-style {
+    color: $theme-menu-font-color;
+  }
   @mixin theme-menu-hover-style {
     color: $theme-menu-item-color-hover;
+    background: $theme-menu-item-background-color-hover;
     i.fa {
       color: $theme-menu-item-color-hover;
     }
-    background: $theme-menu-item-background-color-hover;
+    .el-submenu__icon-arrow {
+      color: $theme-menu-item-color-hover;
+    }
+  }
+  @mixin theme-menu-focus-style {
+    color: $theme-menu-item-color-focus;
+    background: $theme-menu-item-background-color-focus;
+    i.fa {
+      color: $theme-menu-item-color-focus;
+    }
+    .el-submenu__icon-arrow {
+      color: $theme-menu-item-color-focus;
+    }
+  }
+  @mixin theme-menu-active-style {
+    color: $theme-menu-item-color-active;
+    i.fa {
+      color: $theme-menu-item-color-active;
+    }
+    background: $theme-menu-item-background-color-active;
   }
   el-menu-icon {
     i {
@@ -21,93 +44,43 @@
       }
     }
   }
-  /* 菜单 */
-  .el-submenu__title {
-    @include unable-select;
-  }
-  .el-submenu__title:hover {
-    @include theme-menu-hover-style;
-  }
-  .el-menu-item:hover {
-    @include theme-menu-hover-style;
-  }
-  .el-menu--horizontal .el-menu-item:not(.is-disabled):hover {
-    @include theme-menu-hover-style;
-  }
-  .el-menu--horizontal .el-menu .el-submenu__title:hover {
-    @include theme-menu-hover-style;
-  }
   /* 主体 */
   .app {
     // 背景色
     background-color: $theme-bg-color;
     /* 菜单 */
     .el-menu {
-      .el-menu-item {
-        transition: border-top-color 0s;
-        color: $theme-nav-item-color;
-        background: $theme-nav-item-background-color;
-        i.fa {
-          color: inherit;
-        }
-        &:hover {
-          color: $theme-nav-item-color-hover;
-          background: $theme-nav-item-background-color-hover;
-          i.fa {
-            color: inherit;
-          }
-        }
-        &:focus {
-          color: $theme-nav-item-color-focus;
-          background: $theme-nav-item-background-color-focus;
-          i.fa {
-            color: inherit;
-          }
-        }
-        &.is-active {
-          color: $theme-nav-item-color-active;
-          background: $theme-nav-item-background-color-active;
-          i.fa {
-            color: inherit;
-          }
-        }
+      @include theme-menu-font-style;
+      .el-menu--horizontal .el-menu-item:not(.is-disabled):hover {
+        @include theme-menu-hover-style;
+      }
+      .el-menu--horizontal .el-menu .el-submenu__title:hover {
+        @include theme-menu-hover-style;
       }
       .el-submenu {
-        .el-submenu__title {
-          transition: border-top-color 0s;
-          color: $theme-nav-item-color;
-          background: $theme-nav-item-background-color;
-          i.fa {
-            color: inherit;
-          }
-          .el-submenu__icon-arrow {
-            color: $theme-nav-item-color;
-          }
-          &:hover {
-            color: $theme-nav-item-color-hover;
-            background: $theme-nav-item-background-color-hover;
-            i.fa {
-              color: inherit;
-            }
-            .el-submenu__icon-arrow {
-              color: $theme-nav-item-color-hover;
-            }
-          }
-          &:focus {
-            color: $theme-nav-item-color-focus;
-            background: $theme-nav-item-background-color-focus;
-            i.fa {
-              color: inherit;
-            }
-            .el-submenu__icon-arrow {
-              color: $theme-nav-item-color-focus;
-            }
-          }
+        @include unable-select;
+        .el-submenu__title:hover {
+          @include theme-menu-hover-style;
+        }
+        .el-submenu__title:focus {
+          @include theme-menu-focus-style;
+        }
+      }
+      .el-menu-item {
+        &:hover {
+          @include theme-menu-hover-style;
+        }
+        &:focus {
+          @include theme-menu-focus-style;
+        }
+        &.is-active {
+          @include theme-menu-active-style;
         }
       }
     }
     /* 导航栏 */
     .navbar {
+      // background-color: $theme-navbar-background-color;
       /* 应用名 */
       .navbar-brand {
         .logo {
@@ -121,7 +94,6 @@
           &.can-hover {
             &:hover {
               color: $theme-nav-item-color-hover;
-              background: $theme-nav-item-background-color-hover;
             }
           }
         }

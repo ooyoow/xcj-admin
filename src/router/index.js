@@ -225,22 +225,22 @@ const mainFrame = [
   {
     path: '/fd',
     name: 'fd',
-    redirect: '/fd/comprehensive',
+    redirect: '/fd/summary',
     component: AppMain,
     meta: { meta, title: '财务中心' },
     children: [
       {
-        path: '/fd/comprehensive',
-        name: 'comprehensive',
+        path: '/fd/summary',
+        name: 'summary',
         icon: 'folder-o',
-        component: () => import('@/views/test'),
+        component: () => import('@/views/financial/summary'),
         meta: { meta, title: '综合统计' }
       },
       {
         path: '/fd/sale',
         name: 'sale',
         icon: 'folder-o',
-        component: () => import('@/views/test'),
+        component: () => import('@/views/financial/sale'),
         meta: { meta, title: '销售统计' }
       }
     ]
