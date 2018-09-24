@@ -33,20 +33,20 @@
 </template>
 
 <script>
-import './sale.scss'
+import "./sale.scss";
 export default {
-  name: 'sale',
+  name: "sale",
   data() {
     return {
-      prefixCls: 'xcj-financial-sale',
+      prefixCls: "xcj-finance-sale",
       formSearch: {},
       dataList: []
-    }
+    };
   },
   methods: {
     handleFilterDate() {},
     handleFilterOrderNo() {}
   }
-}
+};
 </script>
 

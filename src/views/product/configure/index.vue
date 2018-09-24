@@ -209,7 +209,7 @@ export default {
         url: 'api/v1/templet/queryTemplet',
         method: 'get'
       }).then(result => {
-        const { resultObj } = result.data
+        const { resultObj } = result
         this.couponTempOptions = resultObj.map(item => {
           return {
             label: item.couponName,

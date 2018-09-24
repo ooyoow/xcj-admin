@@ -11,7 +11,7 @@
       </div>
     </div>
     <div class="page-control-btn">
-      <el-tooltip class="item" effect="dark" content="关闭所有" placement="bottom">
+      <el-tooltip class="item" effect="dark" content="关闭其他" placement="bottom">
         <el-button type="primary" icon="el-icon-circle-close-outline" @click="handleControlItemClick('all')"></el-button>
       </el-tooltip>
       <!-- <el-dropdown split-button @click="handleControlBtnClick" @command="command => handleControlItemClick(command)">

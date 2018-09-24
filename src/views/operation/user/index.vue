@@ -43,34 +43,34 @@
       <el-table-column prop="serviceAmount" label="服务额" align="center" show-overflow-tooltip></el-table-column>
       <el-table-column prop="orderNumber" label="订单数量" align="center" show-overflow-tooltip></el-table-column>
       <el-table-column prop="createtime" label="创建时间" align="center" :formatter="formatDate" show-overflow-tooltip></el-table-column>
-      <el-table-column fixed="right" label="操作" align="center" width="150">
+      <el-table-column fixed="right" label="操作" align="center" width="80">
         <template slot-scope="scope">
           <el-button @click="handleConsumeList(scope.row)" type="text">查看</el-button>
-          <el-button type="text" @click="handleUpdate(scope.row)">编辑</el-button>
-          <el-button type="text" @click="handleDelete(scope.row.storeId)">删除</el-button>
+          <!-- <el-button type="text" @click="handleUpdate(scope.row)">编辑</el-button>
+          <el-button type="text" @click="handleDelete(scope.row.storeId)">删除</el-button> -->
         </template>
       </el-table-column>
     </el-table>
     <div :class="`${prefixCls}-pagination`">
-      <el-pagination background @size-change="handleSizeChange" @current-change="handleCurrentChange" :current-page="formSimpleFilter.currentPage" :page-sizes="[10,20,30, 50]" :page-size="formSimpleFilter.size" layout="total, sizes, prev, pager, next, jumper" :total="user.total">
+      <el-pagination background @size-change="handleSizeChange" @current-change="handleCurrentChange" :current-page="formSimpleFilter.currentPage" :page-sizes="[10, 20, 30, 50]" :page-size="formSimpleFilter.size" layout="total, sizes, prev, pager, next, jumper" :total="user.total">
       </el-pagination>
     </div>
     <!-- 消费详情 -->
-    <el-dialog title="消费详情" :visible.sync="consume.visible">
-      <el-table :data="consume.list" v-loading="consume.loading">
-        <el-table-column property="productName" label="产品名称"></el-table-column>
-        <el-table-column property="productId" label="产品ID"></el-table-column>
-        <el-table-column property="1" label="市场价"></el-table-column>
-        <el-table-column property="2" label="售价"></el-table-column>
-        <el-table-column property="3" label="已用/可用"></el-table-column>
-        <el-table-column property="4" label="时间"></el-table-column>
-        <el-table-column property="5" label="洗车时间"></el-table-column>
-        <el-table-column property="6" label="车牌"></el-table-column>
-        <el-table-column property="7" label="服务门店"></el-table-column>
-        <el-table-column property="8" label="状态"></el-table-column>
+    <el-dialog title="消费详情" border width="90%" :visible.sync="consume.visible">
+      <el-table :data="calcConsumeList()" v-loading="consume.loading">
+        <el-table-column property="pName" align="center" label="产品名称"></el-table-column>
+        <el-table-column property="pCode" align="center" label="产品编码"></el-table-column>
+        <el-table-column property="marketPrice" align="center" label="市场价"></el-table-column>
+        <el-table-column property="payMoney" align="center" label="售价"></el-table-column>
+        <el-table-column property="usedNum" align="center" label="已用/可用" :formatter="formatUseData"></el-table-column>
+        <el-table-column property="payTime" align="center" label="下单时间" show-overflow-tooltip :formatter="formatDate"></el-table-column>
+        <el-table-column property="useTime" align="center" label="洗车时间" show-overflow-tooltip :formatter="formatDate"></el-table-column>
+        <el-table-column property="cardNo" align="center" label="车牌"></el-table-column>
+        <el-table-column property="storeName" label="服务门店"></el-table-column>
+        <el-table-column property="driverName" label="终端名称" />
       </el-table>
       <div v-if="consume.total" :class="`${prefixCls}-pagination`">
-        <el-pagination background :page-sizes="[10,20,30, 50]" layout="total, sizes, prev, pager, next, jumper" :total="consume.total">
+        <el-pagination background @size-change="handleConsumeSizeChange" @current-change="handleConsumeCurrentChange" :page-sizes="[10, 20, 30]" layout="total, sizes, prev, pager, next, jumper" :total="consume.total">
         </el-pagination>
       </div>
     </el-dialog>
@@ -108,38 +108,38 @@
 </template>
 
 <script>
-import moment from "moment";
-import $axios from "@/utils/axios";
-import "./user.scss";
+import moment from 'moment'
+import $axios from '@/utils/axios'
+import './user.scss'
 export default {
-  name: "user",
+  name: 'user',
   data() {
     return {
-      prefixCls: "xcj-user",
+      prefixCls: 'xcj-user',
       sourceOptions: [
         {
           value: 1,
-          label: "微信"
+          label: '微信'
         },
         {
           value: 2,
-          label: "小程序"
+          label: '小程序'
         },
         {
           value: 3,
-          label: "共享联盟"
+          label: '共享联盟'
         },
         {
           value: 4,
-          label: "集团客户"
+          label: '集团客户'
         }
       ],
       showMoreFilter: false,
       formSimpleFilter: {
-        search: "",
-        registrationDays: "",
-        nickName: "",
-        source: "",
+        search: '',
+        registrationDays: '',
+        nickName: '',
+        source: '',
         currentPage: 1,
         size: 10
       },
@@ -154,6 +154,8 @@ export default {
       consume: {
         visible: false,
         loading: false,
+        currentPage: 1,
+        size: 10,
         list: [],
         total: 0
       },
@@ -162,33 +164,29 @@ export default {
         rules: {},
         temp: {}
       }
-    };
+    }
   },
   created() {
-    this.getUserList();
+    this.getUserList()
   },
   methods: {
     // 查询用户
     getUserList() {
-      const { formSimpleFilter, formMoreFilter, getUserList } = this;
-      const params = Object.assign({}, formSimpleFilter, formMoreFilter);
-      this.user.loading = true;
+      const { formSimpleFilter, formMoreFilter, getUserList } = this
+      const params = Object.assign({}, formSimpleFilter, formMoreFilter)
+      this.user.loading = true
       $axios({
-        url: "/api/v1/user/queryUserList",
-        method: "get",
+        url: '/api/v1/user/queryUserList',
+        method: 'get',
         params: params
+      }).then(response => {
+        const { resultObj, totalSize } = response
+        this.user = {
+          loading: false,
+          list: resultObj || [],
+          total: totalSize
+        }
       })
-        .then(response => {
-          const { resultObj, totalSize } = response.data;
-          this.user = {
-            loading: false,
-            list: resultObj || [],
-            total: totalSize
-          };
-        })
-        .catch(err => {
-          this.user.loading = false;
-        });
     },
     // 查询消费详情
     getConsumeList(userId) {
@@ -196,58 +194,77 @@ export default {
         ...this.consume,
         visible: true,
         loading: true
-      };
+      }
       $axios({
-        url: "/api/v1/user/queryUseRecdList",
-        method: "get",
+        url: '/api/v1/user/queryUseRecdList',
+        method: 'get',
         params: { userId }
       })
         .then(response => {
-          const { resultObj, totalSize } = response.data;
+          const { resultObj, totalSize } = response
           this.consume = {
             ...this.consume,
             loading: false,
             list: resultObj || [],
-            total: totalSize
-          };
+            total: resultObj.length
+          }
         })
         .catch(err => {
-          this.consume.loading = false;
-        });
+          this.consume.loading = false
+        })
     },
     handleSearch() {
-      this.getUserList();
+      this.getUserList()
     },
     handleMoreFilter() {
-      this.showMoreFilter = !this.showMoreFilter;
+      this.showMoreFilter = !this.showMoreFilter
     },
     handleSizeChange(value) {
-      this.formSimpleFilter.size = value;
-      this.getUserList();
+      this.formSimpleFilter.size = value
+      this.getUserList()
     },
     handleCurrentChange(value) {
-      this.formSimpleFilter.currentPage = value;
-      this.getUserList();
+      this.formSimpleFilter.currentPage = value
+      this.getUserList()
     },
     handleConsumeList(row) {
-      this.getConsumeList(row.userId);
+      this.getConsumeList(row.userId)
     },
     handleUpdate(row) {
       this.editDialog = {
         ...this.editDialog,
         visible: true,
         temp: Object.assign({}, row)
-      };
+      }
       this.$nextTick(() => {
-        this.$refs["editForm"].clearValidate();
-      });
+        this.$refs['editForm'].clearValidate()
+      })
     },
     handleDelete() {},
     updateUser() {},
+    handleConsumeSizeChange(val) {
+      this.consume.size = val
+    },
+    handleConsumeCurrentChange(val) {
+      this.consume.currentPage = val
+    },
+    calcConsumeList() {
+      const { list, currentPage, size } = this.consume
+      return list.slice((currentPage - 1) * size, currentPage * size)
+      // econsume.list.slice(
+      //   (consume.currentPage - 1) * consume.size,
+      //   consum.currentPage * consume.size
+      // );
+    },
     formatDate(row, column, cellValue) {
-      return cellValue ? moment(cellValue).format("YYYY-MM-DD HH:mm:ss") : "";
+      return cellValue ? moment(cellValue).format('YYYY-MM-DD HH:mm:ss') : ''
+    },
+    formatUseData(row, column, cellValue) {
+      const { num, usedNum } = row
+      const surplus = num - usedNum
+      return `${usedNum}/${surplus}`
     }
   }
-};
+}
 </script>
 

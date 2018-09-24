@@ -158,11 +158,11 @@ export default {
       this.getAccountList()
     },
     handleCurrentChange(value) {
-      this.formSearch.size = value
+      this.formSearch.currentPage = value
       this.getAccountList()
     },
     handleSizeChange(value) {
-      this.formSearch.currentPage = value
+      this.formSearch.size = value
       this.getAccountList()
     },
     handleCreate() {
@@ -274,7 +274,7 @@ export default {
         params: this.formSearch
       }).then(response => {
         this.listLoading = false
-        const { resultObj, totalSize } = response.data
+        const { resultObj, totalSize } = response
         this.dataList = resultObj
         this.total = totalSize
       })
@@ -286,7 +286,7 @@ export default {
         url: '/api/v1/store/queryOrgList'
       })
         .then(response => {
-          const { resultObj } = response.data
+          const { resultObj } = response
           if (resultObj && Array.isArray(resultObj)) {
             this.businessOptions = resultObj.map(item => {
               const { organizationId, ownerName, ...anyprops } = item
@@ -308,7 +308,7 @@ export default {
         url: '/api/v1/store/queryStoreAll'
       })
         .then(response => {
-          const { resultObj } = response.data
+          const { resultObj } = response
           if (resultObj && Array.isArray(resultObj)) {
             this.businessOptions = resultObj.map(item => {
               const { storeName, storeId, ...anyprops } = item

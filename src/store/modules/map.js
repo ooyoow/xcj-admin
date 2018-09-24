@@ -16,7 +16,7 @@ const map = {
         method: 'get',
         url: `/api/v1/store/storeInfo?type=${type}`
       }).then(response => {
-        const { resultObj } = response.data
+        const { resultObj } = response
         if (resultObj) {
           commit('MAP_GET_STORE', resultObj)
         }

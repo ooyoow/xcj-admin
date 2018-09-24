@@ -233,14 +233,14 @@ const mainFrame = [
         path: '/fd/summary',
         name: 'summary',
         icon: 'folder-o',
-        component: () => import('@/views/financial/summary'),
+        component: () => import('@/views/finance/summary'),
         meta: { meta, title: '综合统计' }
       },
       {
         path: '/fd/sale',
         name: 'sale',
         icon: 'folder-o',
-        component: () => import('@/views/financial/sale'),
+        component: () => import('@/views/finance/sale'),
         meta: { meta, title: '销售统计' }
       }
     ]

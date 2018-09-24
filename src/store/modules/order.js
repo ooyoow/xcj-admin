@@ -4,7 +4,6 @@ const order = {
   state: {
     orderInfo: {},
     memberInfo: {},
-    orgOptions: [] // 所有者
   },
   getters: {},
   mutations: {
@@ -13,32 +12,9 @@ const order = {
     },
     GET_MEMBER_INFO: (state, memberInfo) => {
       state.memberInfo = memberInfo
-    },
-    GET_ORG_OPTIONS: (state, orgOptions) => {
-      state.orgOptions = orgOptions
     }
   },
   actions: {
-    // 查询所有者下拉选项
-    getOrgOptions({ commit }) {
-      $axios({
-        method: 'get',
-        url: '/api/v1/store/queryOrgList'
-      }).then(response => {
-        const { resultObj } = response.data
-        if (resultObj && Array.isArray(resultObj)) {
-          const orgOptions = resultObj.map(item => {
-            const { organizationId, ownerName, ...anyprops } = item
-            return {
-              label: ownerName,
-              value: organizationId,
-              ...anyprops
-            }
-          })
-          commit('GET_ORG_OPTIONS', orgOptions)
-        }
-      })
-    },
 
     // 查询交易数据
     getOrderInfo({ commit }) {

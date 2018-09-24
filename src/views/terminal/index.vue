@@ -10,10 +10,10 @@
         </el-select>
       </el-form-item>
       <el-form-item>
-        <el-button type="primary" @click="getTerminal">查询</el-button>
+        <el-button type="primary" icon="el-icon-search" @click="getTerminal">查询</el-button>
       </el-form-item>
       <el-form-item>
-        <el-button type="primary" @click="handleCreate">添加</el-button>
+        <el-button type="primary" icon="el-icon-plus" @click="handleCreate">添加</el-button>
       </el-form-item>
     </el-form>
     <el-table :class="`${prefixCls}-table`" :data="terminalList" tooltip-effect="dark" border v-loading="listLoading">
@@ -78,10 +78,10 @@ import { expandParams } from '@/utils/general'
 import { formatTimeStamp } from '@/utils/date'
 import './style.scss'
 export default {
-  name: 'store',
+  name: 'Terminal',
   data() {
     return {
-      prefixCls: 'cw-store',
+      prefixCls: 'xcj-terminal',
       formSearch: {
         search: '',
         storeId: ''
@@ -142,7 +142,7 @@ export default {
         url: '/api/v1/store/queryStoreByUser',
         method: 'get'
       }).then(response => {
-        const { resultObj } = response.data
+        const { resultObj } = response
         if (resultObj && Array.isArray(resultObj)) {
           this.storeOptions = resultObj.map(item => {
             return {
@@ -163,7 +163,7 @@ export default {
         params: params
       }).then(response => {
         this.listLoading = false
-        const { resultObj, totalSize } = response.data
+        const { resultObj, totalSize } = response
         this.terminalList = resultObj
         this.total = totalSize
       })

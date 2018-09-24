@@ -4,10 +4,10 @@
       <div class="header">
         <div>渠道开发</div>
         <div>
-          <el-button>添加</el-button>
+          <el-button type="primary" icon="el-icon-plus">添加</el-button>
         </div>
       </div>
-      <el-table :data="channelTypeList" tooltip-effect="dark" v-loading="typeListLoading">
+      <el-table border :data="channelTypeList" tooltip-effect="dark" v-loading="typeListLoading">
         <el-table-column prop="driverName" label="渠道类型" show-overflow-tooltip/>
         <el-table-column prop="driverid" label="图片" show-overflow-tooltip/>
         <el-table-column prop="manufactor" label="文字" show-overflow-tooltip/>
@@ -30,13 +30,13 @@
           <el-input clearable v-model="formSearch.name" placeholder="请输入名称搜索"></el-input>
         </el-form-item>
         <el-form-item>
-          <el-button type="primary" @click="handleSearch">查询</el-button>
+          <el-button type="primary" icon="el-icon-search" @click="handleSearch">查询</el-button>
         </el-form-item>
         <el-form-item>
-          <el-button type="primary" @click="handleCreate">添加</el-button>
+          <el-button type="primary" icon="el-icon-plus" @click="handleCreate">添加</el-button>
         </el-form-item>
       </el-form>
-      <el-table :data="channelCustomerList" tooltip-effect="dark" v-loading="customerListLoading">
+      <el-table border :data="channelCustomerList" tooltip-effect="dark" v-loading="customerListLoading">
         <el-table-column prop="customerName" label="客户名称" show-overflow-tooltip/>
         <el-table-column prop="phone" label="电话" show-overflow-tooltip/>
         <el-table-column prop="city" label="城市" show-overflow-tooltip/>

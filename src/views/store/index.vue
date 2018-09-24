@@ -10,10 +10,10 @@
         </el-select>
       </el-form-item>
       <el-form-item>
-        <el-button type="primary" @click="handleSearch">查询</el-button>
+        <el-button type="primary" icon="el-icon-search" @click="handleSearch">查询</el-button>
       </el-form-item>
       <el-form-item>
-        <el-button type="primary" @click="handleCreate">添加</el-button>
+        <el-button type="primary" icon="el-icon-plus" @click="handleCreate">添加</el-button>
       </el-form-item>
     </el-form>
     <el-table :class="`${prefixCls}-table`" border :data="storeList" v-loading="listLoading" tooltip-effect="dark">
@@ -26,7 +26,7 @@
       <el-table-column prop="address" align="center" label="地址" show-overflow-tooltip/>
       <el-table-column prop="storeIcon" align="center" label="店铺图标" show-overflow-tooltip>
         <template slot-scope="scope">
-          <el-popover placement="right" trigger="hover">
+          <el-popover v-if="scope.row.storeIcon" placement="right" trigger="hover">
             <img style="width: 150px; height: 150px" :src="`${$base_url}/${scope.row.storeIcon}`" />
             <span slot="reference" class="column-img">预览</span>
           </el-popover>
@@ -34,7 +34,7 @@
       </el-table-column>
       <el-table-column prop="storeImg" align="center" label="店铺图片" show-overflow-tooltip>
         <template slot-scope="scope">
-          <el-popover placement="right" trigger="hover">
+          <el-popover v-if="scope.row.storeImg" placement="right" trigger="hover">
             <img style="width: 150px; height: 150px" :src="`${$base_url}/${scope.row.storeImg}`" />
             <span slot="reference" class="column-img">预览</span>
           </el-popover>
@@ -48,6 +48,14 @@
         <template slot-scope="scope">
           <el-button type="text" @click="handleUpdate(scope.row)">编辑</el-button>
           <el-button type="text" @click="handleDelete(scope.row.storeId)">删除</el-button>
+          <!-- <el-popover placement="top" v-model="deletePopoverVisible">
+            <p>确定删除吗？</p>
+            <div style="text-align: right; margin: 0">
+              <el-button type="text" @click="deletePopover.delete(scope.row.storeId)">取消</el-button>
+              <el-button type="primary" @click="handleDelete(scope.row.storeId)">确定</el-button>
+            </div>
+            <el-button type="text" slot="reference" @click="deletePopoverVisible = true">删除</el-button>
+          </el-popover> -->
         </template>
       </el-table-column>
     </el-table>
@@ -55,13 +63,13 @@
       <el-pagination background @size-change="handleSizeChange" @current-change="handleCurrentChange" :current-page="listQuery.currentPage" :page-sizes="[10,20,30, 50]" :page-size="listQuery.size" layout="total, sizes, prev, pager, next, jumper" :total="total">
       </el-pagination>
     </div>
-    <el-dialog :title="dialogType[dialogStatus]" :visible.sync="dialogFormVisible">
+    <el-dialog :title="dialogType[dialogStatus]" :visible.sync="dialogVisible">
       <el-form :rules="rules" ref="dataForm" :model="storeTemp" label-position="right" label-width="100px">
         <el-form-item label="门店名称" prop="storeName">
-          <el-input v-model="storeTemp.storeName"></el-input>
+          <el-input v-model="storeTemp.storeName" maxlength="50"></el-input>
         </el-form-item>
         <el-form-item label="店长" prop="storeManager">
-          <el-input v-model="storeTemp.storeManager"></el-input>
+          <el-input v-model="storeTemp.storeManager" maxlength="20"></el-input>
         </el-form-item>
         <el-form-item label="门店状态" prop="state">
           <el-select class="filter-item" v-model="storeTemp.state" placeholder="请选择门店状态">
@@ -74,13 +82,13 @@
           </el-select>
         </el-form-item>
         <el-form-item label="省份" prop="storePro">
-          <el-input v-model="storeTemp.storePro"></el-input>
+          <el-input v-model="storeTemp.storePro" maxlength="20"></el-input>
         </el-form-item>
         <el-form-item label="城市" prop="storeCity">
-          <el-input v-model="storeTemp.storeCity"></el-input>
+          <el-input v-model="storeTemp.storeCity" maxlength="20"></el-input>
         </el-form-item>
         <el-form-item label="地址" prop="address">
-          <el-input v-model="storeTemp.address"></el-input>
+          <el-input v-model="storeTemp.address" maxlength="50"></el-input>
         </el-form-item>
         <el-form-item label="经度" prop="storeLocationX">
           <el-input type="number" v-model.number="storeTemp.storeLocationX"></el-input>
@@ -88,35 +96,41 @@
         <el-form-item label="纬度" prop="storeLocationY">
           <el-input type="number" v-model.number="storeTemp.storeLocationY"></el-input>
         </el-form-item>
-        <el-form-item label="店铺图标" prop="storeIcon">
+        <el-form-item label="店铺图标" prop="storeIcon" ref="storeIcon">
           <el-upload v-model="storeTemp.storeIcon" :action="`${$base_url}/api/v1/store/upload`" :limit="1" :on-success="onSuccessStoreIcon" :on-error="this.onUploadError">
             <el-button size="small" type="primary">点击上传</el-button>&nbsp;&nbsp;
             <span slot="tip">只能上传jpg/png文件，且不超过500kb</span>
           </el-upload>
         </el-form-item>
-        <el-form-item label="店铺图片" prop="storeImg">
+        <el-form-item label="店铺图片" prop="storeImg" ref="storeImg">
           <el-upload v-model="storeTemp.storeImg" :action="`${$base_url}/api/v1/store/upload`" :limit="1" :on-success="onSuccessStoreImg" :on-error="this.onUploadError">
             <el-button type="primary">点击上传</el-button>&nbsp;&nbsp;
             <span slot="tip">只能上传jpg/png文件，且不超过500kb</span>
           </el-upload>
         </el-form-item>
-        <el-form-item label="广告语" prop="advertisement">
-          <el-input v-model="storeTemp.advertisement"></el-input>
+        <el-form-item label="所有者" prop="ownerList">
+          <el-select multiple v-model="storeTemp.ownerList" placeholder="请选择所有者">
+            <el-option v-for="item in orgOptions" :key="item.organizationId" :label="item.ownerName" :value="item.organizationId"></el-option>
+          </el-select>
         </el-form-item>
-        <el-form-item label="添加时间" prop="createTime">
+
+        <!-- <el-form-item label="添加时间" prop="createTime">
           <el-date-picker v-model="storeTemp.createTime" type="datetime" placeholder="请选择时间"></el-date-picker>
+        </el-form-item> -->
+        <el-form-item label="广告语" prop="advertisement">
+          <el-input v-model="storeTemp.advertisement" maxlength="100"></el-input>
         </el-form-item>
         <el-form-item label="描述" prop="storeDesc">
-          <el-input v-model="storeTemp.storeDesc" type="textarea" :autosize="{ minRows: 2, maxRows: 4} " placeholder="请输入描述">
+          <el-input v-model="storeTemp.storeDesc" type="textarea" :autosize="{ minRows: 2, maxRows: 4}" maxlength="200" placeholder="请输入描述">
           </el-input>
         </el-form-item>
         <el-form-item label="备注" prop="remarks">
-          <el-input v-model="storeTemp.remarks" type="textarea" :autosize="{ minRows: 2, maxRows: 4} " placeholder="请输入备注">
+          <el-input v-model="storeTemp.remarks" type="textarea" :autosize="{ minRows: 2, maxRows: 4}" maxlength="200" placeholder="请输入备注">
           </el-input>
         </el-form-item>
       </el-form>
       <div slot="footer" class="dialog-footer">
-        <el-button @click="dialogFormVisible=false">取消</el-button>
+        <el-button @click="dialogVisible=false">取消</el-button>
         <el-button v-if="dialogStatus=='create'" type="primary" @click="createStore">确认</el-button>
         <el-button v-else type="primary" @click="updateStore">确认</el-button>
       </div>
@@ -125,6 +139,7 @@
 </template>
 
 <script>
+import { mapState, mapActions } from 'vuex'
 import moment from 'moment'
 import $axios from '@/utils/axios'
 import { formatTimeStamp } from '@/utils/date'
@@ -148,9 +163,10 @@ export default {
       listLoading: false,
       storeList: [],
       total: 0,
+      deletePopover: new Map(),
       terminalUnboundOptios: [],
       // 新增/编辑对话框相关
-      dialogFormVisible: false,
+      dialogVisible: false,
       dialogStatus: 'create',
       dialogType: {
         create: '新增',
@@ -176,14 +192,8 @@ export default {
         state: [{ required: true, message: '门店状态不能为空', trigger: 'change' }],
         storePro: [{ required: true, message: '省份不能为空', trigger: 'change' }],
         storeCity: [{ required: true, message: '城市不能为空', trigger: 'change' }],
-        createTime: [
-          {
-            type: 'date',
-            required: true,
-            message: '门店ID不能为空',
-            trigger: 'change'
-          }
-        ]
+        address: [{ required: true, message: '地址不能为空', trigger: 'change' }],
+        ownerList: [{ required: true, message: '所有者不能为空', trigger: 'change' }]
       },
       storeTemp: this.defaultStoreTemp()
     }
@@ -191,7 +201,13 @@ export default {
   created() {
     this.getStore()
   },
+  computed: {
+    ...mapState({
+      orgOptions: state => state.common.orgOptions
+    })
+  },
   methods: {
+    ...mapActions(['getOrgOptions']),
     // 查询门店
     getStore() {
       this.listLoading = true
@@ -203,7 +219,7 @@ export default {
       })
         .then(response => {
           this.listLoading = false
-          const { resultObj, totalSize } = response.data
+          const { resultObj, totalSize } = response
           this.storeList = resultObj
           this.total = totalSize
         })
@@ -217,7 +233,7 @@ export default {
         url: '/api/v1/driver/queryDriverUnbound',
         method: 'get'
       }).then(response => {
-        const { resultObj } = response.data
+        const { resultObj } = response
         let data = []
         if (resultObj && Array.isArray(resultObj)) {
           data = resultObj.map(item => {
@@ -243,23 +259,30 @@ export default {
     handleCreate() {
       this.storeTemp = this.defaultStoreTemp()
       this.dialogStatus = 'create'
-      this.dialogFormVisible = true
+      this.dialogVisible = true
       this.$nextTick(() => {
         this.$refs['dataForm'].clearValidate()
       })
+      this.getOrgOptions()
       this.getTerminalUnbound(data => {
         this.terminalUnboundOptios = data
       })
     },
     handleUpdate(row) {
-      const { driverid } = row
+      const { driverid, ownerList, ...others } = row
       const arrDriverid = driverid ? driverid.split(',') : []
-      this.storeTemp = Object.assign({}, row, { driverid: arrDriverid })
+      const formatOwnerList = ownerList && Array.isArray(ownerList) ? ownerList.map(item => item.organizationId) : []
+      this.storeTemp = {
+        driverid: arrDriverid,
+        ownerList: formatOwnerList,
+        ...others
+      }
       this.dialogStatus = 'update'
-      this.dialogFormVisible = true
+      this.dialogVisible = true
       this.$nextTick(() => {
         this.$refs['dataForm'].clearValidate()
       })
+      this.getOrgOptions()
       this.getTerminalUnbound(data => {
         this.terminalUnboundOptios = arrDriverid.concat(data)
       })
@@ -286,16 +309,24 @@ export default {
     createStore() {
       this.$refs['dataForm'].validate(valid => {
         if (valid) {
-          const data = Object.assign({}, this.storeTemp, {
-            driverid: this.storeTemp.driverid.toString()
+          const { driverid, ownerList, ...others } = this.storeTemp
+          const driveridToString = this.storeTemp.driverid.toString()
+          const fullOwnerList = this.orgOptions.filter(item => {
+            return ownerList.includes(item.organizationId)
           })
+          const data = {
+            ...others,
+            driverid: driveridToString,
+            ownerList: fullOwnerList
+          }
+          console.log(data, 'data')
           $axios({
             url: '/api/v1/store/addStore',
             method: 'post',
             data: data
           }).then(response => {
             this.storeList.unshift(data)
-            this.dialogFormVisible = false
+            this.dialogVisible = false
             this.$notify({
               title: '成功',
               message: '添加成功',
@@ -309,9 +340,16 @@ export default {
     updateStore() {
       this.$refs['dataForm'].validate(valid => {
         if (valid) {
-          const data = Object.assign({}, this.storeTemp, {
-            driverid: this.storeTemp.driverid.toString()
+          const { driverid, ownerList, ...others } = this.storeTemp
+          const driveridToString = this.storeTemp.driverid.toString()
+          const fullOwnerList = this.orgOptions.filter(item => {
+            return ownerList.includes(item.organizationId)
           })
+          const data = {
+            driverid: driveridToString,
+            ownerList: fullOwnerList,
+            ...others
+          }
           $axios({
             url: '/api/v1/store/editStore',
             method: 'post',
@@ -324,7 +362,7 @@ export default {
                 break
               }
             }
-            this.dialogFormVisible = false
+            this.dialogVisible = false
             this.$notify({
               title: '成功',
               message: '更新成功',
@@ -337,9 +375,11 @@ export default {
     },
     onSuccessStoreIcon(response, file, fileList) {
       this.storeTemp.storeIcon = response.resultObj
+      this.$refs.storeIcon.clearValidate()
     },
     onSuccessStoreImg(response, file, fileList) {
       this.storeTemp.storeImg = response.resultObj
+      this.$refs.storeImg.clearValidate()
     },
     onUploadError(err, file, fileList) {
       this.$message({
@@ -364,7 +404,8 @@ export default {
         storeManager: '',
         storeName: '',
         storeId: '',
-        storePro: ''
+        storePro: '',
+        ownerList: []
       }
     },
     formatTime(row, column, cellValue) {

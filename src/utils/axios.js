@@ -41,10 +41,10 @@ $axios.interceptors.response.use(
           type: 'error',
           duration: 5 * 1000
         })
-        Promise.resolve(() => {})
+        return new Promise(() => { })
       }
     }
-    return response
+    return response.data
   },
   error => {
     if (error && error.response) {

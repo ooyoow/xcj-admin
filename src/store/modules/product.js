@@ -7,13 +7,13 @@ const product = {
      * @param {Object} params
      * @param {Function} callback
      */
-    getProduct({}, { params, callback }) {
+    getProduct({ }, { params, callback }) {
       $axios({
         method: 'get',
         url: '/api/v1/product/queryProductList',
         params: params
       }).then(response => {
-        const { resultObj, totalSize } = response.data
+        const { resultObj, totalSize } = response
         callback({
           list: resultObj || [],
           total: totalSize
@@ -25,13 +25,13 @@ const product = {
      * @param {Object} params
      * @param {Function} callback
      */
-    getProductStatsByType({}, { params, callback }) {
+    getProductStatsByType({ }, { params, callback }) {
       $axios({
         method: 'get',
         url: '/api/v1/product/queryProductStatictis',
         params: params
       }).then(response => {
-        const { resultObj } = response.data
+        const { resultObj } = response
         callback(resultObj || {})
       })
     },
@@ -40,7 +40,7 @@ const product = {
      * @param {Object} params 产品参数
      * @param {Function} callback
      */
-    createProduct({}, { params, callback }) {
+    createProduct({ }, { params, callback }) {
       $axios({
         url: '/api/v1/product/addProduct',
         method: 'post',
@@ -52,7 +52,7 @@ const product = {
      * @param {Object} params 产品参数
      * @param {Function} callback
      */
-    updateProduct({}, { params, callback }) {
+    updateProduct({ }, { params, callback }) {
       $axios({
         url: '/api/v1/product/editProduct',
         method: 'post',
@@ -64,7 +64,7 @@ const product = {
      * @param {Number} id 产品id
      * @param {Function} callback
      */
-    deleteProduct({}, { id, callback }) {
+    deleteProduct({ }, { id, callback }) {
       $axios({
         url: '/api/v1/product/deleteProduct',
         method: 'post',

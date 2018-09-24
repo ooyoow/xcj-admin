@@ -44,50 +44,50 @@
       }
     }
   }
+  /* 菜单 */
+  .el-menu {
+    @include theme-menu-font-style;
+    .el-submenu {
+      @include unable-select;
+      .el-submenu__title:hover {
+        @include theme-menu-hover-style;
+      }
+      .el-submenu__title:focus {
+        @include theme-menu-focus-style;
+      }
+    }
+    .el-menu-item {
+      &:hover {
+        @include theme-menu-hover-style;
+      }
+      &:focus {
+        @include theme-menu-focus-style;
+      }
+      &.is-active {
+        @include theme-menu-active-style;
+      }
+    }
+  }
+  .el-menu--horizontal .el-menu-item:not(.is-disabled):hover {
+    @include theme-menu-hover-style;
+  }
+  .el-menu--horizontal .el-menu .el-submenu__title:hover {
+    @include theme-menu-hover-style;
+  }
   /* 主体 */
   .app {
     // 背景色
     background-color: $theme-bg-color;
-    /* 菜单 */
-    .el-menu {
-      @include theme-menu-font-style;
-      .el-menu--horizontal .el-menu-item:not(.is-disabled):hover {
-        @include theme-menu-hover-style;
-      }
-      .el-menu--horizontal .el-menu .el-submenu__title:hover {
-        @include theme-menu-hover-style;
-      }
-      .el-submenu {
-        @include unable-select;
-        .el-submenu__title:hover {
-          @include theme-menu-hover-style;
-        }
-        .el-submenu__title:focus {
-          @include theme-menu-focus-style;
-        }
-      }
-      .el-menu-item {
-        &:hover {
-          @include theme-menu-hover-style;
-        }
-        &:focus {
-          @include theme-menu-focus-style;
-        }
-        &.is-active {
-          @include theme-menu-active-style;
-        }
-      }
-    }
     /* 导航栏 */
     .navbar {
-      // background-color: $theme-navbar-background-color;
+      background-color: $theme-navbar-background-color;
       /* 应用名 */
       .navbar-brand {
         .logo {
           color: $theme-logo-color;
         }
       }
-      /* 导航右侧 */
+      /* 导航右侧按钮 */
       .navbar-end {
         .btn-text {
           color: $theme-nav-item-color;
@@ -101,8 +101,10 @@
     }
     /* 内容 */
     .app-container {
+      /* 左侧菜单 */
       .menu-side {
-        border-right: 1px solid $theme-menu-side-border-color;
+        box-shadow: $theme-menu-side-box-shadow;
+        background-color: $theme-menu-side-background-color;
       }
     }
   }

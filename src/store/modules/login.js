@@ -25,16 +25,13 @@ const login = {
         data: JSON.stringify(params)
       })
         .then(response => {
-          const { resultObj } = response.data
+          const { resultObj } = response
           const { adminId, token } = resultObj
           setCookie('userId', adminId)
           setCookie('token', token)
           // 设置用户信息
           commit('SET_USER_INFO', resultObj)
           callback(resultObj)
-        })
-        .catch(err => {
-          console.error('err: ', err)
         })
     },
 
@@ -52,7 +49,7 @@ const login = {
         url: '/api/v1/logout'
       })
         .then(response => {
-          const { success } = response.data
+          const { success } = response
           if (success) {
             localStorage.removeItem('userInfo')
             removeCookie('userId')
@@ -60,9 +57,6 @@ const login = {
             commit('SET_USER_INFO', {})
             callback()
           }
-        })
-        .catch(err => {
-          console.error('err: ', err)
         })
     },
     /**
@@ -87,7 +81,7 @@ const login = {
         url: '/api/v1/admin/modifyPassword',
         data: params
       }).then(response => {
-        const { success } = response.data
+        const { success } = response
         if (success) {
           removeCookie('userId')
           removeCookie('token')

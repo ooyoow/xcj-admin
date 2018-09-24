@@ -1,6 +1,5 @@
 html {
-  line-height: 1.15;
-  // -webkit-text-size-adjust: 100%;
+  line-height: 1.15; // -webkit-text-size-adjust: 100%;
 }
 
 body {
@@ -16,4 +15,14 @@ li {
   padding: 0;
   margin: 0;
   list-style: none;
+}
+
+/* 去掉input类型为number时上下箭头 */
+input::-webkit-outer-spin-button,
+input::-webkit-inner-spin-button {
+  -webkit-appearance: none;
+}
+
+input[type="number"] {
+  -moz-appearance: textfield;
 }

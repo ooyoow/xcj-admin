@@ -3,7 +3,7 @@
     <div class="filter-container">
       <div class="filter-item">
         <el-input class="txt" v-model="listQuery.search" clearable @input="handleSearch" placeholder="输入优惠券名称/产品ID搜索"></el-input>
-        <el-button type="primary" @click="handleCreate">添加</el-button>
+        <el-button type="primary" icon="el-icon-plus" @click="handleCreate">添加</el-button>
       </div>
       <div class="filter-item">
         <el-radio-group v-model="listQuery.productStatus" @change="onRadioChange">

@@ -1,8 +1,15 @@
 .xcj-user-portrait {
-  padding: 1.25rem;
-  .user-increase {
-    display: flex;
-    flex-flow: row nowrap;
-    justify-content: space-between;
+  margin: 1rem;
+  .member-item {
+    margin-bottom: 1rem;
+    padding: 1rem;
+    background-color: #fff;
+    border-radius: .375rem;
+    .filter {
+      display: flex;
+      flex-flow: row nowrap;
+      justify-content: space-between;
+      align-items: center;
+    }
   }
 }
