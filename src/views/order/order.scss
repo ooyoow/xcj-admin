@@ -1,57 +1,58 @@
 .xcj-order {
   padding: 1rem;
   .card-panel {
-    padding: 10px 0;
+    padding: 0.625rem 0;
     text-align: center;
     .icon {
       width: 20%;
     }
     .box {
       margin: 0 auto;
-      width: 100px;
+      width: 6.25rem;
       text-align: left;
       line-height: 25px;
       .title {
         color: #999;
       }
       .today {
-        font-size: 20px;
+        font-size: 1.25rem;
         color: #333;
       }
       .yesterday,
       .seven-days {
-        font-size: 14px;
+        font-size: 0.875rem;
         color: #999;
       }
     }
   }
   .box-card {
-    margin-top: .75rem;
+    margin-top: 0.75rem;
     .header {
-      padding: 12px;
+      padding: 0.75rem;
       background: #f5f5f6;
       border-bottom: 1px solid #ebeef5;
     }
     .search-form {
-      padding: 16px 0 0 16px;
+      padding: 1rem 0 0 1rem;
     }
     .order-data {
+      margin: 0 1rem;
+      padding: 0.75rem 0;
       display: flex;
       flex-flow: row nowrap;
       justify-content: space-between;
-      margin: 0 16px;
-      padding: 12px 0;
       border-bottom: 1px solid #ebeef5;
+      font-size: 0.875rem;
       .number {
         color: #f40;
         cursor: pointer;
       }
     }
     .user-data {
-      padding: 10px;
+      padding: 0.625rem;
       text-align: center;
       .number {
-        font-size: 26px;
+        font-size: 1.625rem;
         color: #f40;
       }
     }
@@ -72,24 +73,24 @@
         width: 150px;
         border-right: 1px solid #ddd;
         .card {
-          padding: 10px 0;
+          padding: 0.625rem 0;
           width: 100%;
           &-text {
-            font-size: 14px;
+            font-size: 0.875rem;
             color: #999;
           }
           &-count {
-            padding: 5px 12px;
-            font-size: 24px;
+            padding: 0.375rem 0.75rem;
+            font-size: 1.5rem;
             color: #666;
           }
           &-ratio {
             &-up {
-              font-size: 14px;
+              font-size: 0.875rem;
               color: #00a950;
             }
             &-down {
-              font-size: 14px;
+              font-size: 0.875rem;
               color: #f40;
             }
           }
@@ -101,7 +102,7 @@
           display: flex;
           flex-flow: row;
           justify-content: space-between;
-          padding: 10px;
+          padding: 0.625rem;
         }
       }
     }
@@ -116,7 +117,7 @@
       display: flex;
       align-items: center;
       padding: 1rem 2rem;
-      font-size: 24px;
+      font-size: 1.5rem;
       color: #fff;
       background-color: #00d1b2;
       border-radius: 0.5rem;

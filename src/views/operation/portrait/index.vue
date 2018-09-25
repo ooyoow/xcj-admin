@@ -46,25 +46,25 @@
 </template>
 
 <script>
-import moment from 'moment'
-import LineChart from '@/components/charts/line'
-import Pie from '@/components/charts/pie'
-import Bar from '@/components/charts/bar'
-import $axios from '@/utils/axios'
-import { getDateByInterval, createMonthByYear } from '@/utils/date'
-import './portrait.scss'
+import { format, startOfMonth, endOfMonth } from "date-fns";
+import LineChart from "@/components/charts/line";
+import Pie from "@/components/charts/pie";
+import Bar from "@/components/charts/bar";
+import $axios from "@/utils/axios";
+import { getDateByInterval, createMonthByYear } from "@/utils/date";
+import "./portrait.scss";
 export default {
   data() {
     return {
-      prefixCls: 'xcj-user-portrait',
+      prefixCls: "xcj-user-portrait",
       queryOptions: [
         {
           value: 1,
-          label: '按月统计'
+          label: "按月统计"
         },
         {
           value: 2,
-          label: '按年统计'
+          label: "按年统计"
         }
       ],
       queryUserIncrease: this.initQueryParams(),
@@ -75,45 +75,54 @@ export default {
         seriesData: []
       },
       userPortSource: {
-        legendData: ['微信', '小程序', '共享联盟', '集团客户'],
+        legendData: ["微信", "小程序", "共享联盟", "集团客户"],
         seriesData: [
           {
-            name: '微信',
+            name: "微信",
             value: 0
           },
           {
-            name: '小程序',
+            name: "小程序",
             value: 0
           },
           {
-            name: '共享联盟',
+            name: "共享联盟",
             value: 0
           },
           {
-            name: '集团客户',
+            name: "集团客户",
             value: 0
           }
         ]
       },
       userConsumeChartOption: {
-        color: ['#3398DB'],
+        color: ["#3398DB"],
         tooltip: {
-          trigger: 'axis',
+          trigger: "axis",
           axisPointer: {
             // 坐标轴指示器，坐标轴触发有效
-            type: 'shadow' // 默认为直线，可选为：'line' | 'shadow'
+            type: "shadow" // 默认为直线，可选为：'line' | 'shadow'
           }
         },
         grid: {
-          left: '3%',
-          right: '4%',
-          bottom: '3%',
+          left: "3%",
+          right: "4%",
+          bottom: "3%",
           containLabel: true
         },
         xAxis: [
           {
-            type: 'category',
-            data: ['0元', '5-10元', '11-50元', '51-200元', '201-1000元', '1001-3000元', '3001-10000元', '10000元以上'],
+            type: "category",
+            data: [
+              "0元",
+              "5-10元",
+              "11-50元",
+              "51-200元",
+              "201-1000元",
+              "1001-3000元",
+              "3001-10000元",
+              "10000元以上"
+            ],
             axisTick: {
               alignWithLabel: true
             }
@@ -121,19 +130,19 @@ export default {
         ],
         yAxis: [
           {
-            type: 'value'
+            type: "value"
           }
         ],
         series: [
           {
-            name: '会员数',
-            type: 'bar',
-            barWidth: '60%',
+            name: "会员数",
+            type: "bar",
+            barWidth: "60%",
             data: [0, 0, 0, 0, 0, 0, 0, 0, 0]
           }
         ]
       }
-    }
+    };
   },
   components: {
     LineChart,
@@ -141,161 +150,150 @@ export default {
     Bar
   },
   created() {
-    this.onInputQueryUserParam()
-    this.onInputQueryUserPortSource()
-    this.onQueryUserConsume()
+    this.onInputQueryUserParam();
+    this.onInputQueryUserPortSource();
+    this.onQueryUserConsume();
   },
   methods: {
     // 查询用户增长记录
     getUserIncrease(params) {
       $axios({
-        method: 'get',
-        url: '/api/v1/user/queryUserIncrease',
+        method: "get",
+        url: "/api/v1/user/queryUserIncrease",
         params: params
       }).then(response => {
-        const { resultObj } = response
-        const { type, year, month } = params
+        const { resultObj } = response;
+        const { type, year, month } = params;
         let xAxisData = [],
-          seriesData = []
+          seriesData = [];
         switch (params.type) {
           case 1: // 按月查询
-            const date = `${year}-${month}`
-            const startDay = moment(date)
-              .startOf('month')
-              .valueOf()
-            const endDay = moment(date)
-              .endOf('month')
-              .valueOf()
-            xAxisData = getDateByInterval(startDay, endDay)
-            break
+            const date = `${year}-${month}`;
+            const startDay = +startOfMonth(date);
+            const endDay = +endOfMonth(date);
+            xAxisData = getDateByInterval(startDay, endDay);
+            break;
           case 2:
-            xAxisData = createMonthByYear(year)
-            break
+            xAxisData = createMonthByYear(year);
+            break;
         }
-        seriesData = xAxisData.map(item => 0)
+        seriesData = xAxisData.map(item => 0);
         resultObj.forEach(item => {
-          const { axis, totalcount } = item
-          const index = xAxisData.indexOf(axis)
-          index > 0 ? (seriesData[index] = totalcount) : seriesData
-        })
+          const { axis, totalcount } = item;
+          const index = xAxisData.indexOf(axis);
+          index > 0 ? (seriesData[index] = totalcount) : seriesData;
+        });
         this.userIncreate = {
           xAxisData,
           seriesData
-        }
-      })
+        };
+      });
     },
 
     // 查询会员端口来源
     getUserPortSource(params) {
       $axios({
-        method: 'get',
-        url: '/api/v1/user/queryUserSource',
+        method: "get",
+        url: "/api/v1/user/queryUserSource",
         params: params
       }).then(response => {
-        const { groupCustomer, sharedAlliance, smallProgram, weChat } = response.resultObj || {}
+        const { groupCustomer, sharedAlliance, smallProgram, weChat } =
+          response.resultObj || {};
         this.userPortSource.seriesData = [
           {
-            name: '微信',
+            name: "微信",
             value: weChat
           },
           {
-            name: '小程序',
+            name: "小程序",
             value: smallProgram
           },
           {
-            name: '共享联盟',
+            name: "共享联盟",
             value: sharedAlliance
           },
           {
-            name: '集团客户',
+            name: "集团客户",
             value: groupCustomer
           }
-        ]
-      })
+        ];
+      });
     },
 
     // 会员消费金额分布
     getUserConsume(params) {
       $axios({
-        method: 'get',
-        url: '/api/v1/user/queryUserConsumption',
+        method: "get",
+        url: "/api/v1/user/queryUserConsumption",
         params: params
       }).then(response => {
-        const { resultObj } = response
+        const { resultObj } = response;
         if (resultObj && Array.isArray(resultObj)) {
-          let data = []
+          let data = [];
           resultObj.map(item => {
             data = Object.keys(item).map(key => {
-              return item[key]
-            })
-          })
+              return item[key];
+            });
+          });
           this.userConsumeChartOption = {
             ...this.userConsumeChartOption,
             series: {
               ...this.userConsumeChartOption.series,
               data
             }
-          }
+          };
         }
-      })
+      });
     },
 
     onInputQueryUserParam(value) {
-      const { type, date } = this.queryUserIncrease
-      const year = moment(date).format('YYYY')
-      const params = { type, year, month: '' }
-      type === 1 ? (params.month = moment(date).format('MM')) : params
-      this.getUserIncrease(params)
+      const { type, date } = this.queryUserIncrease;
+      const year = format(date, "YYYY");
+      const params = { type, year, month: "" };
+      type === 1 ? (params.month = format(date, "MM")) : params;
+      this.getUserIncrease(params);
     },
 
     onInputQueryUserPortSource() {
-      const { type, date } = this.queryUserPortSource
-      const params = this.formatQueryParams(type, date)
-      this.getUserPortSource(params)
+      const { type, date } = this.queryUserPortSource;
+      const params = this.formatQueryParams(type, date);
+      this.getUserPortSource(params);
     },
 
     // 会员消费金额分布查询参数表更触发事件
     onQueryUserConsume() {
-      const { type, date } = this.queryUserConsume
-      const params = this.formatQueryParams(type, date)
-      this.getUserConsume(params)
+      const { type, date } = this.queryUserConsume;
+      const params = this.formatQueryParams(type, date);
+      this.getUserConsume(params);
     },
 
     // 查询参数处理
     formatQueryParams(type, date) {
-      const params = { start: '', end: '' }
+      const params = { start: "", end: "" };
       switch (type) {
         case 1: // 按月查询
           Object.assign(params, {
-            start: moment(date)
-              .startOf('month')
-              .valueOf(),
-            end: moment(date)
-              .endOf('month')
-              .valueOf()
-          })
-          break
+            start: +startOfMonth(date),
+            end: +endOfMonth(date)
+          });
+          break;
         case 2: // 按年查询
           Object.assign(params, {
-            start: moment(`${moment(date).format('YYYY')}-01`)
-              .startOf('month')
-              .valueOf(),
-            end: moment(`${moment(date).format('YYYY')}-12`)
-              .endOf('month')
-              .valueOf()
-          })
-          break
+            start: +startOfMonth(`${format(date, "YYYY")}-01`),
+            end: +endOfMonth(`${format(date, "YYYY")}-12`)
+          });
+          break;
       }
-      return params
+      return params;
     },
 
     // 初始化查询对象
     initQueryParams() {
       return {
         type: 1,
-        date: moment().format('YYYY-MM')
-      }
+        date: format(new Date(), "YYYY-MM")
+      };
     }
   }
-}
+};
 </script>

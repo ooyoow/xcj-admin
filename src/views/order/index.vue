@@ -247,7 +247,7 @@
           </el-form-item>
           <el-form-item label="门店">
             <el-select v-model="formWashSearch.storeId" placeholder="请选择门店">
-              <el-option v-for="item in formWashSearch.storeOptions" :key="item.value" :label="item.label" :value="item.value"></el-option>
+              <el-option v-for="item in formWashSearch.storeOptions" :key="item.storeId" :label="item.storeName" :value="item.storeId"></el-option>
             </el-select>
           </el-form-item>
         </el-form>
@@ -274,7 +274,7 @@
           </el-form-item>
           <el-form-item label="门店">
             <el-select v-model="formServiceSearch.storeId" placeholder="请选择门店">
-              <el-option v-for="item in formServiceSearch.storeOptions" :key="item.value" :label="item.label" :value="item.value"></el-option>
+              <el-option v-for="item in formServiceSearch.storeOptions" :key="item.storeId" :label="item.storeName" :value="item.storeId"></el-option>
             </el-select>
           </el-form-item>
         </el-form>
@@ -301,7 +301,7 @@
           </el-form-item>
           <el-form-item label="门店">
             <el-select v-model="formProfitSearch.storeId" placeholder="请选择门店">
-              <el-option v-for="item in formProfitSearch.storeOptions" :key="item.value" :label="item.label" :value="item.value"></el-option>
+              <el-option v-for="item in formProfitSearch.storeOptions" :key="item.storeId" :label="item.storeName" :value="item.storeId"></el-option>
             </el-select>
           </el-form-item>
         </el-form>
@@ -321,21 +321,21 @@
 </template>
 
 <script>
-import { mapState, mapActions } from "vuex";
-import moment from "moment";
-import $axios from "@/utils/axios";
-import { formatTimeStamp } from "@/utils/date";
-import { getDateByInterval } from "@/utils/date";
-import LineChart from "@/components/charts/line";
-import Bar from "@/components/charts/bar";
-import Stats from "./stats";
-import AsideCard from "./asideCard";
-import constants from "./constants";
-import "./order.scss";
-const { statsType, dayHours } = constants;
+import { mapState, mapActions } from 'vuex'
+import { subDays } from 'date-fns'
+import $axios from '@/utils/axios'
+import { formatTimeStamp } from '@/utils/date'
+import { getDateByInterval } from '@/utils/date'
+import LineChart from '@/components/charts/line'
+import Bar from '@/components/charts/bar'
+import Stats from './stats'
+import AsideCard from './asideCard'
+import constants from './constants'
+import './order.scss'
+const { statsType, dayHours } = constants
 
 export default {
-  name: "order",
+  name: 'order',
   components: {
     LineChart,
     Bar,
@@ -356,33 +356,33 @@ export default {
       completedOrderList: [], // 服务订单
       cancelledOrderList: [], // 已取消订单
       queryOrderStatsParams: {
-        type: "今日",
+        type: '今日',
         date: []
       },
       querySalesStatsParams: {
-        type: "今日",
+        type: '今日',
         date: []
       },
       productSalesType: 1,
       productSalesChartOption: {
-        color: ["#3398DB"],
+        color: ['#3398DB'],
         tooltip: {
-          trigger: "axis",
+          trigger: 'axis',
           axisPointer: {
             // 坐标轴指示器，坐标轴触发有效
-            type: "shadow" // 默认为直线，可选为：'line' | 'shadow'
+            type: 'shadow' // 默认为直线，可选为：'line' | 'shadow'
           }
         },
         grid: {
-          left: "3%",
-          right: "4%",
-          bottom: "3%",
+          left: '3%',
+          right: '4%',
+          bottom: '3%',
           containLabel: true
         },
         xAxis: [
           {
-            type: "category",
-            data: ["标准洗", "快速洗", "镀膜洗", "至尊洗"],
+            type: 'category',
+            data: ['标准洗', '快速洗', '镀膜洗', '至尊洗'],
             axisTick: {
               alignWithLabel: true
             }
@@ -390,14 +390,14 @@ export default {
         ],
         yAxis: [
           {
-            type: "value"
+            type: 'value'
           }
         ],
         series: [
           {
-            name: "洗车量",
-            type: "bar",
-            barWidth: "60%",
+            name: '洗车量',
+            type: 'bar',
+            barWidth: '60%',
             data: [0, 0, 0, 0]
           }
         ]
@@ -407,14 +407,14 @@ export default {
       washStats: this.initStatsData(),
       serviceStats: this.initStatsData(),
       profitStats: this.initStatsData(),
-      formWashSearch: this.ininitFromSearch(),
-      formServiceSearch: this.ininitFromSearch(),
-      formProfitSearch: this.ininitFromSearch()
-    };
+      formWashSearch: this.initFromSearchParams(),
+      formServiceSearch: this.initFromSearchParams(),
+      formProfitSearch: this.initFromSearchParams()
+    }
   },
   mounted() {
     // 初始化加载数据
-    this.init();
+    this.init()
   },
   computed: {
     ...mapState({
@@ -424,55 +424,65 @@ export default {
     })
   },
   methods: {
-    ...mapActions(["getOrderInfo", "getMemberInfo", "getOrgOptions"]),
+    ...mapActions(['getOrderInfo', 'getMemberInfo', 'getOrgOptions']),
 
+    // 订单统计：今日/本周/本月
     onOrderRadioChange(value) {
-      this.getOrderStats(statsType.indexOf(value) + 1);
+      this.getOrderStats(value)
     },
 
+    // 订单统计：按起止日期查询
     onOrderDateChange(value) {
       if (value) {
-        this.getOrderStats(4, value[0], value[1]);
+        this.getOrderStats(4, value[0], value[1])
       }
     },
 
+    // 销售统计：今日/本周/本月
     onSalesRadioChange(value) {
-      this.getSalesStats(statsType.indexOf(value) + 1);
+      this.getSalesStats(value)
     },
 
+    // 销售统计：按起止日期查询
     onSalesDateChange(value) {
       if (value) {
-        this.getSalesStats(4, value[0], value[1]);
+        this.getSalesStats(4, value[0], value[1])
       }
     },
 
+    // 洗车量统计：今日/本周/本月
     onWashRadioChange(value) {
-      this.getWashStats(1, statsType.indexOf(value) + 1);
+      this.getWashStats(1, value)
     },
 
+    // 洗车量统计：按起止日期查询
     onWashDateChange(value) {
       if (value) {
-        this.getWashStats(1, 4, value[0], value[1]);
+        this.getWashStats(1, 4, value[0], value[1])
       }
     },
 
+    // 服务额统计：今日/本周/本月
     onServiceRadioChange(value) {
-      this.getServiceStats(1, statsType.indexOf(value) + 1);
+      this.getServiceStats(1, value)
     },
 
+    // 服务额统计：按起止日期查询
     onServiceDateChange(value) {
       if (value) {
-        this.getServiceStats(1, 4, value[0], value[1]);
+        this.getServiceStats(1, 4, value[0], value[1])
       }
     },
 
+    // 分润统计：今日/本周/本月
     onProfitRadioChange(value) {
-      this.getProfitStats(1, statsType.indexOf(value) + 1);
+      this.getProfitStats(1, value)
     },
 
+    // 分润统计：按起止日期查询
     onProfitDateChange(value) {
       if (value) {
-        this.getProfitStats(1, 4, value[0], value[1]);
+        this.getProfitStats(1, 4, value[0], value[1])
       }
     },
 
@@ -480,72 +490,72 @@ export default {
     onOrgOptionChange(type, organizationId) {
       this.getStoreOptions(organizationId, data => {
         switch (type) {
-          case "wash": // 洗车量统计 -> 所有者
-            this.formWashSearch.storeOptions = data;
-            break;
-          case "service": // 服务额统计 -> 所有者
-            this.formServiceSearch.storeOptions = data;
-            break;
-          case "profit": // 分润统计 -> 所有者
-            this.formProfitSearch.storeOptions = data;
-            break;
+          case 'wash': // 洗车量统计 -> 所有者
+            this.formWashSearch.storeOptions = data
+            break
+          case 'service': // 服务额统计 -> 所有者
+            this.formServiceSearch.storeOptions = data
+            break
+          case 'profit': // 分润统计 -> 所有者
+            this.formProfitSearch.storeOptions = data
+            break
           default:
-            break;
+            break
         }
-      });
+      })
     },
 
     // 查询订单统计
-    getOrderStats(type, start = "", end = "") {
+    getOrderStats(type, start = '', end = '') {
       $axios({
-        url: "/api/v1/summary/orderstatic",
-        method: "get",
+        url: '/api/v1/summary/orderstatic',
+        method: 'get',
         params: {
           type: type,
           start: start,
           end: end
         }
       }).then(response => {
-        const { resultObj } = response;
-        const { staticList, sumList, ...otherProps } = resultObj;
+        const { resultObj } = response
+        const { staticList, sumList, ...otherProps } = resultObj
         if (resultObj && staticList && Array.isArray(staticList)) {
-          const result = this.calcStatsData(type, staticList, start, end);
+          const result = this.calcStatsData(type, staticList, start, end)
           this.orderStats = {
             ...result,
             ...otherProps
-          };
+          }
         }
-      });
+      })
     },
 
     // 查询销售额
-    getSalesStats(type, start = "", end = "") {
+    getSalesStats(type, start = '', end = '') {
       $axios({
-        url: "/api/v1/summary/salestatic",
-        method: "get",
+        url: '/api/v1/summary/salestatic',
+        method: 'get',
         params: {
           type: type,
           start: start,
           end: end
         }
       }).then(response => {
-        const { resultObj } = response;
-        const { staticList, sumList, ...otherProps } = resultObj;
+        const { resultObj } = response
+        const { staticList, sumList, ...otherProps } = resultObj
         if (resultObj && sumList && Array.isArray(sumList)) {
-          const result = this.calcStatsData(type, sumList, start, end);
+          const result = this.calcStatsData(type, sumList, start, end)
           this.salesStats = {
             ...result,
             ...otherProps
-          };
+          }
         }
-      });
+      })
     },
 
     // 查询洗车量统计
-    getWashStats(storeId, type, start = "", end = "") {
+    getWashStats(storeId, type, start = '', end = '') {
       $axios({
-        url: "/api/v1/summary/washstatic",
-        method: "get",
+        url: '/api/v1/summary/washstatic',
+        method: 'get',
         params: {
           storeId: storeId,
           type: type,
@@ -553,23 +563,23 @@ export default {
           end: end
         }
       }).then(response => {
-        const { resultObj } = response;
-        const { staticList, sumList, ...otherProps } = resultObj;
+        const { resultObj } = response
+        const { staticList, sumList, ...otherProps } = resultObj
         if (resultObj && staticList && Array.isArray(staticList)) {
-          const result = this.calcStatsData(type, staticList, start, end);
+          const result = this.calcStatsData(type, staticList, start, end)
           this.washStats = {
             ...result,
             ...otherProps
-          };
+          }
         }
-      });
+      })
     },
 
     // 查询服务额统计
-    getServiceStats(storeId, type, start = "", end = "") {
+    getServiceStats(storeId, type, start = '', end = '') {
       $axios({
-        url: "/api/v1/summary/servicestatic",
-        method: "get",
+        url: '/api/v1/summary/servicestatic',
+        method: 'get',
         params: {
           storeId: storeId,
           type: type,
@@ -577,23 +587,23 @@ export default {
           end: end
         }
       }).then(response => {
-        const { resultObj } = response;
-        const { staticList, sumList, ...otherProps } = resultObj;
+        const { resultObj } = response
+        const { staticList, sumList, ...otherProps } = resultObj
         if (resultObj && sumList && Array.isArray(sumList)) {
-          const result = this.calcStatsData(type, sumList, start, end);
+          const result = this.calcStatsData(type, sumList, start, end)
           this.serviceStats = {
             ...result,
             ...otherProps
-          };
+          }
         }
-      });
+      })
     },
 
     // 查询分润统计
-    getProfitStats(storeId, type, start = "", end = "") {
+    getProfitStats(storeId, type, start = '', end = '') {
       $axios({
-        url: "/api/v1/summary/profitstatic",
-        method: "get",
+        url: '/api/v1/summary/profitstatic',
+        method: 'get',
         params: {
           storeId: storeId,
           type: type,
@@ -601,150 +611,135 @@ export default {
           end: end
         }
       }).then(response => {
-        const { resultObj } = response;
-        const { staticList, sumList, ...otherProps } = resultObj;
+        const { resultObj } = response
+        const { staticList, sumList, ...otherProps } = resultObj
         if (resultObj && sumList && Array.isArray(sumList)) {
-          const result = this.calcStatsData(type, sumList, start, end);
+          const result = this.calcStatsData(type, sumList, start, end)
           this.profitStats = {
             ...result,
             ...otherProps
-          };
+          }
         }
-      });
+      })
     },
 
     // 查询订单总览
     getOrderView() {
       $axios({
-        url: "/api/v1/summary/overview",
-        method: "get"
+        url: '/api/v1/summary/overview',
+        method: 'get'
       }).then(response => {
-        const { resultObj } = response;
-        this.orderView = resultObj;
-      });
+        const { resultObj } = response
+        this.orderView = resultObj
+      })
     },
 
     // 查询实时销量
     getProductSales(type) {
       $axios({
-        url: "/api/v1/summary/realtimesales",
-        method: "get",
+        url: '/api/v1/summary/realtimesales',
+        method: 'get',
         params: { type }
       }).then(response => {
-        const { resultObj } = response;
-        const data = resultObj.map(item => item.saleCount);
+        const { resultObj } = response
+        const data = resultObj.map(item => item.saleCount)
         this.productSalesChartOption = {
           ...this.productSalesChartOption,
           series: {
             ...this.productSalesChartOption.series,
             data
           }
-        };
-      });
+        }
+      })
     },
 
     // 查询门店下拉选项
     getStoreOptions(organizationId, callback) {
       $axios({
-        url: "/api/v1/store/queryStoreInfoList",
-        method: "get",
+        url: '/api/v1/store/queryStoreInfoList',
+        method: 'get',
         params: { organizationId }
       }).then(response => {
-        const { resultObj } = response;
-        let storeOptions = [];
+        const { resultObj } = response
+        let storeOptions = []
         if (resultObj && Array.isArray(resultObj)) {
-          storeOptions = resultObj.map(item => {
-            const { storeId, storeName, ...anyprops } = item;
-            return {
-              label: storeName,
-              value: storeId,
-              ...anyprops
-            };
-          });
+          storeOptions = resultObj
         }
-        callback(storeOptions);
-      });
+        callback(storeOptions)
+      })
     },
 
     // 查询订单详情
     loadOrderDetail(orderStatus) {
       $axios({
-        url: "/api/v1/summary/orderDetail",
-        method: "get",
+        url: '/api/v1/summary/orderDetail',
+        method: 'get',
         params: { orderStatus }
       }).then(response => {
-        const { resultObj } = response;
+        const { resultObj } = response
         switch (orderStatus) {
-          case "paidOrder": // 已付款订单
-            this.paidOrderList = resultObj;
-            break;
-          case "unpaymentOrder": // 待付款订单
-            this.unpaymentOrderList = resultObj;
-            break;
-          case "completedOrder": // 服务订单
-            this.completedOrderList = resultObj;
-            break;
-          case "refundedOrder": // 已取消订单
-            this.cancelledOrderList = resultObj;
-            break;
+          case 'paidOrder': // 已付款订单
+            this.paidOrderList = resultObj
+            break
+          case 'unpaymentOrder': // 待付款订单
+            this.unpaymentOrderList = resultObj
+            break
+          case 'completedOrder': // 服务订单
+            this.completedOrderList = resultObj
+            break
+          case 'refundedOrder': // 已取消订单
+            this.cancelledOrderList = resultObj
+            break
         }
-      });
+      })
     },
 
-    calcStatsData(type, data, start = "", end = "") {
-      let seriesData = [];
-      let xAxisData = [];
-      let subtractDay;
+    calcStatsData(type, data, start, end) {
+      let seriesData = []
+      let xAxisData = []
+      let subtractDay
       switch (type) {
         case 1:
-          xAxisData = Array.from(dayHours);
+          xAxisData = Array.from(dayHours)
           xAxisData.forEach(() => {
-            seriesData.push(0);
-          });
-          break;
+            seriesData.push(0)
+          })
+          break
         case 2:
         case 3:
           if (type === 2) {
-            subtractDay = 6;
+            subtractDay = 6
           }
           if (type === 3) {
-            subtractDay = 30;
+            subtractDay = 30
           }
-          xAxisData = getDateByInterval(
-            moment()
-              .subtract("days", subtractDay)
-              .valueOf(),
-            moment().valueOf()
-          );
+          xAxisData = getDateByInterval(subDays(new Date(), 7), +new Date())
           xAxisData.forEach(() => {
-            seriesData.push(0);
-          });
-          break;
+            seriesData.push(0)
+          })
+          break
         case 4:
-          xAxisData = getDateByInterval(
-            moment(start).valueOf(),
-            moment(end).valueOf()
-          );
+          xAxisData = getDateByInterval(+new Date(start), +new Date(end))
           xAxisData.forEach(() => {
-            seriesData.push(0);
-          });
-          break;
+            seriesData.push(0)
+          })
+          break
         default:
-          break;
+          break
       }
       data.forEach(item => {
-        const { axis, totalcount } = item;
+        const { axis, totalcount } = item
         if (type === 1) {
-          seriesData[+axis] = totalcount;
+          seriesData[+axis] = totalcount
         } else {
-          seriesData[xAxisData.indexOf(axis)] = totalcount;
+          seriesData[xAxisData.indexOf(axis)] = totalcount
         }
-      });
-      return { xAxisData, seriesData };
+      })
+      return { xAxisData, seriesData }
     },
 
     formatTime(row, column, cellValue) {
-      return formatTimeStamp(cellValue);
+      return formatTimeStamp(cellValue)
     },
 
     initStatsData() {
@@ -755,32 +750,52 @@ export default {
         lastWeek: 0,
         presentMonth: 0,
         presentWeek: 0,
-        ratioMonth: "0%",
-        ratioWeek: "0%"
-      };
+        ratioMonth: '0%',
+        ratioWeek: '0%'
+      }
     },
 
-    ininitFromSearch() {
+    initFromSearchParams() {
       return {
-        organizationId: "",
-        storeId: "",
+        organizationId: '',
+        storeId: '',
         storeOptions: []
-      };
+      }
     },
 
     init() {
-      this.getOrgOptions();
-      this.getOrderInfo();
-      this.getMemberInfo();
-      this.getOrderView();
-      this.getOrderStats(1);
-      this.getSalesStats(1);
-      this.getWashStats(1, 1);
-      this.getServiceStats(1, 1);
-      this.getProfitStats(1, 1);
-      this.getProductSales(1);
+      // 查询所有者
+      this.getOrgOptions(data => {
+        if (data.length) {
+          const { organizationId } = data[0]
+          this.getStoreOptions(organizationId, storeOptions => {
+            if (storeOptions.length) {
+              const { storeId } = storeOptions[0]
+              const formSearchParams = () => {
+                return {
+                  organizationId: organizationId,
+                  storeId: storeId,
+                  storeOptions: storeOptions
+                }
+              }
+              this.formWashSearch = formSearchParams()
+              this.formServiceSearch = formSearchParams()
+              this.formProfitSearch = formSearchParams()
+              this.getWashStats(storeId, 1)
+              this.getServiceStats(storeId, 1)
+              this.getProfitStats(storeId, 1)
+            }
+          })
+        }
+      })
+      this.getOrderInfo()
+      this.getMemberInfo()
+      this.getOrderView()
+      this.getOrderStats(1)
+      this.getSalesStats(1)
+      this.getProductSales(1)
     }
   }
-};
+}
 </script>
 

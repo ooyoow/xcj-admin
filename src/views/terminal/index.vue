@@ -16,7 +16,7 @@
         <el-button type="primary" icon="el-icon-plus" @click="handleCreate">添加</el-button>
       </el-form-item>
     </el-form>
-    <el-table :class="`${prefixCls}-table`" :data="terminalList" tooltip-effect="dark" border v-loading="listLoading">
+    <el-table :class="`${prefixCls}-table`" :data="terminalList" v-loading="listLoading">
       <el-table-column prop="driverName" label="终端名称" align="center" show-overflow-tooltip />
       <el-table-column prop="driverid" label="终端ID" align="center" show-overflow-tooltip />
       <el-table-column prop="manufactor" label="厂家" align="center" show-overflow-tooltip />
@@ -72,10 +72,9 @@
   </div>
 </template>
 <script>
-import moment from 'moment'
 import $axios from '@/utils/axios'
 import { expandParams } from '@/utils/general'
-import { formatTimeStamp } from '@/utils/date'
+import DateUtils from '@/utils/date'
 import './style.scss'
 export default {
   name: 'Terminal',
@@ -264,7 +263,7 @@ export default {
       }
     },
     formatTime(row, column, cellValue) {
-      return formatTimeStamp(cellValue)
+      return DateUtils.format(cellValue)
     },
     formatState(row, column, cellValue) {
       const stateMap = {

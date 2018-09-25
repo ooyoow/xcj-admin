@@ -11,23 +11,18 @@
 
 <script>
 export default {
-  props: ['text', 'position', 'visible'],
-  watch: {
-    position: {
-      handler() {
-        this.$refs.customOverlay.reload()
-      },
-      deep: false
-    }
-  },
+  props: ['text', 'position', 'active'],
   methods: {
     draw({ el, BMap, map }) {
-      const { lng, lat } = this.position
-      const pixel = map.pointToOverlayPixel(new BMap.Point(lng, lat))
-      el.style.width = el.scrollWidth
-      el.style.height = el.scrollHeight
-      el.style.left = pixel.x - el.scrollWidth / 2 + 'px'
-      el.style.top = pixel.y - el.scrollHeight - 20 + 'px'
+      // 使用setTimeout，防止放大缩写时获取不到覆盖物元素宽高
+      setTimeout(() => {
+        const { lng, lat } = this.position
+        const pixel = map.pointToOverlayPixel(new BMap.Point(lng, lat))
+        el.style.width = el.offsetWidth
+        el.style.height = el.offsetHeight
+        el.style.left = pixel.x - el.scrollWidth / 2 + 'px'
+        el.style.top = pixel.y - el.scrollHeight - 20 + 'px'
+      }, 100)
     }
   }
 }

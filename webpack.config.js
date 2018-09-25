@@ -1,10 +1,11 @@
 const path = require('path')
 const HtmlWebpackPlugin = require('html-webpack-plugin')
 const MiniCssExtractPlugin = require('mini-css-extract-plugin')
+const OptimizeCSSAssetsPlugin = require('optimize-css-assets-webpack-plugin')
 const VueLoaderPlugin = require('vue-loader/lib/plugin')
 const env = process.env.NODE_ENV
 const devMode = env !== 'production'
-const cssLoader = { loader: 'css-loader', options: { importLoaders: 1, minimize: !devMode } }
+const cssLoader = { loader: 'css-loader' }
 
 module.exports = {
   entry: {
@@ -84,6 +85,7 @@ module.exports = {
       template: 'src/index.html',
       // inject: true,
       environment: env
-    })
+    }),
+    new OptimizeCSSAssetsPlugin()
   ]
 }

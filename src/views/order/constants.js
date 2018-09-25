@@ -1,7 +1,6 @@
 // 常量
 
 export default {
-  statsType: ['今日', '本周', '本月'],
   dayHours: [
     '00:00',
     '01:00',

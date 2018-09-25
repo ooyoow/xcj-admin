@@ -70,7 +70,6 @@
 </template>
 
 <script>
-import moment from "moment";
 import $axios from "@/utils/axios";
 import "./summary.scss";
 export default {

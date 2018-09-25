@@ -17,27 +17,20 @@ const common = {
     /**
      * @description 查询所有者下拉选项
      */
-    getOrgOptions({ commit }) {
+    getOrgOptions({ commit }, callback = () => {}) {
       $axios({
         method: 'get',
         url: '/api/v1/store/queryOrgList'
       }).then(response => {
         const { resultObj } = response
-        let orgOptions = [];
+        let orgOptions = []
         if (resultObj && Array.isArray(resultObj)) {
           orgOptions = resultObj
-          // const orgOptions = resultObj.map(item => {
-          //   const { organizationId, ownerName, ...anyprops } = item
-          //   return {
-          //     label: ownerName,
-          //     value: organizationId,
-          //     ...anyprops
-          //   }
-          // })
         }
         commit('GET_ORG_OPTIONS', orgOptions)
+        callback(orgOptions)
       })
-    },
+    }
   }
 }
 

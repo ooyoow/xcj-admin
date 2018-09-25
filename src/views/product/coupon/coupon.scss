@@ -9,7 +9,7 @@
     justify-content: space-between;
     .filter-item {
       .txt {
-        width: 200px;
+        width: 15rem;
         margin-right: 1rem;
       }
     }
@@ -17,6 +17,7 @@
   &-table {
     margin-top: 1rem;
     width: 100%;
+    border-top: 1px solid #ebeef5;
     .column-img {
       color: #3385ff;
       cursor: pointer;

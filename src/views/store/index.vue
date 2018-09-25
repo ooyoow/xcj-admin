@@ -16,14 +16,14 @@
         <el-button type="primary" icon="el-icon-plus" @click="handleCreate">添加</el-button>
       </el-form-item>
     </el-form>
-    <el-table :class="`${prefixCls}-table`" border :data="storeList" v-loading="listLoading" tooltip-effect="dark">
-      <el-table-column prop="storeName" align="center" label="门店名称" show-overflow-tooltip/>
-      <el-table-column prop="storeManager" align="center" label="店长" show-overflow-tooltip/>
-      <el-table-column prop="stateName" align="center" label="门店状态" show-overflow-tooltip/>
-      <el-table-column prop="driverid" align="center" label="终端ID" show-overflow-tooltip/>
-      <el-table-column prop="storePro" align="center" label="省份" show-overflow-tooltip/>
-      <el-table-column prop="storeCity" align="center" label="城市" show-overflow-tooltip/>
-      <el-table-column prop="address" align="center" label="地址" show-overflow-tooltip/>
+    <el-table :class="`${prefixCls}-table`" :data="storeList" v-loading="listLoading" tooltip-effect="dark">
+      <el-table-column prop="storeName" label="门店名称" show-overflow-tooltip/>
+      <el-table-column prop="storeManager" label="店长" show-overflow-tooltip/>
+      <el-table-column prop="stateName" label="门店状态" show-overflow-tooltip/>
+      <el-table-column prop="driverid" label="终端ID" show-overflow-tooltip/>
+      <el-table-column prop="storePro" label="省份" show-overflow-tooltip/>
+      <el-table-column prop="storeCity" label="城市" show-overflow-tooltip/>
+      <el-table-column prop="address" label="地址" show-overflow-tooltip/>
       <el-table-column prop="storeIcon" align="center" label="店铺图标" show-overflow-tooltip>
         <template slot-scope="scope">
           <el-popover v-if="scope.row.storeIcon" placement="right" trigger="hover">
@@ -140,9 +140,8 @@
 
 <script>
 import { mapState, mapActions } from 'vuex'
-import moment from 'moment'
 import $axios from '@/utils/axios'
-import { formatTimeStamp } from '@/utils/date'
+import DateUtils from '@/utils/date'
 import BASE_URL from '../../../config/serve'
 import './store.scss'
 export default {
@@ -409,7 +408,7 @@ export default {
       }
     },
     formatTime(row, column, cellValue) {
-      return formatTimeStamp(cellValue)
+      return DateUtils.format(cellValue)
     }
   }
 }

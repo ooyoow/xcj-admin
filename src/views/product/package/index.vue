@@ -2,7 +2,7 @@
   <div :class="prefixCls">
     <div class="filter-container">
       <div class="filter-item">
-        <el-input class="txt" v-model="listQuery.search" clearable @input="handleSearch" placeholder="输入套餐名称/产品ID搜索"></el-input>
+        <el-input class="txt" v-model="listQuery.search" clearable @input="handleSearch" placeholder="输入套餐名称/产品编号搜索"></el-input>
         <el-button type="primary" icon="el-icon-plus" @click="handleCreate">添加</el-button>
       </div>
       <div class="filter-item">
@@ -19,7 +19,7 @@
         </el-radio-group>
       </div>
     </div>
-    <el-table :class="`${prefixCls}-table`" border :data="dataList" tooltip-effect="dark">
+    <el-table :class="`${prefixCls}-table`" :data="dataList" tooltip-effect="dark">
       <el-table-column prop="pName" label="套餐名称" show-overflow-tooltip />
       <el-table-column prop="pCode" label="产品编号" show-overflow-tooltip />
       <el-table-column prop="pImg" align="center" label="产品图片" show-overflow-tooltip>
@@ -37,7 +37,7 @@
       <el-table-column prop="pShowState" label="状态" align="center" show-overflow-tooltip />
       <el-table-column prop="advertisement" label="广告语" show-overflow-tooltip />
       <el-table-column prop="pContent" label="简介" show-overflow-tooltip />
-      <el-table-column prop="remarks" label="备注" show-overflow-tooltip />
+      <!-- <el-table-column prop="remarks" label="备注" show-overflow-tooltip /> -->
       <!-- <el-table-column prop="groupCustomer" label="集团客户" show-overflow-tooltip /> -->
       <el-table-column fixed="right" label="操作" align="center" width="100 ">
         <template slot-scope="scope">
@@ -97,9 +97,9 @@
         <el-form-item label="简介" prop="pContent">
           <el-input v-model="dataTemp.pContent"></el-input>
         </el-form-item>
-        <el-form-item label="备注" prop="remarks">
+        <!-- <el-form-item label="备注" prop="remarks">
           <el-input v-model="dataTemp.remarks"></el-input>
-        </el-form-item>
+        </el-form-item> -->
       </el-form>
       <div slot="footer" class="dialog-footer">
         <el-button @click="dialogVisible=false">取消</el-button>
@@ -231,16 +231,14 @@ export default {
           this.createProduct({
             params: this.dataTemp,
             callback: result => {
-              if (result && result.data && result.data.success) {
-                this.dataList.unshift(result.data.resultObj)
-                this.dialogVisible = false
-                this.$notify({
-                  title: '成功',
-                  message: '添加成功',
-                  type: 'success',
-                  duration: 2000
-                })
-              }
+              this.dataList.unshift(result.resultObj)
+              this.dialogVisible = false
+              this.$notify({
+                title: '成功',
+                message: '添加成功',
+                type: 'success',
+                duration: 2000
+              })
             }
           })
         }
@@ -252,22 +250,20 @@ export default {
           this.updateProduct({
             params: this.dataTemp,
             callback: result => {
-              if (result && result.data && result.data.success) {
-                for (const v of this.dataList) {
-                  if (v.id === this.dataTemp.id) {
-                    const index = this.dataList.indexOf(v)
-                    this.dataList.splice(index, 1, this.dataTemp)
-                    break
-                  }
+              for (const v of this.dataList) {
+                if (v.id === this.dataTemp.id) {
+                  const index = this.dataList.indexOf(v)
+                  this.dataList.splice(index, 1, this.dataTemp)
+                  break
                 }
-                this.dialogVisible = false
-                this.$notify({
-                  title: '成功',
-                  message: '更新成功',
-                  type: 'success',
-                  duration: 2000
-                })
               }
+              this.dialogVisible = false
+              this.$notify({
+                title: '成功',
+                message: '更新成功',
+                type: 'success',
+                duration: 2000
+              })
             }
           })
         }
@@ -285,7 +281,7 @@ export default {
     },
     setDialog(dialogStatus, data) {
       this.dialogStatus = dialogStatus
-      this.dataTemp = data
+      this.dataTemp = { ...data }
       this.dialogVisible = true
       this.$nextTick(() => {
         this.$refs['dataForm'].clearValidate()
@@ -306,8 +302,8 @@ export default {
         upTime: '',
         downTime: '',
         pValidateTime: '',
-        pContent: '',
-        remarks: ''
+        pContent: ''
+        // remarks: ''
       }
     }
   }
