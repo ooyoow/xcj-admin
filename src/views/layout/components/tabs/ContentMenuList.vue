@@ -1,7 +1,7 @@
 <template>
   <div class="content-menu-list" @click="rowClick">
     <div v-for="item in menulist" :key="item.value" :data-value="item.value" class="content-menu-item">
-      <icon v-if="item.icon" :name="item.icon" />
+      <i v-if="item.icon" class="el-icon-folder" />
       <div class="content-menu-item-title">
         {{item.title}}
       </div>
@@ -11,7 +11,7 @@
 
 <script>
 export default {
-  name: 'ContentMenuList',
+  name: "ContentMenuList",
   props: {
     menulist: {
       type: Array,
@@ -20,14 +20,14 @@ export default {
   },
   methods: {
     rowClick(event) {
-      let target = event.target
+      let target = event.target;
       while (!target.dataset.value) {
-        target = target.parentNode
+        target = target.parentNode;
       }
-      this.$emit('rowClick', target.dataset.value)
+      this.$emit("rowClick", target.dataset.value);
     }
   }
-}
+};
 </script>
 
 <style lang="scss">

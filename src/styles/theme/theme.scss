@@ -8,7 +8,7 @@
   @mixin theme-menu-hover-style {
     color: $theme-menu-item-color-hover;
     background: $theme-menu-item-background-color-hover;
-    i.fa {
+    i {
       color: $theme-menu-item-color-hover;
     }
     .el-submenu__icon-arrow {
@@ -18,7 +18,7 @@
   @mixin theme-menu-focus-style {
     color: $theme-menu-item-color-focus;
     background: $theme-menu-item-background-color-focus;
-    i.fa {
+    i {
       color: $theme-menu-item-color-focus;
     }
     .el-submenu__icon-arrow {
@@ -27,7 +27,7 @@
   }
   @mixin theme-menu-active-style {
     color: $theme-menu-item-color-active;
-    i.fa {
+    i {
       color: $theme-menu-item-color-active;
     }
     background: $theme-menu-item-background-color-active;

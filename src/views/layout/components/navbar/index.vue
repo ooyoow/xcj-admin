@@ -10,26 +10,25 @@
           <li class="navbar-item">
             <el-tooltip effect="dark" :content="isFullScreen ? '退出全屏' : '全屏'" placement="bottom">
               <el-button class="btn-text can-hover" type="text" @click="appToggleFullScreen">
-                <icon v-if="isFullScreen" name="compress" />
-                <icon v-else name="arrows-alt" style="font-size: 16px" />
+                <i class="el-icon-rank" style="font-size: 1.25rem"></i>
               </el-button>
             </el-tooltip>
           </li>
           <li class="navbar-item">
             <el-tooltip effect="dark" content="通知" placement="bottom">
               <el-button class="btn-text can-hover" type="text">
-                <icon name="bell-o" style="font-size: 1rem" />
+                <i class="el-icon-bell" style="font-size: 1.25rem"></i>
               </el-button>
             </el-tooltip>
           </li>
           <li class="navbar-item">
             <el-dropdown>
               <el-button class="btn-text can-hover" type="text">
-                <icon name="delicious" style="font-size: 16px" />
+                <i class="el-icon-menu" style="font-size: 1.25rem"></i>
               </el-button>
               <el-dropdown-menu slot="dropdown">
                 <el-dropdown-item v-for="theme in themeList" :key="theme.key" @click.native="setTheme(theme.key)">
-                  <icon name="circle" :style="{color: theme.color}" />&nbsp;&nbsp;{{theme.name}}
+                  {{theme.name}}
                 </el-dropdown-item>
                 <!-- <el-dropdown-item>
                 <theme-picker class="theme-switch right-menu-item"></theme-picker>
@@ -45,10 +44,10 @@
               </div>
               <el-dropdown-menu slot="dropdown">
                 <el-dropdown-item @click.native="handleChangePassword">
-                  <icon name="key" />&nbsp;修改密码
+                  <i class="el-icon-key"></i>&nbsp;修改密码
                 </el-dropdown-item>
                 <el-dropdown-item @click.native="handleLogout">
-                  <icon name="power-off" />&nbsp;注销
+                  <i class="el-icon-logout"></i>&nbsp;注销
                 </el-dropdown-item>
               </el-dropdown-menu>
             </el-dropdown>
@@ -60,17 +59,17 @@
   </section>
 </template>
 <script>
-import { mapState, mapActions } from 'vuex'
-import { MessageBox } from 'element-ui'
-import MenuNav from './MenuNav'
-import ChangePassword from './ChangePassword'
+import { mapState, mapActions } from "vuex";
+import { MessageBox } from "element-ui";
+import MenuNav from "./MenuNav";
+import ChangePassword from "./ChangePassword";
 export default {
-  name: 'aside-menu',
+  name: "aside-menu",
   components: { MenuNav, ChangePassword },
   data() {
     return {
       showChangePassword: false
-    }
+    };
   },
   computed: {
     ...mapState({
@@ -81,50 +80,55 @@ export default {
     })
   },
   methods: {
-    ...mapActions(['appToggleFullScreen', 'logout', 'setTheme', 'changePassword']),
+    ...mapActions([
+      "appToggleFullScreen",
+      "logout",
+      "setTheme",
+      "changePassword"
+    ]),
     handleTheme(key) {
-      this.setTheme(key)
+      this.setTheme(key);
     },
     handleLogout() {
       if (confirm) {
         const callback = () => {
-          this.$router.push({ path: '/login' })
-        }
-        MessageBox.confirm('确定注销当前账户吗?', '确认操作', {
-          confirmButtonText: '确定注销',
-          cancelButtonText: '放弃',
-          type: 'warning'
+          this.$router.push({ path: "/login" });
+        };
+        MessageBox.confirm("确定注销当前账户吗?", "确认操作", {
+          confirmButtonText: "确定注销",
+          cancelButtonText: "放弃",
+          type: "warning"
         })
           .then(() => {
-            this.logout(callback)
+            this.logout(callback);
           })
           .catch(err => {
-            console.log(err)
-          })
+            console.log(err);
+          });
       }
     },
     handleChangePassword() {
-      this.showChangePassword = true
+      this.showChangePassword = true;
     },
     handleSubmitPassword(data, callback) {
-      const { adminId, loginId } = this.userInfo
+      const { adminId, loginId } = this.userInfo;
       const params = {
         ...data,
         adminId,
         loginId
-      }
+      };
       this.changePassword({
         params,
         callback: () => {
-          this.$router.push({ path: '/login' })
-          callback()
+          this.$router.push({ path: "/login" });
+          callback();
         }
-      })
+      });
     },
     cancelChangePassword() {
-      this.showChangePassword = false
+      this.showChangePassword = false;
     }
   }
-}
+};
 </script>
 

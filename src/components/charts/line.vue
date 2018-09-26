@@ -3,10 +3,10 @@
 </template>
 
 <script>
-// import echarts from 'echarts'
-import echarts from "@/utils/echarts";
+import echarts from '@/utils/echarts'
+import resize from './resize'
 export default {
-  // mixins: [resize],
+  mixins: [resize],
   props: {
     title: {
       type: String,

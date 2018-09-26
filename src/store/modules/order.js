@@ -3,7 +3,7 @@ import $axios from '@/utils/axios'
 const order = {
   state: {
     orderInfo: {},
-    memberInfo: {},
+    memberInfo: {}
   },
   getters: {},
   mutations: {
@@ -15,17 +15,13 @@ const order = {
     }
   },
   actions: {
-
     // 查询交易数据
     getOrderInfo({ commit }) {
       $axios({
         method: 'get',
         url: '/api/v1/summary/topInfo'
       }).then(response => {
-        const { data } = response
-        if (data && data.resultObj) {
-          commit('GET_ORDER_INFO', data.resultObj)
-        }
+        commit('GET_ORDER_INFO', response.resultObj)
       })
     },
 
@@ -35,10 +31,7 @@ const order = {
         method: 'get',
         url: '/api/v1/user/countUserInfo'
       }).then(response => {
-        const { data } = response
-        if (data && data.resultObj) {
-          commit('GET_MEMBER_INFO', data.resultObj)
-        }
+        commit('GET_MEMBER_INFO', response.resultObj)
       })
     }
   }

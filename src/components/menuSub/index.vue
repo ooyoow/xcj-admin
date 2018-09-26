@@ -1,7 +1,7 @@
 <template>
   <el-submenu :index="menu.path || uniqueid">
     <template slot="title">
-      <i :class="`fa fa-${menu.icon || 'folder-o'}`"></i>
+      <i :class="`${menu.meta.icon || 'el-icon-folder'}`"></i>
       <span slot="title">{{menu.meta.title}}</span>
     </template>
     <template v-for="(child, childIndex) in menu.children">
@@ -12,11 +12,11 @@
 </template>
 
 <script>
-import uniqueid from 'lodash.uniqueid'
-import menuItemAside from '@/components/menuItem'
+import uniqueid from "lodash.uniqueid";
+import menuItemAside from "@/components/menuItem";
 
 export default {
-  name: 'menuSubAside',
+  name: "menuSubAside",
   components: {
     menuItemAside
   },
@@ -29,8 +29,8 @@ export default {
   },
   data() {
     return {
-      uniqueid: uniqueid('menu-empty-')
-    }
+      uniqueid: uniqueid("menu-empty-")
+    };
   }
-}
+};
 </script>

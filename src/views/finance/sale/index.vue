@@ -8,7 +8,7 @@
         <el-input v-model="formSearch.orderNo" @input="handleFilterOrderNo"></el-input>
       </el-form-item>
     </el-form>
-    <el-table :class="`${prefixCls}-table`" :data="dataList" border>
+    <el-table :class="`${prefixCls}-table`" :data="dataList">
       <el-table-column prop="date" label="订单号" />
       <el-table-column prop="name" label="产品名称" />
       <el-table-column prop="name" label="产品ID" />

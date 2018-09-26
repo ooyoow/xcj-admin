@@ -1,4 +1,14 @@
 {
   "presets": [["@babel/preset-env", { "modules": false }]],
-  "plugins": ["syntax-dynamic-import", "@babel/plugin-proposal-object-rest-spread"]
+  "plugins": [
+    "syntax-dynamic-import", 
+    "@babel/plugin-proposal-object-rest-spread",
+    [
+      "component",
+      {
+        "libraryName": "element-ui",
+        "styleLibraryName": "theme-chalk"
+      }
+    ]
+  ]
 }

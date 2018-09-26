@@ -1,8 +1,8 @@
 import 'babel-polyfill'
 import Vue from 'vue'
-import ElementUI from 'element-ui'
-import 'element-ui/lib/theme-chalk/index.css'
 import BaiduMap from 'vue-baidu-map'
+import '@/libs/element-ui'
+import '@/assets/icon/iconfont.css'
 import router, { mainRoutes } from '@/router'
 import store from '@/store'
 import BASE_URL from '../config/serve'
@@ -12,7 +12,6 @@ import '@/permission'
 
 Vue.prototype.$base_url = BASE_URL
 // 注册组件
-Vue.use(ElementUI, { size: 'small' })
 Vue.use(BaiduMap, { ak: 'ccL3AHgm0R1prHkC8XsrH9Vo16wf5V1W' })
 
 new Vue({

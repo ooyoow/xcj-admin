@@ -4,7 +4,7 @@
     <div class="card-count" v-text="count"></div>
     <div>
       <span>
-        <icon :name="trend" />
+        <!-- <icon :name="trend" /> -->
         <span :class="trendRatio.includes('-') ? 'card-ratio-down' : 'card-ratio-up'" v-text="trendRatio||'0%'"></span>
       </span>
       <span class="card-text" v-text="compareName"></span>

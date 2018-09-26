@@ -1,14 +1,14 @@
 <template>
   <el-menu-item :index="menu.path || uniqueid">
-    <i :class="`fa fa-${menu.icon || 'file-o'}`"></i>
+    <i :class="`${menu.meta.icon || 'el-icon-folder'}`"></i>
     <span slot="title">{{menu.meta.title || '未命名菜单'}}</span>
   </el-menu-item>
 </template>
 
 <script>
-import uniqueid from 'lodash.uniqueid'
+import uniqueid from "lodash.uniqueid";
 export default {
-  name: 'menuItemAside',
+  name: "menuItemAside",
   props: {
     menu: {
       type: Object,
@@ -18,8 +18,8 @@ export default {
   },
   data() {
     return {
-      uniqueid: uniqueid('menu-empty-')
-    }
+      uniqueid: uniqueid("menu-empty-")
+    };
   }
-}
+};
 </script>

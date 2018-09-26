@@ -2,7 +2,7 @@
   <el-form class="login-form" status-icon :rules="loginRules" ref="loginForm" :model="loginForm" label-width="0">
     <el-form-item prop="phone">
       <el-input size="small" @keyup.enter.native="handleLogin" v-model="loginForm.phone" auto-complete="off" placeholder="请输入手机号码">
-        <icon name="mobile-phone" />
+        <i class="el-icon-phone" />
       </el-input>
     </el-form-item>
     <el-form-item prop="code">
@@ -20,55 +20,55 @@
 </template>
 
 <script>
-const MSGINIT = '发送验证码'
-const MSGSCUCCESS = '${time}秒后重发'
-const MSGTIME = 60
+const MSGINIT = "发送验证码";
+const MSGSCUCCESS = "${time}秒后重发";
+const MSGTIME = 60;
 export default {
-  name: 'mobileLogin',
+  name: "mobileLogin",
   data() {
     const validatePhone = (rule, value, callback) => {
-      callback()
-    }
+      callback();
+    };
     const validateCode = (rule, value, callback) => {
       if (value.length !== 4) {
-        callback(new Error('请输入4位数的验证码'))
+        callback(new Error("请输入4位数的验证码"));
       } else {
-        callback()
+        callback();
       }
-    }
+    };
     return {
       msgText: MSGINIT,
       msgTime: MSGTIME,
       msgKey: false,
       loginForm: {
-        phone: '17621618886',
-        code: ''
+        phone: "17621618886",
+        code: ""
       },
       loginRules: {
-        phone: [{ required: true, trigger: 'blur', validator: validatePhone }],
-        code: [{ required: true, trigger: 'blur', validator: validateCode }]
+        phone: [{ required: true, trigger: "blur", validator: validatePhone }],
+        code: [{ required: true, trigger: "blur", validator: validateCode }]
       }
-    }
+    };
   },
   methods: {
     handleSend() {
-      if (this.msgKey) return
-      this.msgText = MSGSCUCCESS.replace('${time}', this.msgTime)
-      this.msgKey = true
+      if (this.msgKey) return;
+      this.msgText = MSGSCUCCESS.replace("${time}", this.msgTime);
+      this.msgKey = true;
       const time = setInterval(() => {
-        this.msgTime--
-        this.msgText = MSGSCUCCESS.replace('${time}', this.msgTime)
+        this.msgTime--;
+        this.msgText = MSGSCUCCESS.replace("${time}", this.msgTime);
         if (this.msgTime === 0) {
-          this.msgTime = MSGTIME
-          this.msgText = MSGINIT
-          this.msgKey = false
-          clearInterval(time)
+          this.msgTime = MSGTIME;
+          this.msgText = MSGINIT;
+          this.msgKey = false;
+          clearInterval(time);
         }
-      }, 1000)
+      }, 1000);
     },
     handleLogin() {}
   }
-}
+};
 </script>
 
 <style>

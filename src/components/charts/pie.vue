@@ -3,10 +3,10 @@
 </template>
 
 <script>
-// import echarts from 'echarts'
-import echarts from "@/utils/echarts";
+import echarts from '@/utils/echarts'
+import resize from './resize'
 export default {
-  // mixins: [resize],
+  mixins: [resize],
   props: {
     width: {
       type: String,
@@ -58,7 +58,7 @@ export default {
         legend: {
           orient: 'vertical',
           left: 'left',
-          data: this.legendData // ['直接访问', '邮件营销', '联盟广告', '视频广告', '搜索引擎']
+          data: this.legendData
         },
         series: [
           {

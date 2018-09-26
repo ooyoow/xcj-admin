@@ -53,13 +53,13 @@ module.exports = {
           'sass-loader'
         ]
       },
-      {
-        test: /\.svg$/,
-        loader: 'svg-sprite-loader'
-        // options: {
-        //   symbolId: 'vm-[name]'
-        // }
-      },
+      // {
+      //   test: /\.svg$/,
+      //   loader: 'svg-sprite-loader'
+      //   // options: {
+      //   //   symbolId: 'vm-[name]'
+      //   // }
+      // },
       {
         test: /\.(png|jpe?g|gif|svg)(\?.*)?$/,
         loader: 'url-loader',

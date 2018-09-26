@@ -5,7 +5,7 @@
         <el-card shadow="always">
           <div class="order-overview">
             <div class="icon">
-              <icon name="list" />
+              <i class="el-icon-square" style="font-size: 2.5rem" />
             </div>
             <div class=" content">
               <div class="title ">订单（笔）</div>
@@ -26,7 +26,7 @@
         <el-card shadow="always">
           <div class="order-overview">
             <div class="icon">
-              <icon name="list" />
+              <i class="el-icon-square" style="font-size: 2.5rem" />
             </div>
             <div class=" content">
               <div class="title">洗车量（辆）</div>
@@ -47,7 +47,7 @@
         <el-card shadow="always">
           <div class="order-overview">
             <div class="icon">
-              <icon name="list" />
+              <i class="el-icon-square" style="font-size: 2.5rem" />
             </div>
             <div class="content">
               <div class="title">销售额（元）</div>
@@ -68,7 +68,7 @@
         <el-card shadow="always">
           <div class="order-overview">
             <div class="icon">
-              <icon name="list" />
+              <i class="el-icon-square" style="font-size: 2.5rem" />
             </div>
             <div class="content">
               <div class="title">服务额（元）</div>
@@ -239,15 +239,15 @@
     <el-row>
       <el-card class="box-card">
         <div class="header">洗车量统计</div>
-        <el-form class="search-form" :inline="true" :model="formWashSearch">
+        <el-form class="search-form" :inline="true" :model="formWashParams">
           <el-form-item label="所有者">
-            <el-select v-model="formWashSearch.organizationId" placeholder="请选择所有者" @change="onOrgOptionChange('wash', formWashSearch.organizationId)">
+            <el-select v-model="formWashParams.organizationId" placeholder="请选择所有者" @change="onOrgOptionChange('wash', formWashParams.organizationId)">
               <el-option v-for="item in orgOptions" :key="item.organizationId" :label="item.ownerName" :value="item.organizationId"></el-option>
             </el-select>
           </el-form-item>
           <el-form-item label="门店">
-            <el-select v-model="formWashSearch.storeId" placeholder="请选择门店">
-              <el-option v-for="item in formWashSearch.storeOptions" :key="item.storeId" :label="item.storeName" :value="item.storeId"></el-option>
+            <el-select v-model="formWashParams.storeId" placeholder="请选择门店">
+              <el-option v-for="item in formWashParams.storeOptions" :key="item.storeId" :label="item.storeName" :value="item.storeId"></el-option>
             </el-select>
           </el-form-item>
         </el-form>
@@ -266,15 +266,15 @@
     <el-row>
       <el-card class="box-card">
         <div class="header">服务额统计</div>
-        <el-form class="search-form" :inline="true" :model="formServiceSearch">
+        <el-form class="search-form" :inline="true" :model="formServiceParams">
           <el-form-item label="所有者">
-            <el-select v-model="formServiceSearch.organizationId" placeholder="请选择所有者" @change="onOrgOptionChange('service', formServiceSearch.organizationId)">
+            <el-select v-model="formServiceParams.organizationId" placeholder="请选择所有者" @change="onOrgOptionChange('service', formServiceParams.organizationId)">
               <el-option v-for="item in orgOptions" :key="item.organizationId" :label="item.ownerName" :value="item.organizationId"></el-option>
             </el-select>
           </el-form-item>
           <el-form-item label="门店">
-            <el-select v-model="formServiceSearch.storeId" placeholder="请选择门店">
-              <el-option v-for="item in formServiceSearch.storeOptions" :key="item.storeId" :label="item.storeName" :value="item.storeId"></el-option>
+            <el-select v-model="formServiceParams.storeId" placeholder="请选择门店">
+              <el-option v-for="item in formServiceParams.storeOptions" :key="item.storeId" :label="item.storeName" :value="item.storeId"></el-option>
             </el-select>
           </el-form-item>
         </el-form>
@@ -293,15 +293,15 @@
     <el-row>
       <el-card class="box-card">
         <div class="header">分润统计</div>
-        <el-form class="search-form" :inline="true" :model="formProfitSearch">
+        <el-form class="search-form" :inline="true" :model="formProfitParams">
           <el-form-item label="所有者">
-            <el-select v-model="formProfitSearch.organizationId" placeholder="请选择所有者" @change="onOrgOptionChange('profit', formProfitSearch.organizationId)">
+            <el-select v-model="formProfitParams.organizationId" placeholder="请选择所有者" @change="onOrgOptionChange('profit', formProfitParams.organizationId)">
               <el-option v-for="item in orgOptions" :key="item.organizationId" :label="item.ownerName" :value="item.organizationId"></el-option>
             </el-select>
           </el-form-item>
           <el-form-item label="门店">
-            <el-select v-model="formProfitSearch.storeId" placeholder="请选择门店">
-              <el-option v-for="item in formProfitSearch.storeOptions" :key="item.storeId" :label="item.storeName" :value="item.storeId"></el-option>
+            <el-select v-model="formProfitParams.storeId" placeholder="请选择门店">
+              <el-option v-for="item in formProfitParams.storeOptions" :key="item.storeId" :label="item.storeName" :value="item.storeId"></el-option>
             </el-select>
           </el-form-item>
         </el-form>
@@ -372,6 +372,10 @@ export default {
             // 坐标轴指示器，坐标轴触发有效
             type: 'shadow' // 默认为直线，可选为：'line' | 'shadow'
           }
+          // formatter: function(params, ticket, callback) {
+          //   console.log(ticket, "params");
+          //   return "12333";
+          // }
         },
         grid: {
           left: '3%',
@@ -407,9 +411,9 @@ export default {
       washStats: this.initStatsData(),
       serviceStats: this.initStatsData(),
       profitStats: this.initStatsData(),
-      formWashSearch: this.initFromSearchParams(),
-      formServiceSearch: this.initFromSearchParams(),
-      formProfitSearch: this.initFromSearchParams()
+      formWashParams: this.initFromSearchParams(),
+      formServiceParams: this.initFromSearchParams(),
+      formProfitParams: this.initFromSearchParams()
     }
   },
   mounted() {
@@ -458,7 +462,7 @@ export default {
     // 洗车量统计：按起止日期查询
     onWashDateChange(value) {
       if (value) {
-        this.getWashStats(1, 4, value[0], value[1])
+        this.getWashStats(this.formWashParams.storeId, 4, value[0], value[1])
       }
     },
 
@@ -470,7 +474,7 @@ export default {
     // 服务额统计：按起止日期查询
     onServiceDateChange(value) {
       if (value) {
-        this.getServiceStats(1, 4, value[0], value[1])
+        this.getServiceStats(this.formServiceParams.storeId, 4, value[0], value[1])
       }
     },
 
@@ -482,7 +486,7 @@ export default {
     // 分润统计：按起止日期查询
     onProfitDateChange(value) {
       if (value) {
-        this.getProfitStats(1, 4, value[0], value[1])
+        this.getProfitStats(this.formProfitParams.storeId, 4, value[0], value[1])
       }
     },
 
@@ -491,13 +495,13 @@ export default {
       this.getStoreOptions(organizationId, data => {
         switch (type) {
           case 'wash': // 洗车量统计 -> 所有者
-            this.formWashSearch.storeOptions = data
+            this.formWashParams.storeOptions = data
             break
           case 'service': // 服务额统计 -> 所有者
-            this.formServiceSearch.storeOptions = data
+            this.formServiceParams.storeOptions = data
             break
           case 'profit': // 分润统计 -> 所有者
-            this.formProfitSearch.storeOptions = data
+            this.formProfitParams.storeOptions = data
             break
           default:
             break
@@ -629,8 +633,7 @@ export default {
         url: '/api/v1/summary/overview',
         method: 'get'
       }).then(response => {
-        const { resultObj } = response
-        this.orderView = resultObj
+        this.orderView = response.resultObj
       })
     },
 
@@ -713,7 +716,7 @@ export default {
           if (type === 3) {
             subtractDay = 30
           }
-          xAxisData = getDateByInterval(subDays(new Date(), 7), +new Date())
+          xAxisData = getDateByInterval(+subDays(new Date(), subtractDay), +new Date())
           xAxisData.forEach(() => {
             seriesData.push(0)
           })
@@ -778,9 +781,9 @@ export default {
                   storeOptions: storeOptions
                 }
               }
-              this.formWashSearch = formSearchParams()
-              this.formServiceSearch = formSearchParams()
-              this.formProfitSearch = formSearchParams()
+              this.formWashParams = formSearchParams()
+              this.formServiceParams = formSearchParams()
+              this.formProfitParams = formSearchParams()
               this.getWashStats(storeId, 1)
               this.getServiceStats(storeId, 1)
               this.getProfitStats(storeId, 1)
