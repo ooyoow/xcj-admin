@@ -34,7 +34,7 @@
       <el-table-column prop="pRice" align="center" label="售价" show-overflow-tooltip />
       <el-table-column prop="pNum" label="次数" align="center" show-overflow-tooltip />
       <el-table-column prop="pAllnum" label="发行量" align="center" show-overflow-tooltip />
-      <el-table-column prop="pShowState" label="状态" align="center" show-overflow-tooltip />
+      <!-- <el-table-column prop="pShowState" label="状态" align="center" show-overflow-tooltip /> -->
       <el-table-column prop="advertisement" label="广告语" show-overflow-tooltip />
       <el-table-column prop="pContent" label="简介" show-overflow-tooltip />
       <!-- <el-table-column prop="remarks" label="备注" show-overflow-tooltip /> -->
@@ -289,7 +289,7 @@ export default {
     },
     defaultTemp() {
       return {
-        pType: 1,
+        pType: 0,
         pName: '',
         pCode: '',
         marketPrice: '',

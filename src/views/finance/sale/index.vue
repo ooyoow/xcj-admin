@@ -1,52 +1,121 @@
 <template>
   <div :class="prefixCls">
-    <el-form class="filter-container" :inline="true" :model="formSearch">
+    <el-form class="filter-container" :inline="true" :model="queryParams">
       <el-form-item label="起止时间">
-        <el-date-picker v-model="formSearch.date" type="daterange" start-placeholder="开始日期" end-placeholder="结束日期" format="yyyy-MM-dd" value-format="yyyy-MM-dd" @change="handleFilterDate" />
+        <el-date-picker v-model="queryParams.date" type="daterange" start-placeholder="开始日期" end-placeholder="结束日期" format="yyyy-MM-dd" value-format="yyyy-MM-dd" @change="_getOrderList" />
       </el-form-item>
       <el-form-item label="订单编号">
-        <el-input v-model="formSearch.orderNo" @input="handleFilterOrderNo"></el-input>
+        <el-input v-model="queryParams.orderNo" clearable @input="_getOrderList"></el-input>
       </el-form-item>
     </el-form>
-    <el-table :class="`${prefixCls}-table`" :data="dataList">
-      <el-table-column prop="date" label="订单号" />
-      <el-table-column prop="name" label="产品名称" />
-      <el-table-column prop="name" label="产品ID" />
-      <el-table-column prop="name" label="账户" />
-      <el-table-column prop="name" label="所有者" />
-      <el-table-column prop="name" label="市场价" />
-      <el-table-column prop="name" label="售价" />
-      <el-table-column prop="name" label="已用/可用" />
-      <el-table-column prop="name" label="服务额" />
-      <el-table-column prop="name" label="服务门店" />
-      <el-table-column prop="name" label="服务车牌与时间" />
-      <el-table-column prop="name" label="状态与时间" />
-      <el-table-column prop="name" label="备注" />
-      <el-table-column fixed="right" label="操作" width="100" align="center">
+    <el-table :class="`${prefixCls}-table`" v-loading="orderLoading" :data="orderList">
+      <el-table-column prop="orderNo" label="订单号" show-overflow-tooltip />
+      <el-table-column prop="pName" label="产品名称" show-overflow-tooltip />
+      <el-table-column prop="pCode" label="产品编号" align="center" show-overflow-tooltip />
+      <el-table-column prop="userName" label="用户名" align="center" show-overflow-tooltip />
+      <el-table-column prop="marketPrice" label="市场价" align="center" show-overflow-tooltip />
+      <el-table-column prop="pRice" label="售价" align="center" show-overflow-tooltip />
+      <el-table-column prop="usedNum" label="已用/可用" align="center" show-overflow-tooltip>
         <template slot-scope="scope">
-          <el-button type="text" @click="handleUpdate(scope.row)">编辑</el-button>
-          <el-button type="text" @click="handleDelete(scope.row.storeId)">删除</el-button>
+          {{(scope.row.num || 0) - (scope.row.usedNum || 0)}}/{{scope.row.num || 0}}
         </template>
       </el-table-column>
+      <el-table-column prop="serviceAmount" label="服务额" align="center" show-overflow-tooltip />
+      <el-table-column prop="storeName" label="服务门店" show-overflow-tooltip />
+      <el-table-column prop="cardNo" label="服务车牌与时间" align="center" width="110">
+        <template slot-scope="scope">
+          <el-popover placement="right" trigger="hover">
+            <el-table :data="washList">
+              <el-table-column align="center" property="carNo" label="车牌" />
+              <el-table-column align="center" property="useTime" label="洗车时间" />
+            </el-table>
+            <span slot="reference" class="wash-detail">详情</span>
+          </el-popover>
+        </template>
+      </el-table-column>
+      <el-table-column prop="payResult" label="支付状态" show-overflow-tooltip />
+      <el-table-column prop="payTime" label="支付时间" :formatter="formatTime" show-overflow-tooltip />
     </el-table>
+    <div :class="`${prefixCls}-pagination`">
+      <el-pagination background @size-change="handleSizeChange" @current-change="handleCurrentChange" :current-page="queryParams.currentPage" :page-sizes="[10,20,30, 50]" :page-size="queryParams.size" layout="total, sizes, prev, pager, next, jumper" :total="total">
+      </el-pagination>
+    </div>
   </div>
 </template>
 
 <script>
-import "./sale.scss";
+import $axios from '@/utils/axios'
+import DateUtils from '@/utils/date'
+import { debounce } from '@/utils/general'
+import './sale.scss'
 export default {
-  name: "sale",
+  name: 'sale',
   data() {
     return {
-      prefixCls: "xcj-finance-sale",
-      formSearch: {},
-      dataList: []
-    };
+      prefixCls: 'xcj-finance-sale',
+      queryParams: {
+        date: [],
+        orderNo: '',
+        currentPage: 1,
+        size: 10
+      },
+      orderLoading: false,
+      orderList: [],
+      total: 0,
+      washList: [],
+      _getOrderList: null
+    }
+  },
+  created() {
+    this.getOrderList(this.queryParams)
+    this._getOrderList = debounce(() => {
+      this.queryParams.currentPage = 1
+      this.getOrderList(this.queryParams)
+    }, 200)
   },
   methods: {
-    handleFilterDate() {},
-    handleFilterOrderNo() {}
+    handleGetOrderList() {
+      return
+    },
+    handleSizeChange(val) {
+      this.queryParams.size = val
+      this.getOrderList()
+    },
+    handleCurrentChange(val) {
+      this.queryParams.currentPage = val
+      this.getOrderList()
+    },
+
+    // 查询订单list
+    getOrderList(params) {
+      this.orderLoading = true
+      $axios({
+        url: '/api/v1/finance/queryOrderList',
+        method: 'get',
+        params: this.formatQueryParams(params)
+      })
+        .then(response => {
+          this.orderLoading = false
+          const { resultObj, totalSize } = response
+          this.orderList = resultObj
+          this.total = totalSize
+        })
+        .catch(error => {
+          this.orderLoading = false
+        })
+    },
+    formatQueryParams() {
+      const { date, ...otherProps } = this.queryParams
+      return {
+        start: date && Array.isArray(date) ? date[0] : '',
+        end: date && Array.isArray(date) ? date[1] : '',
+        ...otherProps
+      }
+    },
+    formatTime(row, column, cellValue) {
+      return DateUtils.format(cellValue)
+    }
   }
-};
+}
 </script>
 

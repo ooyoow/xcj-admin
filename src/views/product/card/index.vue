@@ -289,7 +289,7 @@ export default {
     },
     defaultTemp() {
       return {
-        pType: 2,
+        pType: 1,
         pName: '',
         pCode: '',
         marketPrice: '',

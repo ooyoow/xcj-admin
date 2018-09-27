@@ -197,9 +197,9 @@
         <div class="product-sales">
           <div class="actions">
             <el-radio-group v-model="productSalesType" @change="getProductSales">
-              <el-radio-button :label="1">套餐卡</el-radio-button>
-              <el-radio-button :label="2">次卡</el-radio-button>
-              <el-radio-button :label="3">优惠券</el-radio-button>
+              <el-radio-button :label="0">套餐卡</el-radio-button>
+              <el-radio-button :label="1">次卡</el-radio-button>
+              <el-radio-button :label="2">优惠券</el-radio-button>
             </el-radio-group>
           </div>
           <bar height='300px' width='100%' :option="productSalesChartOption" />
@@ -363,19 +363,38 @@ export default {
         type: '今日',
         date: []
       },
-      productSalesType: 1,
+      productSalesType: 0,
       productSalesChartOption: {
-        color: ['#3398DB'],
+        color: ['#c5c8ce', '#2db7f5'],
         tooltip: {
           trigger: 'axis',
           axisPointer: {
             // 坐标轴指示器，坐标轴触发有效
             type: 'shadow' // 默认为直线，可选为：'line' | 'shadow'
+          },
+          formatter: (params, ticket, callback) => {
+            return `<div>
+                        <div>${params[0].name}</div>
+                        <div>
+                          <span style="display: inline-block;margin-right: 5px; border-radius: 10px;width: 10px; height: 10px; background-color: ${
+                            params[0].color
+                          };"></span>
+                          <span>
+                            使用次数：${params[0].data}，
+                            服务额：¥${this.realTimeSalesServiceAmount[params[0].dataIndex]}
+                          </span>
+                        </div>
+                        <div>
+                          <span style="display: inline-block;margin-right: 5px; border-radius: 10px;width: 10px; height: 10px; background-color: ${
+                            params[1].color
+                          };"></span>
+                          <span>
+                            剩余次数：${params[1].data}，
+                            余额：¥${this.realTimeSalesBalance[params[1].dataIndex]}
+                          </span>
+                        </div>
+                      </div>`
           }
-          // formatter: function(params, ticket, callback) {
-          //   console.log(ticket, "params");
-          //   return "12333";
-          // }
         },
         grid: {
           left: '3%',
@@ -386,7 +405,7 @@ export default {
         xAxis: [
           {
             type: 'category',
-            data: ['标准洗', '快速洗', '镀膜洗', '至尊洗'],
+            data: [],
             axisTick: {
               alignWithLabel: true
             }
@@ -397,15 +416,10 @@ export default {
             type: 'value'
           }
         ],
-        series: [
-          {
-            name: '洗车量',
-            type: 'bar',
-            barWidth: '60%',
-            data: [0, 0, 0, 0]
-          }
-        ]
+        series: []
       },
+      realTimeSalesServiceAmount: [], // 实时销量--服务额
+      realTimeSalesBalance: [], // 实时销量--余额
       orderStats: this.initStatsData(),
       salesStats: this.initStatsData(),
       washStats: this.initStatsData(),
@@ -645,14 +659,35 @@ export default {
         params: { type }
       }).then(response => {
         const { resultObj } = response
-        const data = resultObj.map(item => item.saleCount)
-        this.productSalesChartOption = {
-          ...this.productSalesChartOption,
-          series: {
-            ...this.productSalesChartOption.series,
-            data
+        let serviceAmount = []
+        let balance = []
+        let xAxisData = []
+        let seriesData = [
+          {
+            type: 'bar',
+            stack: 'realTimeSales',
+            data: []
+          },
+          {
+            type: 'bar',
+            stack: 'realTimeSales',
+            data: []
           }
+        ]
+        if (resultObj && Array.isArray(resultObj)) {
+          resultObj.forEach((item, index) => {
+            const { pName, usedCount, unUsedCount, serverAmount, unServerAmount } = item
+            xAxisData.push(pName)
+            serviceAmount.push(serverAmount)
+            balance.push(unServerAmount)
+            seriesData[0].data.push(usedCount)
+            seriesData[1].data.push(unUsedCount)
+          })
         }
+        this.realTimeSalesServiceAmount = serviceAmount
+        this.realTimeSalesBalance = balance
+        this.productSalesChartOption.xAxis[0].data = xAxisData
+        this.productSalesChartOption.series = seriesData
       })
     },
 
@@ -796,7 +831,7 @@ export default {
       this.getOrderView()
       this.getOrderStats(1)
       this.getSalesStats(1)
-      this.getProductSales(1)
+      this.getProductSales(0)
     }
   }
 }

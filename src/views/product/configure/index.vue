@@ -7,31 +7,31 @@
     </el-steps>
     <el-form class="data-form" ref="formProduct" :rules="rules" :model="fromProduct" label-width="90px">
       <el-form-item label="产品分类" prop="pType">
-        <el-select v-model="fromProduct.type" clearable placeholder="请选择活动区域" @input="onInputType">
-          <el-option label="套餐" :value="1"></el-option>
-          <el-option label="限次卡" :value="2"></el-option>
-          <el-option label="优惠券" :value="3"></el-option>
+        <el-select v-model="fromProduct.pType" clearable placeholder="请选择活动区域" @input="onInputType">
+          <el-option label="套餐" :value="0"></el-option>
+          <el-option label="限次卡" :value="1"></el-option>
+          <el-option label="优惠券" :value="2"></el-option>
         </el-select>
       </el-form-item>
       <el-row>
         <el-col :span="12">
-          <el-form-item class="form-item" label="产品名称" prop="pname">
-            <el-input v-model="fromProduct.pname" placeholder="请输入商品名称"></el-input>
+          <el-form-item class="form-item" label="产品名称" prop="pName">
+            <el-input v-model="fromProduct.pName" placeholder="请输入商品名称"></el-input>
           </el-form-item>
-          <el-form-item label="产品编号" prop="pcode">
-            <el-input v-model="fromProduct.pcode" placeholder="请输入产品编号"></el-input>
+          <el-form-item label="产品编号" prop="pCode">
+            <el-input v-model="fromProduct.pCode" placeholder="请输入产品编号"></el-input>
           </el-form-item>
-          <el-form-item label="售价" prop="price">
-            <el-input v-model="fromProduct.price" placeholder="请输入售价"></el-input>
+          <el-form-item label="售价" prop="pRice">
+            <el-input v-model="fromProduct.pRice" placeholder="请输入售价"></el-input>
           </el-form-item>
-          <el-form-item label="次数" prop="pnum">
-            <el-input v-model="fromProduct.pnum" placeholder="请输入售价"></el-input>
+          <el-form-item label="次数" prop="pNum">
+            <el-input type="number" v-model.number="fromProduct.pNum" placeholder="请输入售价"></el-input>
           </el-form-item>
           <el-form-item label="推荐指数" prop="recommend">
-            <el-input v-model="fromProduct.recommend" placeholder="请输入推荐指数"></el-input>
+            <el-input type="number" v-model.number="fromProduct.recommend" placeholder="请输入推荐指数"></el-input>
           </el-form-item>
           <el-form-item label="折扣率" prop="discountRate">
-            <el-input v-model="fromProduct.discountRate" placeholder="请输入折扣率"></el-input>
+            <el-input type="number" v-model.number="fromProduct.discountRate" placeholder="请输入折扣率"></el-input>
           </el-form-item>
           <el-form-item label="上架时间" prop="upTime">
             <el-date-picker v-model="fromProduct.upTime" placeholder="请选择上架时间"></el-date-picker>
@@ -42,13 +42,13 @@
           <el-form-item label="导航" prop="navigation">
             <el-input v-model="fromProduct.navigation" placeholder="请输入导航"></el-input>
           </el-form-item>
-          <el-form-item label="优惠券模板" prop="pcouponId">
-            <el-radio-group v-model="fromProduct.pcouponId">
+          <el-form-item label="优惠券模板" prop="pCouponId">
+            <el-radio-group v-model="fromProduct.pCouponId">
               <el-radio v-for="item in couponTempOptions" :key="item.value" :label="item.value">{{item.label}}</el-radio>
             </el-radio-group>
           </el-form-item>
-          <el-form-item label="简介" prop="pcontent">
-            <el-input v-model="fromProduct.pcontent" placeholder="请输入简介"></el-input>
+          <el-form-item label="简介" prop="pContent">
+            <el-input v-model="fromProduct.pContent" placeholder="请输入简介"></el-input>
           </el-form-item>
         </el-col>
         <el-col :span="12">
@@ -56,19 +56,19 @@
             <el-input v-model="fromProduct.brand" placeholder="请输入产品品牌"></el-input>
           </el-form-item>
           <el-form-item label="市场价" prop="marketPrice">
-            <el-input v-model="fromProduct.marketPrice" placeholder="请输入市场价"></el-input>
+            <el-input type="number" v-model.number="fromProduct.marketPrice" placeholder="请输入市场价"></el-input>
           </el-form-item>
           <el-form-item label="发行量" prop="pAllnum">
-            <el-input v-model="fromProduct.pAllnum" placeholder="请输入发行量"></el-input>
+            <el-input type="number" v-model.number="fromProduct.pAllnum" placeholder="请输入发行量"></el-input>
           </el-form-item>
           <!-- <el-form-item label="集团客户" prop="groupCustomer">
               <el-input v-model="fromProduct.groupCustomer" placeholder="请输入集团客户"></el-input>
             </el-form-item> -->
-          <el-form-item label="赠送次数" prop="psendNum">
-            <el-input v-model="fromProduct.psendNum" placeholder="请输入赠送次数"></el-input>
+          <el-form-item label="赠送次数" prop="pSendNum">
+            <el-input type="number" v-model.number="fromProduct.pSendNum" placeholder="请输入赠送次数"></el-input>
           </el-form-item>
-          <el-form-item label="有效期" prop="pvalidateTime">
-            <el-input v-model.number="fromProduct.pvalidateTime" placeholder="请输入有效期"></el-input>
+          <el-form-item label="有效期" prop="pValidateTime">
+            <el-input type="number" v-model.number="fromProduct.pValidateTime" placeholder="请输入有效期/天"></el-input>
           </el-form-item>
           <el-form-item label="洗车模式" prop="model">
             <el-input v-model="fromProduct.model" placeholder="请输入洗车模式"></el-input>
@@ -82,8 +82,8 @@
           <el-form-item label="产品详情" prop="details">
             <el-input v-model="fromProduct.details" placeholder="请输入产品详情"></el-input>
           </el-form-item>
-          <el-form-item label="风格" prop="pcode">
-            <el-radio-group v-model="fromProduct.pcode ">
+          <el-form-item label="风格" prop="pCode">
+            <el-radio-group v-model="fromProduct.pCode ">
               <el-radio :label="0">
                 <span>
                   <img src="@/assets/images/style.png" />
@@ -121,7 +121,7 @@ export default {
       stepActive: 0,
       couponTempOptions: [],
       fromProduct: {
-        pType: 1, // 产品类别 （1:套餐卡，2:次卡，3:限次卡）
+        pType: '', // 产品类别 （1:套餐卡，2:次卡，3:限次卡）
         advertisement: '', // 广告语
         pAllnum: '', // 预备发行量
         brand: '', // 商品品牌
@@ -133,15 +133,15 @@ export default {
         marketPrice: '', // 市场价
         model: '', // 模式
         navigation: '', //  导航
-        pcode: '', // 产品编码
-        pcontent: '', // 简介
-        pcouponId: 0, // 优惠券Id
-        pimg: '', // 产品图片
-        pname: '', // 产品名称
-        pnum: '', // 次数
-        price: '', // 售价
-        psendNum: 0, // 赠送数量
-        pvalidateTime: '', // 有效期
+        pCode: '', // 产品编码
+        pContent: '', // 简介
+        pCouponId: '', // 优惠券Id
+        pImg: '', // 产品图片
+        pName: '', // 产品名称
+        pNum: '', // 次数
+        pRice: '', // 售价
+        pSendNum: 0, // 赠送数量
+        pValidateTime: '', // 有效期
         recommend: '', // 推荐指数 0-100
         style: '' // 样式
       },
@@ -160,15 +160,15 @@ export default {
         marketPrice: [{ required: true, message: '市场价不能为空', trigger: 'change' }],
         model: [{ required: true, message: '请选择模式', trigger: 'change' }],
         navigation: [{ required: true, message: '导航不能为空', trigger: 'change' }],
-        pcode: [{ required: true, message: '请输入产品编号', trigger: 'change' }],
-        pcontent: [{ required: true, message: '请输入简介', trigger: 'change' }],
-        pcouponId: [{ required: true, message: '请选择优惠券模板', trigger: 'change' }],
-        pimg: [{ required: true, message: '请选择风格', trigger: 'change' }],
-        pname: [{ required: true, message: '请输入产品名称', trigger: 'change' }],
-        pnum: [{ required: true, message: '请输入次数', trigger: 'change' }],
-        price: [{ required: true, message: '售价不能为空', trigger: 'change' }],
-        psendNum: [{ required: true, message: '请输入赠送次数', trigger: 'change' }],
-        pvalidateTime: [{ required: true, message: '请选择有效期', trigger: 'change' }],
+        pCode: [{ required: true, message: '请输入产品编号', trigger: 'change' }],
+        pContent: [{ required: true, message: '请输入简介', trigger: 'change' }],
+        pCouponId: [{ required: true, message: '请选择优惠券模板', trigger: 'change' }],
+        pImg: [{ required: true, message: '请选择风格', trigger: 'change' }],
+        pName: [{ required: true, message: '请输入产品名称', trigger: 'change' }],
+        pNum: [{ required: true, message: '请输入次数', trigger: 'change' }],
+        pRice: [{ required: true, message: '售价不能为空', trigger: 'change' }],
+        pSendNum: [{ required: true, message: '请输入赠送次数', trigger: 'change' }],
+        pValidateTime: [{ required: true, message: '请选择有效期', trigger: 'change' }],
         recommend: [{ required: true, message: '请输入推荐指数', trigger: 'change' }],
         style: [{ required: true, message: '请选择样式', trigger: 'change' }]
       }

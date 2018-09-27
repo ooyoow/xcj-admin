@@ -12,9 +12,9 @@
         <tabs class="app-container-main-tabs" />
         <!-- 主体内容 -->
         <div class="app-container-main-body">
-          <transition name="fade-transverse">
+          <transition name="fade-transform" mode="out-in">
             <keep-alive>
-              <router-view/>
+              <router-view />
             </keep-alive>
           </transition>
         </div>

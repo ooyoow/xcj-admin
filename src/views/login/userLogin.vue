@@ -2,7 +2,7 @@
   <el-form class="login-form" status-icon :rules="loginRules" ref="loginForm" :model="loginForm" label-width="0">
     <el-form-item prop="loginId">
       <el-input size="small" @keyup.enter.native="handleLogin" v-model="loginForm.loginId" auto-complete="off" placeholder="请输入用户名">
-        <i class="el-icon-user" />
+        <i class="el-icon-user" slot="prefix" />
       </el-input>
     </el-form-item>
     <el-form-item prop="password">

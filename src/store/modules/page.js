@@ -14,7 +14,24 @@ export default {
     opened: [], // 当前显示的多页面列表
     current: '' // 当前页面
   },
-  getters: {},
+  getters: {
+    /**
+     * @description 从当前所有打开的多标签页里返回需要缓存的页面 name
+     * @param {*} state vuex state
+     */
+    // keepAlive(state) {
+    //   return state.opened
+    //     .filter(item => {
+    //       if (item.meta) {
+    //         if (item.meta.notCache) {
+    //           return false
+    //         }
+    //       }
+    //       return true
+    //     })
+    //     .map(e => e.name)
+    // }
+  },
   mutations: {
     OPENED_UPDATE: (state, { index, params, query }) => {
       // 更新页面列表某一项

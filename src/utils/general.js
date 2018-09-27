@@ -22,7 +22,7 @@ export const expandParams = params => {
 export const deleteObjectEmptyValue = obj => {
   const newObj = {}
   Object.keys(obj).forEach(key => {
-    obj[key].toString() ? (newObj[key] = obj[key]) : newObj
+    obj[key] !== null && obj[key] !== undefined && obj[key].toString() ? (newObj[key] = obj[key]) : newObj
   })
   return newObj
 }

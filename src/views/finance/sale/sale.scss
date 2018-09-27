@@ -1,10 +1,22 @@
 .xcj-finance-sale {
-  padding: 1.25rem;
+  margin: 1rem;
+  padding: 1rem;
+  background-color: #fff;
+  border-radius: 0.375rem;
   .filter-container {
-    padding: 1.125rem .625rem 0 .625rem;
-    background-color: #fff;
+    padding: 1.125rem 0.625rem 0 0.625rem;
+    border-bottom: 1px solid #ebeef5;
   }
   &-table {
-    padding: 0 .625rem;
+    padding: 0 0.625rem;
+    .wash-detail {
+      color: #3385ff;
+      cursor: pointer;
+      border-style: none;
+      user-select: none;
+    }
+  }
+  &-pagination {
+    margin-top: 1.25rem;
   }
 }
