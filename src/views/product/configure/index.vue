@@ -5,7 +5,7 @@
       <el-step title="填写产品信息"></el-step>
       <el-step title="配置成功"></el-step>
     </el-steps>
-    <el-form class="data-form" ref="formProduct" :rules="rules" :model="fromProduct" label-width="90px">
+    <el-form class="data-form" ref="formProduct" :rules="rules" :model="fromProduct" label-width="100px">
       <el-form-item label="产品分类" prop="pType">
         <el-select v-model="fromProduct.pType" clearable placeholder="请选择活动区域" @input="onInputType">
           <el-option label="套餐" :value="0"></el-option>
@@ -36,19 +36,38 @@
           <el-form-item label="上架时间" prop="upTime">
             <el-date-picker v-model="fromProduct.upTime" placeholder="请选择上架时间"></el-date-picker>
           </el-form-item>
-          <el-form-item label="样式" prop="style">
+          <!-- <el-form-item label="样式" prop="style">
             <el-input v-model="fromProduct.style" placeholder="请选择样式"></el-input>
-          </el-form-item>
+          </el-form-item> -->
           <el-form-item label="导航" prop="navigation">
             <el-input v-model="fromProduct.navigation" placeholder="请输入导航"></el-input>
           </el-form-item>
-          <el-form-item label="优惠券模板" prop="pCouponId">
+          <el-form-item label="简介" prop="pContent">
+            <el-input v-model="fromProduct.pContent" placeholder="请输入简介"></el-input>
+          </el-form-item>
+          <el-form-item v-if="fromProduct.pType ===2" label="优惠券模板" prop="pCouponId">
             <el-radio-group v-model="fromProduct.pCouponId">
               <el-radio v-for="item in couponTempOptions" :key="item.value" :label="item.value">{{item.label}}</el-radio>
             </el-radio-group>
           </el-form-item>
-          <el-form-item label="简介" prop="pContent">
-            <el-input v-model="fromProduct.pContent" placeholder="请输入简介"></el-input>
+          <el-form-item v-else label="风格" prop="pCode">
+            <el-radio-group v-model="fromProduct.pCode ">
+              <el-radio :label="0">
+                <span>
+                  <img src="@/assets/images/style.png" />
+                </span>
+              </el-radio>
+              <el-radio :label="1">
+                <span>
+                  <img src="@/assets/images/style.png" />
+                </span>
+              </el-radio>
+              <el-radio :label="2">
+                <span>
+                  <img src="@/assets/images/style.png" />
+                </span>
+              </el-radio>
+            </el-radio-group>
           </el-form-item>
         </el-col>
         <el-col :span="12">
@@ -82,28 +101,9 @@
           <el-form-item label="产品详情" prop="details">
             <el-input v-model="fromProduct.details" placeholder="请输入产品详情"></el-input>
           </el-form-item>
-          <el-form-item label="风格" prop="pCode">
-            <el-radio-group v-model="fromProduct.pCode ">
-              <el-radio :label="0">
-                <span>
-                  <img src="@/assets/images/style.png" />
-                </span>
-              </el-radio>
-              <el-radio :label="1">
-                <span>
-                  <img src="@/assets/images/style.png" />
-                </span>
-              </el-radio>
-              <el-radio :label="2">
-                <span>
-                  <img src="@/assets/images/style.png" />
-                </span>
-              </el-radio>
-            </el-radio-group>
-          </el-form-item>
         </el-col>
       </el-row>
-      <el-form-item>
+      <el-form-item style="text-align: right">
         <el-button @click="resetForm('formProduct')">重置</el-button>
         <el-button type="primary" @click="submitForm('formProduct')">保存</el-button>
       </el-form-item>
@@ -140,7 +140,7 @@ export default {
         pName: '', // 产品名称
         pNum: '', // 次数
         pRice: '', // 售价
-        pSendNum: 0, // 赠送数量
+        pSendNum: '', // 赠送数量
         pValidateTime: '', // 有效期
         recommend: '', // 推荐指数 0-100
         style: '' // 样式

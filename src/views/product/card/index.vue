@@ -19,7 +19,7 @@
         </el-radio-group>
       </div>
     </div>
-    <el-table :class="`${prefixCls}-table`" :data="dataList" tooltip-effect="dark">
+    <el-table :class="`${prefixCls}-table`" :data="dataList" tooltip-effect="dark" v-loading="listLoading">
       <el-table-column prop="pName" label="限次卡名称" show-overflow-tooltip />
       <el-table-column prop="pCode" label="产品编号" show-overflow-tooltip />
       <el-table-column prop="pImg" align="center" label="产品图片" show-overflow-tooltip>
@@ -132,6 +132,7 @@ export default {
         warehouseNumber: 0,
         count: 0
       },
+      listLoading: false,
       dataList: [],
       total: 0,
       dialogStatus: 'create',
@@ -176,9 +177,11 @@ export default {
   methods: {
     ...mapActions(['getProduct', 'getProductStatsByType', 'createProduct', 'updateProduct', 'deleteProduct']),
     getDataList() {
+      this.listLoading = true
       this.getProduct({
         params: this.listQuery,
         callback: result => {
+          this.listLoading = false
           const { list, total } = result
           this.dataList = list
           this.total = total

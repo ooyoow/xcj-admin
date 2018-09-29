@@ -251,10 +251,6 @@ export default {
     calcConsumeList() {
       const { list, currentPage, size } = this.consume
       return list.slice((currentPage - 1) * size, currentPage * size)
-      // econsume.list.slice(
-      //   (consume.currentPage - 1) * consume.size,
-      //   consum.currentPage * consume.size
-      // );
     },
     formatDate(row, column, cellValue) {
       return DateUtils.format(cellValue)
