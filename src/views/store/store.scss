@@ -5,6 +5,19 @@
   border-radius: .375rem;
   &-table {
     width: 100%;
+    &-view-icon {
+      width: 150px;
+      height: 150px;
+      img {
+        width: 100%;
+      }
+    }
+    &-view-img {
+      max-width: 500px;
+      img {
+        width: 100%;
+      }
+    }
     .column-img {
       color: #3385ff;
       cursor: pointer;

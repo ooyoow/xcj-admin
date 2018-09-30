@@ -31,7 +31,7 @@
     <div class="stats-item">
       <div class="category">产品销量统计</div>
       <el-table :data="productSales" border>
-        <el-table-column prop="pname" label="产品名称" align="center" />
+        <el-table-column prop="pName" label="产品名称" align="center" />
         <el-table-column prop="saleCount" label="销量" align="center" />
       </el-table>
     </div>

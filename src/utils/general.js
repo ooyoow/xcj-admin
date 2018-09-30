@@ -48,7 +48,7 @@ export const newPage = url => {
 export function debounce(func, wait, immediate) {
   let timeout, args, context, timestamp, result
 
-  const later = function() {
+  const later = function () {
     // 据上一次触发时间间隔
     const last = +new Date() - timestamp
 
@@ -65,7 +65,7 @@ export function debounce(func, wait, immediate) {
     }
   }
 
-  return function(...args) {
+  return function (...args) {
     context = this
     timestamp = +new Date()
     const callNow = immediate && !timeout
@@ -78,4 +78,17 @@ export function debounce(func, wait, immediate) {
 
     return result
   }
+}
+
+/**
+ * @description 通过文件url截取文件名
+ * @param {String} url 地址
+ * @return {String} fileName
+ */
+export const interceptFileName = (url) => {
+  if (url) {
+    const index = url.lastIndexOf('\/');
+    return url.substring(index + 1, url.length);
+  }
+  return ''
 }

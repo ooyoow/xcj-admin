@@ -17,31 +17,35 @@
       </el-form-item>
     </el-form>
     <el-table :class="`${prefixCls}-table`" :data="storeList" v-loading="listLoading" tooltip-effect="dark">
-      <el-table-column prop="storeName" label="门店名称" show-overflow-tooltip/>
-      <el-table-column prop="storeManager" label="店长" show-overflow-tooltip/>
-      <el-table-column prop="stateName" label="门店状态" show-overflow-tooltip/>
-      <el-table-column prop="driverid" label="终端ID" show-overflow-tooltip/>
-      <el-table-column prop="storePro" label="省份" show-overflow-tooltip/>
-      <el-table-column prop="storeCity" label="城市" show-overflow-tooltip/>
-      <el-table-column prop="address" label="地址" show-overflow-tooltip/>
+      <el-table-column prop="storeName" label="门店名称" show-overflow-tooltip />
+      <el-table-column prop="storeManager" label="店长" show-overflow-tooltip />
+      <el-table-column prop="stateName" label="门店状态" show-overflow-tooltip />
+      <el-table-column prop="driverid" label="终端ID" show-overflow-tooltip />
+      <el-table-column prop="storePro" label="省份" show-overflow-tooltip />
+      <el-table-column prop="storeCity" label="城市" show-overflow-tooltip />
+      <el-table-column prop="address" label="地址" show-overflow-tooltip />
       <el-table-column prop="storeIcon" align="center" label="店铺图标" show-overflow-tooltip>
         <template slot-scope="scope">
           <el-popover v-if="scope.row.storeIcon" placement="right" trigger="hover">
-            <img style="width: 150px; height: 150px" :src="`${$base_url}/${scope.row.storeIcon}`" />
-            <span slot="reference" class="column-img">预览</span>
+            <div :class="`${prefixCls}-table-view-icon`">
+              <img :src="scope.row.storeIcon" />
+            </div>
+              <span slot="reference" class="column-img">预览</span>
           </el-popover>
         </template>
       </el-table-column>
       <el-table-column prop="storeImg" align="center" label="店铺图片" show-overflow-tooltip>
         <template slot-scope="scope">
           <el-popover v-if="scope.row.storeImg" placement="right" trigger="hover">
-            <img style="width: 150px; height: 150px" :src="`${$base_url}/${scope.row.storeImg}`" />
-            <span slot="reference" class="column-img">预览</span>
+            <div :class="`${prefixCls}-table-view-img`">
+              <img :src="scope.row.storeImg" />
+            </div>
+              <span slot="reference" class="column-img">预览</span>
           </el-popover>
         </template>
       </el-table-column>
-      <el-table-column prop="storeDesc" label="描述" show-overflow-tooltip/>
-      <el-table-column prop="remarks" label="备注" show-overflow-tooltip/>
+      <el-table-column prop="storeDesc" label="描述" show-overflow-tooltip />
+      <el-table-column prop="remarks" label="备注" show-overflow-tooltip />
       <el-table-column prop="createTime" align="center" label="添加时间" show-overflow-tooltip :formatter="formatTime" />
       <el-table-column prop="updateTime" align="center" label="更新时间" show-overflow-tooltip :formatter="formatTime" />
       <el-table-column fixed="right" label="操作" width="100" align="center">
@@ -97,13 +101,13 @@
           <el-input type="number" v-model.number="storeTemp.storeLocationY"></el-input>
         </el-form-item>
         <el-form-item label="店铺图标" prop="storeIcon" ref="storeIcon">
-          <el-upload v-model="storeTemp.storeIcon" :action="`${$base_url}/api/v1/store/upload`" :limit="1" :on-success="onSuccessStoreIcon" :on-error="this.onUploadError">
+          <el-upload v-model="storeTemp.storeIcon" :file-list="storeIconFile" :action="`${$base_url}/api/v1/store/upload`" :limit="1" :on-success="onSuccessStoreIcon" :on-error="this.onUploadError">
             <el-button size="small" type="primary">点击上传</el-button>&nbsp;&nbsp;
             <span slot="tip">只能上传jpg/png文件，且不超过500kb</span>
           </el-upload>
         </el-form-item>
         <el-form-item label="店铺图片" prop="storeImg" ref="storeImg">
-          <el-upload v-model="storeTemp.storeImg" :action="`${$base_url}/api/v1/store/upload`" :limit="1" :on-success="onSuccessStoreImg" :on-error="this.onUploadError">
+          <el-upload v-model="storeTemp.storeImg" :file-list="storeImgFile" :action="`${$base_url}/api/v1/store/upload`" :limit="1" :on-success="onSuccessStoreImg" :on-error="this.onUploadError">
             <el-button type="primary">点击上传</el-button>&nbsp;&nbsp;
             <span slot="tip">只能上传jpg/png文件，且不超过500kb</span>
           </el-upload>
@@ -139,21 +143,22 @@
 </template>
 
 <script>
-import { mapState, mapActions } from 'vuex'
-import $axios from '@/utils/axios'
-import DateUtils from '@/utils/date'
-import BASE_URL from '../../../config/serve'
-import './store.scss'
+import { mapState, mapActions } from "vuex";
+import $axios from "@/utils/axios";
+import DateUtils from "@/utils/date";
+import { interceptFileName } from "@/utils/general";
+import BASE_URL from "../../../config/serve";
+import "./store.scss";
 export default {
-  name: 'store',
+  name: "store",
   data() {
     return {
-      prefixCls: 'xcj-store',
+      prefixCls: "xcj-store",
       BASE_URL: BASE_URL,
       formSearch: {
-        storeName: '',
-        state: '',
-        sort: ''
+        storeName: "",
+        state: "",
+        sort: ""
       },
       listQuery: {
         currentPage: 1,
@@ -166,39 +171,55 @@ export default {
       terminalUnboundOptios: [],
       // 新增/编辑对话框相关
       dialogVisible: false,
-      dialogStatus: 'create',
+      dialogStatus: "create",
       dialogType: {
-        create: '新增',
-        update: '编辑'
+        create: "新增",
+        update: "编辑"
       },
       statusOptions: [
         {
-          label: '营业',
-          value: 'business'
+          label: "营业",
+          value: "business"
         },
         {
-          label: '暂停营业',
-          value: 'suspend'
+          label: "暂停营业",
+          value: "suspend"
         },
         {
-          label: '在建',
-          value: 'build'
+          label: "在建",
+          value: "build"
         }
       ],
       rules: {
-        storeName: [{ required: true, message: '门店名称不能为空', trigger: 'change' }],
-        storeManager: [{ required: true, message: '店长不能为空', trigger: 'change' }],
-        state: [{ required: true, message: '门店状态不能为空', trigger: 'change' }],
-        storePro: [{ required: true, message: '省份不能为空', trigger: 'change' }],
-        storeCity: [{ required: true, message: '城市不能为空', trigger: 'change' }],
-        address: [{ required: true, message: '地址不能为空', trigger: 'change' }],
-        ownerList: [{ required: true, message: '所有者不能为空', trigger: 'change' }]
+        storeName: [
+          { required: true, message: "门店名称不能为空", trigger: "change" }
+        ],
+        storeManager: [
+          { required: true, message: "店长不能为空", trigger: "change" }
+        ],
+        state: [
+          { required: true, message: "门店状态不能为空", trigger: "change" }
+        ],
+        storePro: [
+          { required: true, message: "省份不能为空", trigger: "change" }
+        ],
+        storeCity: [
+          { required: true, message: "城市不能为空", trigger: "change" }
+        ],
+        address: [
+          { required: true, message: "地址不能为空", trigger: "change" }
+        ],
+        ownerList: [
+          { required: true, message: "所有者不能为空", trigger: "change" }
+        ]
       },
-      storeTemp: this.defaultStoreTemp()
-    }
+      storeTemp: this.defaultStoreTemp(),
+      storeIconFile: [],
+      storeImgFile: []
+    };
   },
   created() {
-    this.getStore()
+    this.getStore();
   },
   computed: {
     ...mapState({
@@ -206,210 +227,219 @@ export default {
     })
   },
   methods: {
-    ...mapActions(['getOrgOptions']),
+    ...mapActions(["getOrgOptions"]),
     // 查询门店
     getStore() {
-      this.listLoading = true
-      const params = Object.assign({}, this.formSearch, this.listQuery)
+      this.listLoading = true;
+      const params = Object.assign({}, this.formSearch, this.listQuery);
       $axios({
-        url: '/api/v1/store/queryStoreList',
-        method: 'get',
+        url: "/api/v1/store/queryStoreList",
+        method: "get",
         params: params
       })
         .then(response => {
-          this.listLoading = false
-          const { resultObj, totalSize } = response
-          this.storeList = resultObj
-          this.total = totalSize
+          this.listLoading = false;
+          const { resultObj, totalSize } = response;
+          this.storeList = resultObj;
+          this.total = totalSize;
         })
         .catch(error => {
-          this.listLoading = false
-        })
+          this.listLoading = false;
+        });
     },
     //  查询未绑定的门店
     getTerminalUnbound(callback) {
       $axios({
-        url: '/api/v1/driver/queryDriverUnbound',
-        method: 'get'
+        url: "/api/v1/driver/queryDriverUnbound",
+        method: "get"
       }).then(response => {
-        const { resultObj } = response
-        let data = []
+        const { resultObj } = response;
+        let data = [];
         if (resultObj && Array.isArray(resultObj)) {
           data = resultObj.map(item => {
-            return item.driverid
-          })
+            return item.driverid;
+          });
         }
-        if (callback && typeof callback === 'function') {
-          callback(data)
+        if (callback && typeof callback === "function") {
+          callback(data);
         }
-      })
+      });
     },
     handleCurrentChange(value) {
-      this.listQuery.currentPage = value
-      this.getStore()
+      this.listQuery.currentPage = value;
+      this.getStore();
     },
     handleSizeChange(value) {
-      this.listQuery.size = value
-      this.getStore()
+      this.listQuery.size = value;
+      this.getStore();
     },
     handleSearch() {
-      this.getStore()
+      this.getStore();
     },
     handleCreate() {
-      this.storeTemp = this.defaultStoreTemp()
-      this.dialogStatus = 'create'
-      this.dialogVisible = true
+      this.storeTemp = this.defaultStoreTemp();
+      this.dialogStatus = "create";
+      this.dialogVisible = true;
       this.$nextTick(() => {
-        this.$refs['dataForm'].clearValidate()
-      })
-      this.getOrgOptions()
+        this.$refs["dataForm"].clearValidate();
+      });
+      this.getOrgOptions();
       this.getTerminalUnbound(data => {
-        this.terminalUnboundOptios = data
-      })
+        this.terminalUnboundOptios = data;
+      });
     },
     handleUpdate(row) {
-      const { driverid, ownerList, ...others } = row
-      const arrDriverid = driverid ? driverid.split(',') : []
-      const formatOwnerList = ownerList && Array.isArray(ownerList) ? ownerList.map(item => item.organizationId) : []
+      this.dialogStatus = "update";
+      this.dialogVisible = true;
+      const { driverid, ownerList, storeIcon, storeImg, ...others } = row;
+      this.storeIconFile = storeIcon
+        ? [{ name: interceptFileName(storeIcon), url: storeIcon }]
+        : [];
+      this.storeImgFile = storeImg
+        ? [{ name: interceptFileName(storeImg), url: storeImg }]
+        : [];
+      const arrDriverid = driverid ? driverid.split(",") : [];
+      const formatOwnerList =
+        ownerList && Array.isArray(ownerList)
+          ? ownerList.map(item => item.organizationId)
+          : [];
       this.storeTemp = {
         driverid: arrDriverid,
         ownerList: formatOwnerList,
         ...others
-      }
-      this.dialogStatus = 'update'
-      this.dialogVisible = true
+      };
       this.$nextTick(() => {
-        this.$refs['dataForm'].clearValidate()
-      })
-      this.getOrgOptions()
+        this.$refs["dataForm"].clearValidate();
+      });
+      this.getOrgOptions();
       this.getTerminalUnbound(data => {
-        this.terminalUnboundOptios = arrDriverid.concat(data)
-      })
+        this.terminalUnboundOptios = arrDriverid.concat(data);
+      });
     },
     handleDelete(storeId) {
       $axios({
-        url: '/api/v1/store/deleteStore',
-        method: 'post',
+        url: "/api/v1/store/deleteStore",
+        method: "post",
         data: { storeId }
       }).then(response => {
         for (const v of this.storeList) {
           if (v.storeId === storeId) {
-            const index = this.storeList.indexOf(v)
-            this.storeList.splice(index, 1)
+            const index = this.storeList.indexOf(v);
+            this.storeList.splice(index, 1);
             this.$message({
-              message: '删除成功',
-              type: 'success'
-            })
-            break
+              message: "删除成功",
+              type: "success"
+            });
+            break;
           }
         }
-      })
+      });
     },
     createStore() {
-      this.$refs['dataForm'].validate(valid => {
+      this.$refs["dataForm"].validate(valid => {
         if (valid) {
-          const { driverid, ownerList, ...others } = this.storeTemp
-          const driveridToString = this.storeTemp.driverid.toString()
+          const { driverid, ownerList, ...others } = this.storeTemp;
+          const driveridToString = this.storeTemp.driverid.toString();
           const fullOwnerList = this.orgOptions.filter(item => {
-            return ownerList.includes(item.organizationId)
-          })
+            return ownerList.includes(item.organizationId);
+          });
           const data = {
             ...others,
             driverid: driveridToString,
             ownerList: fullOwnerList
-          }
-          console.log(data, 'data')
+          };
+          console.log(data, "data");
           $axios({
-            url: '/api/v1/store/addStore',
-            method: 'post',
+            url: "/api/v1/store/addStore",
+            method: "post",
             data: data
           }).then(response => {
-            this.storeList.unshift(data)
-            this.dialogVisible = false
+            this.storeList.unshift(data);
+            this.dialogVisible = false;
             this.$notify({
-              title: '成功',
-              message: '添加成功',
-              type: 'success',
+              title: "成功",
+              message: "添加成功",
+              type: "success",
               duration: 2000
-            })
-          })
+            });
+          });
         }
-      })
+      });
     },
     updateStore() {
-      this.$refs['dataForm'].validate(valid => {
+      this.$refs["dataForm"].validate(valid => {
         if (valid) {
-          const { driverid, ownerList, ...others } = this.storeTemp
-          const driveridToString = this.storeTemp.driverid.toString()
+          const { driverid, ownerList, ...others } = this.storeTemp;
+          const driveridToString = this.storeTemp.driverid.toString();
           const fullOwnerList = this.orgOptions.filter(item => {
-            return ownerList.includes(item.organizationId)
-          })
+            return ownerList.includes(item.organizationId);
+          });
           const data = {
             driverid: driveridToString,
             ownerList: fullOwnerList,
             ...others
-          }
+          };
           $axios({
-            url: '/api/v1/store/editStore',
-            method: 'post',
+            url: "/api/v1/store/editStore",
+            method: "post",
             data: data
           }).then(response => {
             for (const v of this.storeList) {
               if (v.storeId === data.storeId) {
-                const index = this.storeList.indexOf(v)
-                this.storeList.splice(index, 1, data)
-                break
+                const index = this.storeList.indexOf(v);
+                this.storeList.splice(index, 1, data);
+                break;
               }
             }
-            this.dialogVisible = false
+            this.dialogVisible = false;
             this.$notify({
-              title: '成功',
-              message: '更新成功',
-              type: 'success',
+              title: "成功",
+              message: "更新成功",
+              type: "success",
               duration: 2000
-            })
-          })
+            });
+          });
         }
-      })
+      });
     },
     onSuccessStoreIcon(response, file, fileList) {
-      this.storeTemp.storeIcon = response.resultObj
-      this.$refs.storeIcon.clearValidate()
+      this.storeTemp.storeIcon = response.resultObj;
+      this.$refs.storeIcon.clearValidate();
     },
     onSuccessStoreImg(response, file, fileList) {
-      this.storeTemp.storeImg = response.resultObj
-      this.$refs.storeImg.clearValidate()
+      this.storeTemp.storeImg = response.resultObj;
+      this.$refs.storeImg.clearValidate();
     },
     onUploadError(err, file, fileList) {
       this.$message({
-        message: err.message || '服务异常',
-        type: 'error'
-      })
+        message: err.message || "服务异常",
+        type: "error"
+      });
     },
     defaultStoreTemp() {
       return {
-        address: '',
-        advertisement: '',
-        createTime: '',
-        driverid: '',
-        remarks: '',
-        state: '',
-        storeCity: '',
-        storeDesc: '',
-        storeIcon: '',
-        storeImg: '',
-        storeLocationX: '',
-        storeLocationY: '',
-        storeManager: '',
-        storeName: '',
-        storeId: '',
-        storePro: '',
+        address: "",
+        advertisement: "",
+        createTime: "",
+        driverid: "",
+        remarks: "",
+        state: "",
+        storeCity: "",
+        storeDesc: "",
+        storeIcon: "",
+        storeImg: "",
+        storeLocationX: "",
+        storeLocationY: "",
+        storeManager: "",
+        storeName: "",
+        storeId: "",
+        storePro: "",
         ownerList: []
-      }
+      };
     },
     formatTime(row, column, cellValue) {
-      return DateUtils.format(cellValue)
+      return DateUtils.format(cellValue);
     }
   }
-}
+};
 </script>

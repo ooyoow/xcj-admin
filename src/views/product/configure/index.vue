@@ -45,13 +45,13 @@
           <el-form-item label="简介" prop="pContent">
             <el-input v-model="fromProduct.pContent" placeholder="请输入简介"></el-input>
           </el-form-item>
-          <el-form-item v-if="fromProduct.pType ===2" label="优惠券模板" prop="pCouponId">
+          <el-form-item v-if="fromProduct.pType === 2" label="优惠券模板" prop="pCouponId">
             <el-radio-group v-model="fromProduct.pCouponId">
               <el-radio v-for="item in couponTempOptions" :key="item.value" :label="item.value">{{item.label}}</el-radio>
             </el-radio-group>
           </el-form-item>
-          <el-form-item v-else label="风格" prop="pCode">
-            <el-radio-group v-model="fromProduct.pCode ">
+          <el-form-item v-else label="风格" prop="style">
+            <el-radio-group v-model="fromProduct.style ">
               <el-radio :label="0">
                 <span>
                   <img src="@/assets/images/style.png" />
@@ -143,7 +143,7 @@ export default {
         pSendNum: '', // 赠送数量
         pValidateTime: '', // 有效期
         recommend: '', // 推荐指数 0-100
-        style: '' // 样式
+        style: '' // 风格
       },
       rules: {
         pType: [{ required: true, message: '终端名称不能为空', trigger: 'change' }],
@@ -170,7 +170,7 @@ export default {
         pSendNum: [{ required: true, message: '请输入赠送次数', trigger: 'change' }],
         pValidateTime: [{ required: true, message: '请选择有效期', trigger: 'change' }],
         recommend: [{ required: true, message: '请输入推荐指数', trigger: 'change' }],
-        style: [{ required: true, message: '请选择样式', trigger: 'change' }]
+        style: [{ required: true, message: '请选择风格', trigger: 'change' }]
       }
     }
   },

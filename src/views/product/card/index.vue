@@ -25,8 +25,10 @@
       <el-table-column prop="pImg" align="center" label="产品图片" show-overflow-tooltip>
         <template slot-scope="scope">
           <el-popover placement="right" trigger="hover">
-            <img style="width: 150px; height: 150px" :src="`${$base_url}/${scope.row.storeImg}`" />
-            <span slot="reference" class="column-img">预览</span>
+            <div :class="[`${prefixCls}-table-view-img`]">
+              <img :src="scope.row.pImg" />
+            </div>
+              <span slot="reference" class="column-img">预览</span>
           </el-popover>
         </template>
       </el-table-column>
@@ -111,21 +113,22 @@
 </template>
 
 <script>
-import { mapActions } from 'vuex'
-import $axios from '@/utils/axios'
-import './card.scss'
+import { mapActions } from "vuex";
+import $axios from "@/utils/axios";
+import { interceptFileName } from "@/utils/general";
+import "./card.scss";
 export default {
-  name: 'card',
+  name: "card",
   data() {
     return {
-      prefixCls: 'xcj-product-card',
+      prefixCls: "xcj-product-card",
       listQuery: {
-        search: '',
+        search: "",
         type: 1,
         currentPage: 1,
         size: 10,
-        productStatus: '',
-        sort: ''
+        productStatus: "",
+        sort: ""
       },
       stats: {
         onlineNumber: 0,
@@ -135,80 +138,112 @@ export default {
       listLoading: false,
       dataList: [],
       total: 0,
-      dialogStatus: 'create',
+      dialogStatus: "create",
       dialogType: {
-        create: '新增限次卡',
-        update: '编辑限次卡'
+        create: "新增限次卡",
+        update: "编辑限次卡"
       },
       dialogVisible: false,
       pImgList: [],
       dataTemp: this.defaultTemp(),
       rules: {
-        pName: [{ required: true, message: '限次卡名称不能为空', trigger: 'change' }],
-        pCode: [{ required: true, message: '产品编号不能为空', trigger: 'change' }],
-        marketPrice: [{ required: true, message: '市场价不能为空', trigger: 'change' }],
-        pRice: [{ required: true, message: '产品售价不能为空', trigger: 'change' }],
-        pNum: [{ required: true, message: '次数不能为空', trigger: 'change' }],
-        pAllnum: [{ required: true, message: '发行量不能为空', trigger: 'change' }],
-        pRecommond: [{ required: true, message: '推荐指数不能为空', trigger: 'change' }],
-        pImg: [{ required: true, message: '产品图片不能为空', trigger: 'change' }],
-        advertisement: [{ required: true, message: '广告语不能为空', trigger: 'change' }],
-        upTime: [{ required: true, message: '上架时间不能为空', trigger: 'change' }],
-        downTime: [{ required: true, message: '下架时间不能为空', trigger: 'change' }],
-        pValidateTime: [{ required: true, message: '有效期不能为空', trigger: 'change' }],
-        pContent: [{ required: true, message: '简介不能为空', trigger: 'change' }]
+        pName: [
+          { required: true, message: "限次卡名称不能为空", trigger: "change" }
+        ],
+        pCode: [
+          { required: true, message: "产品编号不能为空", trigger: "change" }
+        ],
+        marketPrice: [
+          { required: true, message: "市场价不能为空", trigger: "change" }
+        ],
+        pRice: [
+          { required: true, message: "产品售价不能为空", trigger: "change" }
+        ],
+        pNum: [{ required: true, message: "次数不能为空", trigger: "change" }],
+        pAllnum: [
+          { required: true, message: "发行量不能为空", trigger: "change" }
+        ],
+        pRecommond: [
+          { required: true, message: "推荐指数不能为空", trigger: "change" }
+        ],
+        pImg: [
+          { required: true, message: "产品图片不能为空", trigger: "change" }
+        ],
+        advertisement: [
+          { required: true, message: "广告语不能为空", trigger: "change" }
+        ],
+        upTime: [
+          { required: true, message: "上架时间不能为空", trigger: "change" }
+        ],
+        downTime: [
+          { required: true, message: "下架时间不能为空", trigger: "change" }
+        ],
+        pValidateTime: [
+          { required: true, message: "有效期不能为空", trigger: "change" }
+        ],
+        pContent: [
+          { required: true, message: "简介不能为空", trigger: "change" }
+        ]
       }
-    }
+    };
   },
   created() {
-    this.getDataList()
+    this.getDataList();
     this.getProductStatsByType({
       params: { type: 1 },
       callback: data => {
-        const { onlineNumber, warehouseNumber } = data
+        const { onlineNumber, warehouseNumber } = data;
         this.stats = {
           onlineNumber: onlineNumber,
           warehouseNumber: warehouseNumber,
           count: onlineNumber + warehouseNumber
-        }
+        };
       }
-    })
+    });
   },
   methods: {
-    ...mapActions(['getProduct', 'getProductStatsByType', 'createProduct', 'updateProduct', 'deleteProduct']),
+    ...mapActions([
+      "getProduct",
+      "getProductStatsByType",
+      "createProduct",
+      "updateProduct",
+      "deleteProduct"
+    ]),
     getDataList() {
-      this.listLoading = true
+      this.listLoading = true;
       this.getProduct({
         params: this.listQuery,
         callback: result => {
-          this.listLoading = false
-          const { list, total } = result
-          this.dataList = list
-          this.total = total
+          this.listLoading = false;
+          const { list, total } = result;
+          this.dataList = list;
+          this.total = total;
         }
-      })
+      });
     },
     onRadioChange() {
-      this.getDataList()
+      this.getDataList();
     },
     handleSearch(value) {
-      this.getDataList()
+      this.getDataList();
     },
     handleCurrentChange(value) {
-      this.listQuery.currentPage = value
-      this.getDataList()
+      this.listQuery.currentPage = value;
+      this.getDataList();
     },
     handleSizeChange(value) {
-      this.listQuery.size = value
-      this.getDataList()
+      this.listQuery.size = value;
+      this.getDataList();
     },
     handleCreate() {
-      this.setDialog('create', this.defaultTemp())
+      this.setDialog("create", this.defaultTemp());
     },
     handleUpdate(row) {
-      const { pImg } = row
-      this.pImgList = pImg ? [{ name: 'pImg.jpg', url: pImg }] : []
-      this.setDialog('update', row)
+      const { pImg } = row;
+      this.pImgList = pImg
+        ? [{ name: interceptFileName(pImg), url: pImg }]
+        : [];
+      this.setDialog("update", row);
     },
     handleDelete(id) {
       this.deleteProduct({
@@ -216,99 +251,99 @@ export default {
         callback: result => {
           for (const p of this.dataList) {
             if (p.id === id) {
-              const index = this.dataList.indexOf(p)
-              this.dataList.splice(index, 1)
+              const index = this.dataList.indexOf(p);
+              this.dataList.splice(index, 1);
               this.$message({
-                message: '删除成功',
-                type: 'success'
-              })
-              break
+                message: "删除成功",
+                type: "success"
+              });
+              break;
             }
           }
         }
-      })
+      });
     },
     createPackage() {
-      this.$refs['dataForm'].validate(valid => {
+      this.$refs["dataForm"].validate(valid => {
         if (valid) {
           this.createProduct({
             params: this.dataTemp,
             callback: result => {
-              this.dataList.unshift(result.resultObj)
-              this.dialogVisible = false
+              this.dataList.unshift(result.resultObj);
+              this.dialogVisible = false;
               this.$notify({
-                title: '成功',
-                message: '添加成功',
-                type: 'success',
+                title: "成功",
+                message: "添加成功",
+                type: "success",
                 duration: 2000
-              })
+              });
             }
-          })
+          });
         }
-      })
+      });
     },
     updatePackage() {
-      this.$refs['dataForm'].validate(valid => {
+      this.$refs["dataForm"].validate(valid => {
         if (valid) {
           this.updateProduct({
             params: this.dataTemp,
             callback: result => {
               for (const v of this.dataList) {
                 if (v.id === this.dataTemp.id) {
-                  const index = this.dataList.indexOf(v)
-                  this.dataList.splice(index, 1, this.dataTemp)
-                  break
+                  const index = this.dataList.indexOf(v);
+                  this.dataList.splice(index, 1, this.dataTemp);
+                  break;
                 }
               }
-              this.dialogVisible = false
+              this.dialogVisible = false;
               this.$notify({
-                title: '成功',
-                message: '更新成功',
-                type: 'success',
+                title: "成功",
+                message: "更新成功",
+                type: "success",
                 duration: 2000
-              })
+              });
             }
-          })
+          });
         }
-      })
+      });
     },
     onUploadSuccess(response, file, fileList) {
-      this.dataTemp.pImg = response.resultObj
-      this.$refs.pImg.clearValidate()
+      this.dataTemp.pImg = response.resultObj;
+      this.$refs.pImg.clearValidate();
     },
     onUploadError() {
       this.$message({
-        message: err.message || '服务异常',
-        type: 'error'
-      })
+        message: err.message || "服务异常",
+        type: "error"
+      });
     },
     setDialog(dialogStatus, data) {
-      this.dialogStatus = dialogStatus
-      this.dataTemp = { ...data }
-      this.dialogVisible = true
+      this.dialogStatus = dialogStatus;
+      this.dataTemp = { ...data };
+      this.dialogVisible = true;
       this.$nextTick(() => {
-        this.$refs['dataForm'].clearValidate()
-      })
+        this.$refs["dataForm"].clearValidate();
+      });
     },
     defaultTemp() {
       return {
         pType: 1,
-        pName: '',
-        pCode: '',
-        marketPrice: '',
-        pRice: '',
-        pNum: '',
-        pAllnum: '',
-        pRecommond: '',
-        pImg: '',
-        advertisement: '',
-        upTime: '',
-        downTime: '',
-        pValidateTime: '',
-        pContent: ''
+        pName: "",
+        pCode: "",
+        marketPrice: "",
+        pRice: "",
+        pNum: "",
+        pAllnum: "",
+        pRecommond: "",
+        pImg: "",
+        advertisement: "",
+        upTime: "",
+        downTime: "",
+        pValidateTime: "",
+        pContent: ""
         // remarks: ''
-      }
+      };
     }
   }
-}
+};
 </script>

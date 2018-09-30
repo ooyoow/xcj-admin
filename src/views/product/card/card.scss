@@ -18,6 +18,12 @@
     margin-top: 1rem;
     width: 100%;
     border-top: 1px solid #ebeef5;
+    &-view-img {
+      max-width: 500px;
+      img {
+        width: 100%;
+      }
+    }
     .column-img {
       color: #3385ff;
       cursor: pointer;
