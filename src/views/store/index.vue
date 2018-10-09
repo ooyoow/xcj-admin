@@ -30,7 +30,7 @@
             <div :class="`${prefixCls}-table-view-icon`">
               <img :src="scope.row.storeIcon" />
             </div>
-              <span slot="reference" class="column-img">预览</span>
+            <span slot="reference" class="column-img">预览</span>
           </el-popover>
         </template>
       </el-table-column>
@@ -40,7 +40,7 @@
             <div :class="`${prefixCls}-table-view-img`">
               <img :src="scope.row.storeImg" />
             </div>
-              <span slot="reference" class="column-img">预览</span>
+            <span slot="reference" class="column-img">预览</span>
           </el-popover>
         </template>
       </el-table-column>
@@ -67,24 +67,33 @@
       <el-pagination background @size-change="handleSizeChange" @current-change="handleCurrentChange" :current-page="listQuery.currentPage" :page-sizes="[10,20,30, 50]" :page-size="listQuery.size" layout="total, sizes, prev, pager, next, jumper" :total="total">
       </el-pagination>
     </div>
-    <el-dialog :title="dialogType[dialogStatus]" :visible.sync="dialogVisible">
-      <el-form :rules="rules" ref="dataForm" :model="storeTemp" label-position="right" label-width="100px">
+    <el-dialog :class="`${prefixCls}-dialog`" :title="dialogType[dialogStatus]" :visible.sync="dialogVisible">
+      <el-form :rules="rules" ref="dataForm" :model="storeTemp" label-position="right" label-width="150px">
         <el-form-item label="门店名称" prop="storeName">
           <el-input v-model="storeTemp.storeName" maxlength="50"></el-input>
-        </el-form-item>
-        <el-form-item label="店长" prop="storeManager">
-          <el-input v-model="storeTemp.storeManager" maxlength="20"></el-input>
         </el-form-item>
         <el-form-item label="门店状态" prop="state">
           <el-select class="filter-item" v-model="storeTemp.state" placeholder="请选择门店状态">
             <el-option v-for="item in statusOptions" :key="item.value" :label="item.label" :value="item.value"></el-option>
           </el-select>
         </el-form-item>
-        <el-form-item label="终端ID" prop="driverid">
-          <el-select class="filter-item" v-model="storeTemp.driverid" multiple placeholder="请选择终端名称">
-            <el-option v-for="item in terminalUnboundOptios" :key="item" :label="item" :value="item"></el-option>
+        <el-form-item label="店长" prop="storeManager">
+          <el-input v-model="storeTemp.storeManager" maxlength="20"></el-input>
+        </el-form-item>
+        <el-form-item label="所有者" prop="ownerList">
+          <el-select multiple v-model="storeTemp.ownerList" placeholder="请选择所有者" @input="handleSelectOwner" @remove-tag="handleRemoveOwner">
+            <el-option v-for="item in orgOptions" :key="item.organizationId" :label="item.ownerName" :value="item.organizationId"></el-option>
           </el-select>
         </el-form-item>
+
+        <el-form-item v-for="(fraction, index) in storeTemp.fractions" :label="`[${fraction.ownerName}]分润比例`" :key="index" :prop="'fractions.' + index + '.value'" :rules="{
+      required: true, message: '分润比例不能为空', trigger: 'change'
+    }">
+          <el-input type="number" v-model.number="fraction.value">
+            <template slot="append">%</template>
+          </el-input>
+        </el-form-item>
+
         <el-form-item label="省份" prop="storePro">
           <el-input v-model="storeTemp.storePro" maxlength="20"></el-input>
         </el-form-item>
@@ -100,6 +109,11 @@
         <el-form-item label="纬度" prop="storeLocationY">
           <el-input type="number" v-model.number="storeTemp.storeLocationY"></el-input>
         </el-form-item>
+        <el-form-item label="终端ID" prop="driverid">
+          <el-select class="filter-item" v-model="storeTemp.driverid" multiple placeholder="请选择终端名称">
+            <el-option v-for="item in terminalUnboundOptios" :key="item" :label="item" :value="item"></el-option>
+          </el-select>
+        </el-form-item>
         <el-form-item label="店铺图标" prop="storeIcon" ref="storeIcon">
           <el-upload v-model="storeTemp.storeIcon" :file-list="storeIconFile" :action="`${$base_url}/api/v1/store/upload`" :limit="1" :on-success="onSuccessStoreIcon" :on-error="this.onUploadError">
             <el-button size="small" type="primary">点击上传</el-button>&nbsp;&nbsp;
@@ -111,11 +125,6 @@
             <el-button type="primary">点击上传</el-button>&nbsp;&nbsp;
             <span slot="tip">只能上传jpg/png文件，且不超过500kb</span>
           </el-upload>
-        </el-form-item>
-        <el-form-item label="所有者" prop="ownerList">
-          <el-select multiple v-model="storeTemp.ownerList" placeholder="请选择所有者">
-            <el-option v-for="item in orgOptions" :key="item.organizationId" :label="item.ownerName" :value="item.organizationId"></el-option>
-          </el-select>
         </el-form-item>
 
         <!-- <el-form-item label="添加时间" prop="createTime">
@@ -143,22 +152,22 @@
 </template>
 
 <script>
-import { mapState, mapActions } from "vuex";
-import $axios from "@/utils/axios";
-import DateUtils from "@/utils/date";
-import { interceptFileName } from "@/utils/general";
-import BASE_URL from "../../../config/serve";
-import "./store.scss";
+import { mapState, mapActions } from 'vuex'
+import $axios from '@/utils/axios'
+import DateUtils from '@/utils/date'
+import { interceptFileName } from '@/utils/general'
+import BASE_URL from '../../../config/serve'
+import './store.scss'
 export default {
-  name: "store",
+  name: 'store',
   data() {
     return {
-      prefixCls: "xcj-store",
+      prefixCls: 'xcj-store',
       BASE_URL: BASE_URL,
       formSearch: {
-        storeName: "",
-        state: "",
-        sort: ""
+        storeName: '',
+        state: '',
+        sort: ''
       },
       listQuery: {
         currentPage: 1,
@@ -171,55 +180,41 @@ export default {
       terminalUnboundOptios: [],
       // 新增/编辑对话框相关
       dialogVisible: false,
-      dialogStatus: "create",
+      dialogStatus: 'create',
       dialogType: {
-        create: "新增",
-        update: "编辑"
+        create: '新增',
+        update: '编辑'
       },
       statusOptions: [
         {
-          label: "营业",
-          value: "business"
+          label: '营业',
+          value: 'business'
         },
         {
-          label: "暂停营业",
-          value: "suspend"
+          label: '暂停营业',
+          value: 'suspend'
         },
         {
-          label: "在建",
-          value: "build"
+          label: '在建',
+          value: 'build'
         }
       ],
       rules: {
-        storeName: [
-          { required: true, message: "门店名称不能为空", trigger: "change" }
-        ],
-        storeManager: [
-          { required: true, message: "店长不能为空", trigger: "change" }
-        ],
-        state: [
-          { required: true, message: "门店状态不能为空", trigger: "change" }
-        ],
-        storePro: [
-          { required: true, message: "省份不能为空", trigger: "change" }
-        ],
-        storeCity: [
-          { required: true, message: "城市不能为空", trigger: "change" }
-        ],
-        address: [
-          { required: true, message: "地址不能为空", trigger: "change" }
-        ],
-        ownerList: [
-          { required: true, message: "所有者不能为空", trigger: "change" }
-        ]
+        storeName: [{ required: true, message: '门店名称不能为空', trigger: 'change' }],
+        storeManager: [{ required: true, message: '店长不能为空', trigger: 'change' }],
+        state: [{ required: true, message: '门店状态不能为空', trigger: 'change' }],
+        storePro: [{ required: true, message: '省份不能为空', trigger: 'change' }],
+        storeCity: [{ required: true, message: '城市不能为空', trigger: 'change' }],
+        address: [{ required: true, message: '地址不能为空', trigger: 'change' }],
+        ownerList: [{ required: true, message: '所有者不能为空', trigger: 'change' }]
       },
       storeTemp: this.defaultStoreTemp(),
       storeIconFile: [],
       storeImgFile: []
-    };
+    }
   },
   created() {
-    this.getStore();
+    this.getStore()
   },
   computed: {
     ...mapState({
@@ -227,219 +222,226 @@ export default {
     })
   },
   methods: {
-    ...mapActions(["getOrgOptions"]),
+    ...mapActions(['getOrgOptions']),
     // 查询门店
     getStore() {
-      this.listLoading = true;
-      const params = Object.assign({}, this.formSearch, this.listQuery);
+      this.listLoading = true
+      const params = Object.assign({}, this.formSearch, this.listQuery)
       $axios({
-        url: "/api/v1/store/queryStoreList",
-        method: "get",
+        url: '/api/v1/store/queryStoreList',
+        method: 'get',
         params: params
       })
         .then(response => {
-          this.listLoading = false;
-          const { resultObj, totalSize } = response;
-          this.storeList = resultObj;
-          this.total = totalSize;
+          this.listLoading = false
+          const { resultObj, totalSize } = response
+          this.storeList = resultObj
+          this.total = totalSize
         })
         .catch(error => {
-          this.listLoading = false;
-        });
+          this.listLoading = false
+        })
     },
     //  查询未绑定的门店
     getTerminalUnbound(callback) {
       $axios({
-        url: "/api/v1/driver/queryDriverUnbound",
-        method: "get"
+        url: '/api/v1/driver/queryDriverUnbound',
+        method: 'get'
       }).then(response => {
-        const { resultObj } = response;
-        let data = [];
+        const { resultObj } = response
+        let data = []
         if (resultObj && Array.isArray(resultObj)) {
           data = resultObj.map(item => {
-            return item.driverid;
-          });
+            return item.driverid
+          })
         }
-        if (callback && typeof callback === "function") {
-          callback(data);
+        if (callback && typeof callback === 'function') {
+          callback(data)
         }
-      });
+      })
     },
     handleCurrentChange(value) {
-      this.listQuery.currentPage = value;
-      this.getStore();
+      this.listQuery.currentPage = value
+      this.getStore()
     },
     handleSizeChange(value) {
-      this.listQuery.size = value;
-      this.getStore();
+      this.listQuery.size = value
+      this.getStore()
     },
     handleSearch() {
-      this.getStore();
+      this.getStore()
     },
     handleCreate() {
-      this.storeTemp = this.defaultStoreTemp();
-      this.dialogStatus = "create";
-      this.dialogVisible = true;
+      this.storeTemp = this.defaultStoreTemp()
+      this.dialogStatus = 'create'
+      this.dialogVisible = true
       this.$nextTick(() => {
-        this.$refs["dataForm"].clearValidate();
-      });
-      this.getOrgOptions();
+        this.$refs['dataForm'].clearValidate()
+      })
+      this.getOrgOptions()
       this.getTerminalUnbound(data => {
-        this.terminalUnboundOptios = data;
-      });
+        this.terminalUnboundOptios = data
+      })
     },
     handleUpdate(row) {
-      this.dialogStatus = "update";
-      this.dialogVisible = true;
-      const { driverid, ownerList, storeIcon, storeImg, ...others } = row;
-      this.storeIconFile = storeIcon
-        ? [{ name: interceptFileName(storeIcon), url: storeIcon }]
-        : [];
-      this.storeImgFile = storeImg
-        ? [{ name: interceptFileName(storeImg), url: storeImg }]
-        : [];
-      const arrDriverid = driverid ? driverid.split(",") : [];
-      const formatOwnerList =
-        ownerList && Array.isArray(ownerList)
-          ? ownerList.map(item => item.organizationId)
-          : [];
+      this.dialogStatus = 'update'
+      this.dialogVisible = true
+      const { driverid, ownerList, storeIcon, storeImg, ...others } = row
+      this.storeIconFile = storeIcon ? [{ name: interceptFileName(storeIcon), url: storeIcon }] : []
+      this.storeImgFile = storeImg ? [{ name: interceptFileName(storeImg), url: storeImg }] : []
+      const arrDriverid = driverid ? driverid.split(',') : []
+      const formatOwnerList = ownerList && Array.isArray(ownerList) ? ownerList.map(item => item.organizationId) : []
       this.storeTemp = {
         driverid: arrDriverid,
         ownerList: formatOwnerList,
         ...others
-      };
+      }
       this.$nextTick(() => {
-        this.$refs["dataForm"].clearValidate();
-      });
-      this.getOrgOptions();
+        this.$refs['dataForm'].clearValidate()
+      })
+      this.getOrgOptions()
       this.getTerminalUnbound(data => {
-        this.terminalUnboundOptios = arrDriverid.concat(data);
-      });
+        this.terminalUnboundOptios = arrDriverid.concat(data)
+      })
     },
     handleDelete(storeId) {
       $axios({
-        url: "/api/v1/store/deleteStore",
-        method: "post",
+        url: '/api/v1/store/deleteStore',
+        method: 'post',
         data: { storeId }
       }).then(response => {
         for (const v of this.storeList) {
           if (v.storeId === storeId) {
-            const index = this.storeList.indexOf(v);
-            this.storeList.splice(index, 1);
+            const index = this.storeList.indexOf(v)
+            this.storeList.splice(index, 1)
             this.$message({
-              message: "删除成功",
-              type: "success"
-            });
-            break;
+              message: '删除成功',
+              type: 'success'
+            })
+            break
           }
         }
-      });
+      })
+    },
+    handleSelectOwner(val) {
+      // 添加
+      if (val.length > this.storeTemp.fractions.length) {
+        const result = this.orgOptions.find(item => item.organizationId === val[val.length - 1])
+        if (result) {
+          this.storeTemp.fractions.push({ ...result, value: '' })
+        }
+      } else {
+        this.storeTemp.fractions = this.storeTemp.fractions.filter(item => val.includes(item.organizationId))
+      }
+    },
+    handleRemoveOwner(val) {
+      this.storeTemp.fractions = this.storeTemp.fractions.filter(item => item.organizationId !== val)
     },
     createStore() {
-      this.$refs["dataForm"].validate(valid => {
+      this.$refs['dataForm'].validate(valid => {
         if (valid) {
-          const { driverid, ownerList, ...others } = this.storeTemp;
-          const driveridToString = this.storeTemp.driverid.toString();
+          const { driverid, ownerList, ...others } = this.storeTemp
+          const driveridToString = this.storeTemp.driverid.toString()
           const fullOwnerList = this.orgOptions.filter(item => {
-            return ownerList.includes(item.organizationId);
-          });
+            return ownerList.includes(item.organizationId)
+          })
           const data = {
             ...others,
             driverid: driveridToString,
             ownerList: fullOwnerList
-          };
-          console.log(data, "data");
+          }
           $axios({
-            url: "/api/v1/store/addStore",
-            method: "post",
+            url: '/api/v1/store/addStore',
+            method: 'post',
             data: data
           }).then(response => {
-            this.storeList.unshift(data);
-            this.dialogVisible = false;
+            this.storeList.unshift(data)
+            this.dialogVisible = false
             this.$notify({
-              title: "成功",
-              message: "添加成功",
-              type: "success",
+              title: '成功',
+              message: '添加成功',
+              type: 'success',
               duration: 2000
-            });
-          });
+            })
+          })
         }
-      });
+      })
     },
     updateStore() {
-      this.$refs["dataForm"].validate(valid => {
+      this.$refs['dataForm'].validate(valid => {
         if (valid) {
-          const { driverid, ownerList, ...others } = this.storeTemp;
-          const driveridToString = this.storeTemp.driverid.toString();
+          const { driverid, ownerList, ...others } = this.storeTemp
+          const driveridToString = this.storeTemp.driverid.toString()
           const fullOwnerList = this.orgOptions.filter(item => {
-            return ownerList.includes(item.organizationId);
-          });
+            return ownerList.includes(item.organizationId)
+          })
           const data = {
             driverid: driveridToString,
             ownerList: fullOwnerList,
             ...others
-          };
+          }
           $axios({
-            url: "/api/v1/store/editStore",
-            method: "post",
+            url: '/api/v1/store/editStore',
+            method: 'post',
             data: data
           }).then(response => {
             for (const v of this.storeList) {
               if (v.storeId === data.storeId) {
-                const index = this.storeList.indexOf(v);
-                this.storeList.splice(index, 1, data);
-                break;
+                const index = this.storeList.indexOf(v)
+                this.storeList.splice(index, 1, data)
+                break
               }
             }
-            this.dialogVisible = false;
+            this.dialogVisible = false
             this.$notify({
-              title: "成功",
-              message: "更新成功",
-              type: "success",
+              title: '成功',
+              message: '更新成功',
+              type: 'success',
               duration: 2000
-            });
-          });
+            })
+          })
         }
-      });
+      })
     },
     onSuccessStoreIcon(response, file, fileList) {
-      this.storeTemp.storeIcon = response.resultObj;
-      this.$refs.storeIcon.clearValidate();
+      this.storeTemp.storeIcon = response.resultObj
+      this.$refs.storeIcon.clearValidate()
     },
     onSuccessStoreImg(response, file, fileList) {
-      this.storeTemp.storeImg = response.resultObj;
-      this.$refs.storeImg.clearValidate();
+      this.storeTemp.storeImg = response.resultObj
+      this.$refs.storeImg.clearValidate()
     },
     onUploadError(err, file, fileList) {
       this.$message({
-        message: err.message || "服务异常",
-        type: "error"
-      });
+        message: err.message || '服务异常',
+        type: 'error'
+      })
     },
     defaultStoreTemp() {
       return {
-        address: "",
-        advertisement: "",
-        createTime: "",
-        driverid: "",
-        remarks: "",
-        state: "",
-        storeCity: "",
-        storeDesc: "",
-        storeIcon: "",
-        storeImg: "",
-        storeLocationX: "",
-        storeLocationY: "",
-        storeManager: "",
-        storeName: "",
-        storeId: "",
-        storePro: "",
-        ownerList: []
-      };
+        address: '',
+        advertisement: '',
+        createTime: '',
+        driverid: '',
+        remarks: '',
+        state: '',
+        storeCity: '',
+        storeDesc: '',
+        storeIcon: '',
+        storeImg: '',
+        storeLocationX: '',
+        storeLocationY: '',
+        storeManager: '',
+        storeName: '',
+        storeId: '',
+        storePro: '',
+        ownerList: [],
+        fractions: [] // 分润比例
+      }
     },
     formatTime(row, column, cellValue) {
-      return DateUtils.format(cellValue);
+      return DateUtils.format(cellValue)
     }
   }
-};
+}
 </script>
