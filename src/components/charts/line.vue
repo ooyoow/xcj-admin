@@ -20,6 +20,10 @@ export default {
       type: String,
       default: '200px'
     },
+    yAxisName: {
+      type: String,
+      default: ''
+    },
     xAxisData: {
       type: Array,
       default: () => {
@@ -56,16 +60,16 @@ export default {
       this.chart = echarts.init(this.$refs.line)
       this.chart.setOption({
         backgroundColor: '#fff',
-        title: {
-          top: 20,
-          text: this.title,
-          textStyle: {
-            fontWeight: 'normal',
-            fontSize: 16,
-            color: '#F1F1F3'
-          },
-          left: '1%'
-        },
+        // title: {
+        //   top: 20,
+        //   text: this.title,
+        //   textStyle: {
+        //     fontWeight: 'normal',
+        //     fontSize: 16,
+        //     color: '#F1F1F3'
+        //   },
+        //   left: '1%'
+        // },
         tooltip: {
           trigger: 'axis',
           axisPointer: {
@@ -74,21 +78,19 @@ export default {
             }
           }
         },
-        legend: {
-          top: 20,
-          icon: 'rect',
-          itemWidth: 14,
-          itemHeight: 5,
-          itemGap: 13,
-          // data: ['CMCC', 'CTCC', 'CUCC'],
-          // right: '4%',
-          textStyle: {
-            fontSize: 12,
-            color: '#F1F1F3'
-          }
-        },
+        // legend: {
+        //   top: 20,
+        //   icon: 'rect',
+        //   itemWidth: 14,
+        //   itemHeight: 5,
+        //   itemGap: 13,
+        //   textStyle: {
+        //     fontSize: 12,
+        //     color: '#F1F1F3'
+        //   }
+        // },
         grid: {
-          top: 10,
+          top: 30,
           left: 10,
           right: '4%',
           bottom: '2%',
@@ -109,26 +111,26 @@ export default {
         yAxis: [
           {
             type: 'value',
-            // name: '(%)',
-            axisTick: {
-              show: false
-            },
-            axisLine: {
-              lineStyle: {
-                color: '#57617B'
-              }
-            },
-            axisLabel: {
-              margin: 10,
-              textStyle: {
-                fontSize: 14
-              }
-            },
-            splitLine: {
-              lineStyle: {
-                color: '#57617B'
-              }
-            }
+            name: this.yAxisName
+            // axisTick: {
+            //   show: false
+            // },
+            // axisLine: {
+            //   lineStyle: {
+            //     color: '#57617B'
+            //   }
+            // },
+            // axisLabel: {
+            //   margin: 10,
+            //   textStyle: {
+            //     fontSize: 14
+            //   }
+            // },
+            // splitLine: {
+            //   lineStyle: {
+            //     color: '#57617B'
+            //   }
+            // }
           }
         ],
         series: [
