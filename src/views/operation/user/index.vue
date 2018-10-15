@@ -2,18 +2,21 @@
   <div class="xcj-user">
     <div class="xcj-user-filter">
       <el-form :inline="true" :model="formSimpleFilter">
-        <el-form-item label="用户账号">
-          <el-input v-model="formSimpleFilter.search" clearable placeholder="请输入用户账号搜索"></el-input>
+        <el-form-item label="用户账号或ID">
+          <el-input v-model="formSimpleFilter.search" clearable placeholder="请输入用户账号、ID查询"></el-input>
+        </el-form-item>
+        <el-form-item label="手机号">
+          <el-input type="number" v-model="formMoreFilter.phone" clearable placeholder="请输入手机号查询"></el-input>
+        </el-form-item>
+        <el-form-item label="车牌号">
+          <el-input type="number" v-model="formMoreFilter.cardNo" clearable placeholder="请输入车牌号查询"></el-input>
         </el-form-item>
         <el-form-item label="会龄">
-          <el-input type="number" v-model.number="formSimpleFilter.registrationDays" clearable placeholder="请输入会龄"></el-input>
-        </el-form-item>
-        <el-form-item label="用户昵称">
-          <el-input v-model="formMoreFilter.nickName" clearable placeholder="请输入用户昵称"></el-input>
+          <el-input type="number" v-model.number="formSimpleFilter.registrationDays" clearable placeholder="请输入会龄查询"></el-input>
         </el-form-item>
         <el-form-item label="来源">
-          <el-select v-model="formMoreFilter.source" clearable placeholder="请选择">
-            <el-option v-for="item in sourceOptions" :key="item.value" :label="item.label" :value="item.value" placeholder="请输入用户昵称"></el-option>
+          <el-select v-model="formMoreFilter.source" clearable placeholder="请选择来源">
+            <el-option v-for="item in sourceOptions" :key="item.value" :label="item.label" :value="item.value"></el-option>
           </el-select>
         </el-form-item>
         <el-form-item>
@@ -36,6 +39,7 @@
       <el-table-column prop="userId" label="用户ID" align="center" width="100" show-overflow-tooltip></el-table-column>
       <el-table-column prop="userName" label="用户账号" align="center" show-overflow-tooltip></el-table-column>
       <el-table-column prop="nickName" label="用户昵称" align="center" show-overflow-tooltip></el-table-column>
+      <el-table-column prop="phone" label="手机号" align="center" show-overflow-tooltip></el-table-column>
       <el-table-column prop="carBrand" label="车辆" align="center" show-overflow-tooltip></el-table-column>
       <el-table-column prop="registrationDays" label="会龄" align="center" show-overflow-tooltip></el-table-column>
       <el-table-column prop="source" label="来源" align="center" show-overflow-tooltip></el-table-column>

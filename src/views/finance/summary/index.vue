@@ -47,6 +47,7 @@
       <div class="category">所有者分润统计</div>
       <el-table :data="ownerProfit" border>
         <el-table-column prop="ownerName" label="所有者" align="center" />
+        <el-table-column prop="storeName" label="门店" align="center" />
         <el-table-column prop="realAmount" label="到账服务总额" align="center" />
         <el-table-column prop="shareAmount" label="分润额" align="center" />
         <el-table-column prop="rate" label="分润比例" align="center">
@@ -72,112 +73,112 @@
 </template>
 
 <script>
-import $axios from '@/utils/axios'
-import './summary.scss'
+import $axios from "@/utils/axios";
+import "./summary.scss";
 export default {
-  name: 'Summary',
+  name: "Summary",
   data() {
     return {
-      prefixCls: 'xcj-finance-summary',
+      prefixCls: "xcj-finance-summary",
       type: 1,
-      date: '',
+      date: "",
       keyFigures: [], // 关键指标
       bigSales: [], // 大类销量统计
       productSales: [], // 产品销量统计
       storeService: [], // 门店服务额统计
       ownerProfit: [], // 所有者分润统计
       orderStats: [] // 订单统计
-    }
+    };
   },
   created() {
-    this.getPageData({ type: this.type })
+    this.getPageData({ type: this.type });
   },
   methods: {
     handleExport() {},
     handleFilterRadioGroup(val) {
-      this.getPageData({ type: this.type })
+      this.getPageData({ type: this.type });
     },
     handleFilterDate(val) {
-      this.type = 4
+      this.type = 4;
       this.getPageData({
         type: this.type,
         start: val[0],
         end: val[1]
-      })
+      });
     },
     // 查询关键指标
     getKeyFigures(params) {
       $axios({
-        url: '/api/v1/finance/keyFigures',
-        method: 'get',
+        url: "/api/v1/finance/keyFigures",
+        method: "get",
         params: params
       }).then(response => {
-        const { resultObj, totalSize } = response
-        this.keyFigures = resultObj ? new Array(resultObj) : []
-      })
+        const { resultObj, totalSize } = response;
+        this.keyFigures = resultObj ? new Array(resultObj) : [];
+      });
     },
     // 查询大类销售统计
     getBigSales(params) {
       $axios({
-        url: '/api/v1/finance/salesStatistics',
-        method: 'get',
+        url: "/api/v1/finance/salesStatistics",
+        method: "get",
         params: params
       }).then(response => {
-        const { resultObj } = response
-        this.bigSales = resultObj ? new Array(resultObj) : []
-      })
+        const { resultObj } = response;
+        this.bigSales = resultObj ? new Array(resultObj) : [];
+      });
     },
     // 查询产品销量统计
     getProductSales(params) {
       $axios({
-        url: '/api/v1/finance/productSales',
-        method: 'get',
+        url: "/api/v1/finance/productSales",
+        method: "get",
         params: params
       }).then(response => {
-        this.productSales = response.resultObj
-      })
+        this.productSales = response.resultObj;
+      });
     },
     // 门店服务额统计
     getStoreServiceAmount(params) {
       $axios({
-        url: '/api/v1/finance/storeServiceStatistics',
-        method: 'get',
+        url: "/api/v1/finance/storeServiceStatistics",
+        method: "get",
         params: params
       }).then(response => {
-        this.storeService = response.resultObj
-      })
+        this.storeService = response.resultObj;
+      });
     },
     // 所有者分润统计
     getOwnerProfitStats(params) {
       $axios({
-        url: '/api/v1/finance/profitStatistics',
-        method: 'get',
+        url: "/api/v1/finance/profitStatistics",
+        method: "get",
         params: params
       }).then(response => {
-        this.ownerProfit = response.resultObj
-      })
+        this.ownerProfit = response.resultObj;
+      });
     },
     // 查询订单统计
     getOrderStats(params) {
       $axios({
-        url: '/api/v1/finance/orderStatistics',
-        method: 'get',
+        url: "/api/v1/finance/orderStatistics",
+        method: "get",
         params: params
       }).then(response => {
-        const { resultObj } = response
-        this.orderStats = resultObj ? new Array(resultObj) : []
-      })
+        const { resultObj } = response;
+        this.orderStats = resultObj ? new Array(resultObj) : [];
+      });
     },
     // 查询所有统计
     getPageData(params) {
-      this.getKeyFigures(params)
-      this.getBigSales(params)
-      this.getProductSales(params)
-      this.getStoreServiceAmount(params)
-      this.getOwnerProfitStats(params)
-      this.getOrderStats(params)
+      this.getKeyFigures(params);
+      this.getBigSales(params);
+      this.getProductSales(params);
+      this.getStoreServiceAmount(params);
+      this.getOwnerProfitStats(params);
+      this.getOrderStats(params);
     }
   }
-}
+};
 </script>
 

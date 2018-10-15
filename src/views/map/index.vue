@@ -3,6 +3,15 @@
     <baidu-map :class="[`${prefixCls}-content`]" :center="center" :zoom="zoom" :scroll-wheel-zoom="true">
       <bm-marker :key="key" v-for="(store, key) in storeList" :position="{lng: store.storeLocationX, lat: store.storeLocationY}">
         <overlay :position="{lng: store.storeLocationX, lat: store.storeLocationY}">
+          <!-- <div class="tips-box">
+            <div>
+              <div class="servie-amount">{{store.servieAmount||0}}元</div>
+              <div class="bar"></div>
+              <div class="wash-amount">{{store.washAmount||0}}辆</div>
+            </div>
+            <div class="store-logo"><img :src="store.storeImg" /></div>
+            <div class="store-name">{{store.storeName}}</div>
+          </div> -->
           <div>{{store.storeName}}</div>
           <div class="tips-box">
             <div class="item">
@@ -19,8 +28,8 @@
     </baidu-map>
     <div :class="[`${prefixCls}-actions`]">
       <el-radio-group v-model="type" @change="onRadioChange">
-        <el-radio-button :label="2">本日</el-radio-button>
-        <el-radio-button :label="1">本周</el-radio-button>
+        <el-radio-button :label="1">本日</el-radio-button>
+        <el-radio-button :label="2">本周</el-radio-button>
         <el-radio-button :label="0">本月</el-radio-button>
       </el-radio-group>
       <el-button type="primary" size="mini" @click="handleBtnStore">{{showStore ? '隐藏' : '门店' }}列表</el-button>
@@ -28,11 +37,16 @@
     <div v-show="showStore" :class="[`${prefixCls}-store`]">
       <ul :key="key" v-for="(store, key) in storeList">
         <li :class="[`${prefixCls}-store-item`]">
-          <div class="store-name">{{`${key + 1}. ${store.storeName}`}}</div>
-          <div class="servie-amount">服务额：
-            <span>{{store.servieAmount||0}}</span> 元</div>
-          <div class="wash-amount">洗车量：
-            <span>{{store.washAmount||0}}</span> 辆</div>
+          <div>
+            <span class="store-name">{{store.storeName}}</span>
+            <span class="store-number">{{store.storeId}}</span>
+            <el-tag :type="storeState[store.state]">{{store.stateName}}</el-tag>
+          </div>
+          <div>
+            <span class="servie-amount"><span>{{store.servieAmount||0}}</span> 元</span>
+            <span class="wash-amount"><span>{{store.washAmount||0}}</span> 辆</span>
+            <span>{{store.driverid}}</span>
+          </div>
           <div class="store-address">{{`${store.storePro||""}${store.storeCity||""}${store.address||""}`}}</div>
         </li>
       </ul>
@@ -53,14 +67,19 @@ export default {
       show: true,
       showStore: false,
       active: true,
-      type: 2
+      type: 2,
       // storeList: [
       //   {
       //     storeName: '海口丘海店海口丘海店海口丘海店',
       //     storeLocationX: 110.301309,
       //     storeLocationY: 20.016001
       //   }
-      // ]
+      // ],
+      storeState: {
+        business: 'success',
+        suspend: 'warning',
+        build: 'info'
+      }
     }
   },
   components: {

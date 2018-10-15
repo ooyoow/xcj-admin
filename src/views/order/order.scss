@@ -59,6 +59,8 @@
     }
     .product-sales {
       .actions {
+        display: flex;
+        justify-content: flex-end;
         padding: 1.25rem;
         text-align: right;
       }
@@ -129,17 +131,30 @@
       flex-flow: column;
       padding-left: 1.5rem;
       .title {
+        text-align: center;
         color: rgb(102, 102, 102);
         font-size: 1.25rem;
       }
       .today {
+        padding-top: .375rem;
+        display: flex;
+        justify-content: space-between;
         font-size: 1.125rem;
-        color: #2a2a2a;
+        color: #666;
+        :first-child {
+          width: 50%;
+        }
       }
       .yesterday,
       .seven-days {
+        padding-top: .375rem;
+        display: flex;
+        justify-content: space-between;
         font-size: 0.875rem;
         color: #999;
+        :first-child {
+          width: 50%;
+        }
       }
     }
   }
