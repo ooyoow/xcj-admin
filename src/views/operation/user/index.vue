@@ -9,7 +9,7 @@
           <el-input type="number" v-model="formMoreFilter.phone" clearable placeholder="请输入手机号查询"></el-input>
         </el-form-item>
         <el-form-item label="车牌号">
-          <el-input type="number" v-model="formMoreFilter.cardNo" clearable placeholder="请输入车牌号查询"></el-input>
+          <el-input v-model="formMoreFilter.cardNo" clearable placeholder="请输入车牌号查询"></el-input>
         </el-form-item>
         <el-form-item label="会龄">
           <el-input type="number" v-model.number="formSimpleFilter.registrationDays" clearable placeholder="请输入会龄查询"></el-input>

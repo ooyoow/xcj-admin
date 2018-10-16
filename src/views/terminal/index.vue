@@ -17,10 +17,12 @@
       </el-form-item>
     </el-form>
     <el-table :class="`${prefixCls}-table`" :data="terminalList" v-loading="listLoading">
-      <el-table-column prop="driverName" label="终端名称" align="center" show-overflow-tooltip />
       <el-table-column prop="driverid" label="终端ID" align="center" show-overflow-tooltip />
+      <el-table-column prop="currCardno" label="终端编号" align="center" show-overflow-tooltip />
+      <el-table-column prop="driverName" label="终端名称" align="center" show-overflow-tooltip />
       <el-table-column prop="manufactor" label="厂家" align="center" show-overflow-tooltip />
-      <el-table-column prop="currCardno" label="型号" align="center" show-overflow-tooltip />
+      <el-table-column prop="model" label="型号" align="center" show-overflow-tooltip />
+      <el-table-column prop="type" label="设备类型" align="center" show-overflow-tooltip :formatter="formatType" />
       <el-table-column prop="storeName" label="所属门店" align="center" show-overflow-tooltip />
       <el-table-column prop="state" label="工作状态" align="center" show-overflow-tooltip :formatter="formatState" />
       <el-table-column prop="createTime" label="添加时间" align="center" show-overflow-tooltip :formatter="formatTime" />
@@ -37,17 +39,22 @@
     </div>
     <el-dialog :title="dialogType[dialogStatus]" :visible.sync="dialogFormVisible">
       <el-form :rules="rules" ref="dataForm" :model="terminalTemp" label-position="right" label-width="100px">
+        <el-form-item label="终端ID" prop="driverid">
+          <el-input v-model="terminalTemp.driverid" :readonly="dialogStatus==='update'"></el-input>
+        </el-form-item>
+        <el-form-item label="终端编号" prop="currCardno">
+          <el-input v-model="terminalTemp.currCardno"></el-input>
+        </el-form-item>
         <el-form-item label="终端名称" prop="driverName">
           <el-input v-model="terminalTemp.driverName"></el-input>
-        </el-form-item>
-        <el-form-item label="终端ID" prop="driverid">
-          <el-input v-model="terminalTemp.driverid"></el-input>
         </el-form-item>
         <el-form-item label="厂家" prop="manufactor">
           <el-input v-model="terminalTemp.manufactor"></el-input>
         </el-form-item>
-        <el-form-item label="型号" prop="currCardno">
-          <el-input v-model="terminalTemp.currCardno"></el-input>
+        <el-form-item label="设备类型" prop="type">
+          <el-select v-model="terminalTemp.type" placeholder="请选择设备类型">
+            <el-option v-for="item in typeOptions" :key="item.value" :label="item.label" :value="item.value"></el-option>
+          </el-select>
         </el-form-item>
         <el-form-item label="所属门店" prop="storeId">
           <el-select v-model="terminalTemp.storeId" placeholder="请选择所属门店">
@@ -59,8 +66,8 @@
             <el-option v-for="item in statusOptions" :key="item.value" :label="item.label" :value="item.value"></el-option>
           </el-select>
         </el-form-item>
-        <el-form-item label="添加时间" prop="createTime">
-          <el-date-picker v-model="terminalTemp.createTime" type="datetime" placeholder="请选择时间"></el-date-picker>
+        <el-form-item label="型号" prop="model">
+          <el-input v-model="terminalTemp.model"></el-input>
         </el-form-item>
       </el-form>
       <div slot="footer" class="dialog-footer">
@@ -110,14 +117,25 @@ export default {
           value: 'run'
         }
       ],
+      typeOptions: [
+        {
+          label: '龙门机',
+          value: 1
+        },
+        {
+          label: '隧道机',
+          value: 2
+        }
+      ],
       rules: {
+        currCardno: [{ required: true, message: '终端编号不能为空', trigger: 'change' }],
         driverName: [{ required: true, message: '终端名称不能为空', trigger: 'change' }],
         driverid: [{ required: true, message: '终端ID不能为空', trigger: 'change' }],
         manufactor: [{ required: true, message: '厂家不能为空', trigger: 'change' }],
-        currCardno: [{ required: true, message: '型号不能为空', trigger: 'change' }],
+        mode: [{ required: true, message: '型号不能为空', trigger: 'change' }],
+        type: [{ required: true, message: '设备类型不能为空', trigger: 'change' }],
         storeId: [{ required: true, message: '所属门店不能为空', trigger: 'change' }],
-        state: [{ required: true, message: '工作状态不能为空', trigger: 'change' }],
-        createTime: [{ required: true, message: '添加时间不能为空', trigger: 'change' }]
+        state: [{ required: true, message: '工作状态不能为空', trigger: 'change' }]
       },
       terminalTemp: this.defaultTerminalTemp()
     }
@@ -176,7 +194,8 @@ export default {
       })
     },
     handleUpdate(row) {
-      this.terminalTemp = Object.assign({}, row)
+      const { createTime, updateTime, updateUser, createUser, ...anyprops } = row
+      this.terminalTemp = Object.assign({}, anyprops)
       this.dialogStatus = 'update'
       this.dialogFormVisible = true
       this.$nextTick(() => {
@@ -253,7 +272,6 @@ export default {
       return {
         driverName: '',
         driverid: '',
-        createTime: '',
         currCardno: '',
         manufactor: '',
         model: '',
@@ -271,6 +289,13 @@ export default {
         run: '运行中'
       }
       return stateMap[cellValue]
+    },
+    formatType(row, column, cellValue) {
+      const typeMap = {
+        1: '龙门机',
+        2: '隧道机'
+      }
+      return typeMap[cellValue]
     }
   }
 }
