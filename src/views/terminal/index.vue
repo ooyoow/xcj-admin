@@ -62,7 +62,7 @@
           </el-select>
         </el-form-item>
         <el-form-item label="工作状态" prop="state">
-          <el-select v-model="terminalTemp.state" placeholder="请选择工作状态">
+          <el-select v-model="terminalTemp.state" :readonly="dialogStatus==='update'" placeholder="请选择工作状态">
             <el-option v-for="item in statusOptions" :key="item.value" :label="item.label" :value="item.value"></el-option>
           </el-select>
         </el-form-item>
@@ -110,11 +110,15 @@ export default {
       statusOptions: [
         {
           label: '空闲',
-          value: 'free'
+          value: 1
         },
         {
-          label: '运行中',
-          value: 'run'
+          label: '忙碌',
+          value: 2
+        },
+        {
+          label: '故障',
+          value: 3
         }
       ],
       typeOptions: [
@@ -285,8 +289,9 @@ export default {
     },
     formatState(row, column, cellValue) {
       const stateMap = {
-        free: '空闲',
-        run: '运行中'
+        1: '空闲',
+        2: '忙碌',
+        3: '故障'
       }
       return stateMap[cellValue]
     },
