@@ -141,6 +141,7 @@ export default {
       })
     },
     getOwnerList() {
+      this.listLoading = true
       $axios({
         url: '/api/v1/organization/queryOrganization',
         method: 'get',
