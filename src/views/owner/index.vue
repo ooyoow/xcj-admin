@@ -28,7 +28,7 @@
       <el-table-column fixed="right" label="操作" align="center" width="100">
         <template slot-scope="scope">
           <el-button type="text" size="small" @click="handleUpdate(scope.row)">编辑</el-button>
-          <el-button type="text" size="small" @click="handleDelete(scope.row.driverid)">删除</el-button>
+          <el-button type="text" size="small" @click="handleDelete(scope.row.organizationId)">删除</el-button>
         </template>
       </el-table-column>
     </el-table>
@@ -119,6 +119,25 @@ export default {
       this.dialogFormVisible = true
       this.$nextTick(() => {
         this.$refs['dataForm'].clearValidate()
+      })
+    },
+    handleDelete(organizationId) {
+      $axios({
+        url: '/api/v1/organization/deletOrg',
+        method: 'post',
+        body: { organizationId }
+      }).then(() => {
+        for (const v of this.list) {
+          if (v.organizationId === organizationId) {
+            const index = this.list.indexOf(v)
+            this.list.splice(index, 1)
+            this.$message({
+              message: '删除成功',
+              type: 'success'
+            })
+            break
+          }
+        }
       })
     },
     getOwnerList() {
