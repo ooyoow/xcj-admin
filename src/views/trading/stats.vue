@@ -1,13 +1,27 @@
 <template>
   <div>
-    <div class="title" v-text="title"></div>
+    <div
+      class="title"
+      v-text="title"
+    ></div>
     <div class="bar">
-      <el-radio-group v-model="type" @change="onRadioChange">
+      <el-radio-group
+        v-model="type"
+        @change="onRadioChange"
+      >
         <el-radio-button :label="1">今日</el-radio-button>
         <el-radio-button :label="2">本周</el-radio-button>
         <el-radio-button :label="3">本月</el-radio-button>
       </el-radio-group>
-      <el-date-picker v-model="date" type="daterange" start-placeholder="开始日期" end-placeholder="结束日期" format="yyyy-MM-dd" value-format="yyyy-MM-dd" @change="onDateChange"></el-date-picker>
+      <el-date-picker
+        v-model="date"
+        type="daterange"
+        start-placeholder="开始日期"
+        end-placeholder="结束日期"
+        format="yyyy-MM-dd"
+        value-format="yyyy-MM-dd"
+        @change="onDateChange"
+      ></el-date-picker>
     </div>
   </div>
 </template>

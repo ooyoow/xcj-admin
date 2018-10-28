@@ -38,9 +38,9 @@ const mainFrame = [
         component: () => import('@/views/map')
       },
       {
-        path: '/order',
-        name: 'order',
-        component: () => import('@/views/order'),
+        path: '/trading',
+        name: 'trading',
+        component: () => import('@/views/trading'),
         meta: { meta, icon: 'el-icon-statistics', title: '交易驾驶舱' }
       },
       {
@@ -54,6 +54,12 @@ const mainFrame = [
         name: 'terminal',
         component: () => import('@/views/terminal'),
         meta: { meta, icon: 'el-icon-terminal', title: '终端信息' }
+      },
+      {
+        path: '/owner',
+        name: 'owner',
+        component: () => import('@/views/owner'),
+        meta: { meta, icon: 'el-icon-account-manage', title: '所有者信息' }
       }
     ]
   },
@@ -229,12 +235,6 @@ const mainFrame = [
         name: 'sale',
         component: () => import('@/views/finance/sale'),
         meta: { meta, icon: 'el-icon-sale', title: '销售统计' }
-      },
-      {
-        path: '/fd/owner',
-        name: 'owner',
-        component: () => import('@/views/owner'),
-        meta: { meta, icon: 'el-icon-sale', title: '所有者' }
       }
     ]
   },
