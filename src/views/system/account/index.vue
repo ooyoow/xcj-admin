@@ -1,78 +1,225 @@
 <template>
   <div class="xcj-system-account">
-    <el-form class="form-filter" :inline="true" :model="formSearch">
+    <el-form
+      class="form-filter"
+      :inline="true"
+      :model="formSearch"
+    >
       <el-form-item label="账户名">
-        <el-input clearable v-model="formSearch.loginId" placeholder="请输入账户名查询"></el-input>
+        <el-input
+          clearable
+          v-model="formSearch.loginId"
+          placeholder="请输入账户名查询"
+        ></el-input>
       </el-form-item>
       <el-form-item label="昵称">
-        <el-input clearable v-model="formSearch.name" placeholder="请输入昵称查询"></el-input>
+        <el-input
+          clearable
+          v-model="formSearch.name"
+          placeholder="请输入昵称查询"
+        ></el-input>
       </el-form-item>
       <el-form-item>
-        <el-button type="primary" icon="el-icon-search" @click="handleSearch">查询</el-button>
+        <el-button
+          type="primary"
+          icon="el-icon-search"
+          @click="handleSearch"
+        >查询</el-button>
       </el-form-item>
       <el-form-item>
-        <el-button type="primary" icon="el-icon-plus" @click="handleCreate">添加</el-button>
+        <el-button
+          type="primary"
+          icon="el-icon-plus"
+          @click="handleCreate"
+        >添加</el-button>
       </el-form-item>
     </el-form>
-    <el-table :data="dataList" tooltip-effect="dark" v-loading="listLoading">
-      <el-table-column prop="loginId" label="账户名" show-overflow-tooltip/>
-      <el-table-column prop="name" label="昵称" show-overflow-tooltip/>
-      <el-table-column prop="type" label="类型" show-overflow-tooltip :formatter="formatType" />
-      <el-table-column prop="email" label="邮箱" show-overflow-tooltip/>
-      <el-table-column prop="active" label="状态" show-overflow-tooltip>
+    <el-table
+      :data="dataList"
+      tooltip-effect="dark"
+      v-loading="listLoading"
+    >
+      <el-table-column
+        prop="loginId"
+        label="账户名"
+        show-overflow-tooltip
+      />
+      <el-table-column
+        prop="name"
+        label="昵称"
+        show-overflow-tooltip
+      />
+      <el-table-column
+        prop="type"
+        label="类型"
+        show-overflow-tooltip
+        :formatter="formatType"
+      />
+      <el-table-column
+        prop="email"
+        label="邮箱"
+        show-overflow-tooltip
+      />
+      <el-table-column
+        prop="active"
+        label="状态"
+        show-overflow-tooltip
+      >
         <template slot-scope="scope">
           <el-tag :type="scope.row.active | activeFilter">{{scope.row.active | activeNameFilter}}</el-tag>
         </template>
       </el-table-column>
-      <el-table-column prop="createTime" label="创建时间" show-overflow-tooltip :formatter="formatTime" />
-      <el-table-column prop="updateTime" label="更新时间" show-overflow-tooltip :formatter="formatTime" />
-      <el-table-column align="center" fixed="right" label="操作" width="100">
+      <el-table-column
+        prop="createTime"
+        label="创建时间"
+        show-overflow-tooltip
+        :formatter="formatTime"
+      />
+      <el-table-column
+        prop="updateTime"
+        label="更新时间"
+        show-overflow-tooltip
+        :formatter="formatTime"
+      />
+      <el-table-column
+        align="center"
+        fixed="right"
+        label="操作"
+        width="100"
+      >
         <template slot-scope="scope">
-          <el-button type="text" v-if="scope.row.active === 1" @click="handleModifyActive(scope.row)">禁用
+          <el-button
+            type="text"
+            v-if="scope.row.active === 1"
+            @click="handleModifyActive(scope.row)"
+          >禁用
           </el-button>
-          <el-button type="text" v-if="scope.row.active === 0" @click="handleModifyActive(scope.row)">启用
+          <el-button
+            type="text"
+            v-if="scope.row.active === 0"
+            @click="handleModifyActive(scope.row)"
+          >启用
           </el-button>
-          <el-button type="text" @click="handleUpdate(scope.row)">编辑</el-button>
+          <el-button
+            type="text"
+            @click="handleUpdate(scope.row)"
+          >编辑</el-button>
         </template>
       </el-table-column>
     </el-table>
     <div :class="`${prefixCls}-pagination`">
-      <el-pagination background @size-change="handleSizeChange" @current-change="handleCurrentChange" :current-page="formSearch.currentPage" :page-sizes="[10,20,30, 50]" :page-size="formSearch.size" layout="total, sizes, prev, pager, next, jumper" :total="total">
+      <el-pagination
+        background
+        @size-change="handleSizeChange"
+        @current-change="handleCurrentChange"
+        :current-page="formSearch.currentPage"
+        :page-sizes="[10,20,30, 50]"
+        :page-size="formSearch.size"
+        layout="total, sizes, prev, pager, next, jumper"
+        :total="total"
+      >
       </el-pagination>
     </div>
 
-    <el-dialog :title="dialogType[dialogStatus]" :visible.sync="dialogVisible">
-      <el-form :rules="rules" ref="accountForm" :model="accountTemp" label-position="right" label-width="80px">
-        <el-form-item label="账户名" prop="loginId">
+    <el-dialog
+      :title="dialogType[dialogStatus]"
+      :visible.sync="dialogVisible"
+    >
+      <el-form
+        :rules="rules"
+        ref="accountForm"
+        :model="accountTemp"
+        label-position="right"
+        label-width="80px"
+      >
+        <el-form-item
+          label="账户名"
+          prop="loginId"
+        >
           <el-input v-model="accountTemp.loginId"></el-input>
         </el-form-item>
-        <el-form-item label="昵称" prop="name">
+        <el-form-item
+          label="昵称"
+          prop="name"
+        >
           <el-input v-model="accountTemp.name"></el-input>
         </el-form-item>
-        <el-form-item label="类型" prop="type">
-          <el-select v-model="accountTemp.type" placeholder="请选择类型" @input="getBusinessOptions">
-            <el-option v-for="item in typeOptions" :key="item.value" :label="item.label" :value="item.value"></el-option>
+        <el-form-item
+          label="类型"
+          prop="type"
+        >
+          <el-select
+            v-model="accountTemp.type"
+            placeholder="请选择类型"
+            @input="getBusinessOptions"
+          >
+            <el-option
+              v-for="item in typeOptions"
+              :key="item.value"
+              :label="item.label"
+              :value="item.value"
+            ></el-option>
           </el-select>
         </el-form-item>
-        <el-form-item v-if="accountTemp.type && accountTemp.type !== 1" :label="accountTemp.type | businessFilter" prop="businessId">
-          <el-select v-model="accountTemp.businessId" placeholder="请选择类型">
-            <el-option v-for="item in businessOptions" :key="item.value" :label="item.label" :value="item.value"></el-option>
+        <el-form-item
+          v-if="accountTemp.type && accountTemp.type !== 1"
+          :label="accountTemp.type | businessFilter"
+          prop="businessId"
+        >
+          <el-select
+            v-model="accountTemp.businessId"
+            placeholder="请选择类型"
+          >
+            <el-option
+              v-for="item in businessOptions"
+              :key="item.value"
+              :label="item.label"
+              :value="item.value"
+            ></el-option>
           </el-select>
         </el-form-item>
-        <el-form-item v-if="dialogStatus==='create'" label="密码" prop="password">
-          <el-input v-model="accountTemp.password" type="password"></el-input>
+        <el-form-item
+          v-if="dialogStatus==='create'"
+          label="密码"
+          prop="password"
+        >
+          <el-input
+            v-model="accountTemp.password"
+            type="password"
+          ></el-input>
         </el-form-item>
-        <el-form-item v-if="dialogStatus==='create'" label="确认密码" prop="confirmPassword">
-          <el-input v-model="accountTemp.confirmPassword" type="password"></el-input>
+        <el-form-item
+          v-if="dialogStatus==='create'"
+          label="确认密码"
+          prop="confirmPassword"
+        >
+          <el-input
+            v-model="accountTemp.confirmPassword"
+            type="password"
+          ></el-input>
         </el-form-item>
-        <el-form-item label="邮箱" prop="email">
+        <el-form-item
+          label="邮箱"
+          prop="email"
+        >
           <el-input v-model="accountTemp.email"></el-input>
         </el-form-item>
       </el-form>
-      <div slot="footer" class="dialog-footer">
+      <div
+        slot="footer"
+        class="dialog-footer"
+      >
         <el-button @click="dialogVisible=false">取消</el-button>
-        <el-button v-if="dialogStatus=='create'" type="primary" @click="createAccount">确认</el-button>
-        <el-button v-else type="primary" @click="updateAccount">确认</el-button>
+        <el-button
+          v-if="dialogStatus=='create'"
+          type="primary"
+          @click="createAccount"
+        >确认</el-button>
+        <el-button
+          v-else
+          type="primary"
+          @click="updateAccount"
+        >确认</el-button>
       </div>
     </el-dialog>
   </div>

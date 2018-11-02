@@ -235,6 +235,12 @@ const mainFrame = [
         name: 'sale',
         component: () => import('@/views/finance/sale'),
         meta: { meta, icon: 'el-icon-sale', title: '销售统计' }
+      },
+      {
+        path: '/fd/daily',
+        name: 'daily',
+        component: () => import('@/views/finance/daily'),
+        meta: { meta, icon: 'el-icon-summary', title: '每日统计' }
       }
     ]
   },

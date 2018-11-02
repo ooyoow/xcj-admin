@@ -4,43 +4,114 @@
       <div class="filter">
         <div>会员增长情况</div>
         <div>
-          <el-button icon="el-icon-download" type="primary">导出数据</el-button>
-          <el-select v-model="queryUserIncrease.type" placeholder="请选择" @input="onInputQueryUserParam">
-            <el-option v-for="item in queryOptions" :key="item.value" :label="item.label" :value="item.value">
+          <el-button
+            icon="el-icon-download"
+            type="primary"
+            @click="handleExportUser"
+          >导出数据</el-button>
+          <el-select
+            v-model="queryUserIncrease.type"
+            placeholder="请选择"
+            @input="onInputQueryUserParam"
+          >
+            <el-option
+              v-for="item in queryOptions"
+              :key="item.value"
+              :label="item.label"
+              :value="item.value"
+            >
             </el-option>
           </el-select>
-          <el-date-picker v-model="queryUserIncrease.date" :clearable="false" :type="queryUserIncrease.type === 1 ? 'month' : 'year'" placeholder="选择年" @input="onInputQueryUserParam"></el-date-picker>
+          <el-date-picker
+            v-model="queryUserIncrease.date"
+            :clearable="false"
+            :type="queryUserIncrease.type === 1 ? 'month' : 'year'"
+            placeholder="选择年"
+            @input="onInputQueryUserParam"
+          ></el-date-picker>
         </div>
       </div>
-      <line-chart yAxisName="（个）" height='300px' width='100%' :xAxisData="userIncreate.xAxisData" :seriesData="userIncreate.seriesData"></line-chart>
+      <line-chart
+        yAxisName="（个）"
+        height='300px'
+        width='100%'
+        :xAxisData="userIncreate.xAxisData"
+        :seriesData="userIncreate.seriesData"
+      ></line-chart>
     </div>
     <div class="member-item">
       <div class="filter">
         <div>会员端口来源</div>
         <div>
-          <el-button icon="el-icon-download" type="primary">导出数据</el-button>
-          <el-select v-model="queryUserPortSource.type" placeholder="请选择" @input="onInputQueryUserPortSource">
-            <el-option v-for="item in queryOptions" :key="item.value" :label="item.label" :value="item.value">
+          <el-button
+            icon="el-icon-download"
+            type="primary"
+            @click="handleExportUserPortSource"
+          >导出数据</el-button>
+          <el-select
+            v-model="queryUserPortSource.type"
+            placeholder="请选择"
+            @input="onInputQueryUserPortSource"
+          >
+            <el-option
+              v-for="item in queryOptions"
+              :key="item.value"
+              :label="item.label"
+              :value="item.value"
+            >
             </el-option>
           </el-select>
-          <el-date-picker v-model="queryUserPortSource.date" :clearable="false" :type="queryUserPortSource.type === 1 ? 'month' : 'year'" placeholder="选择年" @input="onInputQueryUserPortSource" />
+          <el-date-picker
+            v-model="queryUserPortSource.date"
+            :clearable="false"
+            :type="queryUserPortSource.type === 1 ? 'month' : 'year'"
+            placeholder="选择年"
+            @input="onInputQueryUserPortSource"
+          />
         </div>
       </div>
-      <pie height='300px' width='100%' :legendData="userPortSource.legendData" :seriesData="userPortSource.seriesData"></pie>
+      <pie
+        height='300px'
+        width='100%'
+        :legendData="userPortSource.legendData"
+        :seriesData="userPortSource.seriesData"
+      ></pie>
     </div>
     <div class="member-item">
       <div class="filter">
         <div>会员消费金额分布</div>
         <div>
-          <el-button type="primary">导出数据</el-button>
-          <el-select v-model="queryUserConsume.type" placeholder="请选择" @input="onQueryUserConsume">
-            <el-option v-for="item in queryOptions" :key="item.value" :label="item.label" :value="item.value">
+          <el-button
+            type="primary"
+            @click="handleExportUserConsume"
+          >导出数据</el-button>
+          <el-select
+            v-model="queryUserConsume.type"
+            placeholder="请选择"
+            @input="onQueryUserConsume"
+          >
+            <el-option
+              v-for="item in queryOptions"
+              :key="item.value"
+              :label="item.label"
+              :value="item.value"
+            >
             </el-option>
           </el-select>
-          <el-date-picker v-model="queryUserConsume.date" :clearable="false" :type="queryUserConsume.type === 1 ? 'month' : 'year'" placeholder="选择年" @input="onQueryUserConsume" />
+          <el-date-picker
+            v-model="queryUserConsume.date"
+            :clearable="false"
+            :type="queryUserConsume.type === 1 ? 'month' : 'year'"
+            placeholder="选择年"
+            @input="onQueryUserConsume"
+          />
         </div>
       </div>
-      <bar height='300px' width='100%' :option="userConsumeChartOption"></bar>
+      <bar
+        height='300px'
+        width='100%'
+        :option="userConsumeChartOption"
+      ></bar>
     </div>
   </div>
 </template>
@@ -51,8 +122,12 @@ import LineChart from '@/components/charts/line'
 import Pie from '@/components/charts/pie'
 import Bar from '@/components/charts/bar'
 import $axios from '@/utils/axios'
+
 import { getDateByInterval, createMonthByYear } from '@/utils/date'
+import { expandParams } from '@/utils/general'
 import './portrait.scss'
+import { _getUserIncreate } from '@/service/portrait'
+import BASE_URL from '../../../../config/serve'
 export default {
   data() {
     return {
@@ -149,11 +224,7 @@ export default {
   methods: {
     // 查询用户增长记录
     getUserIncrease(params) {
-      $axios({
-        method: 'get',
-        url: '/api/v1/user/queryUserIncrease',
-        params: params
-      }).then(response => {
+      _getUserIncreate(params).then(response => {
         const { resultObj } = response
         const { type, year, month } = params
         let xAxisData = [],
@@ -238,10 +309,7 @@ export default {
     },
 
     onInputQueryUserParam(value) {
-      const { type, date } = this.queryUserIncrease
-      const year = format(date, 'YYYY')
-      const params = { type, year, month: '' }
-      type === 1 ? (params.month = format(date, 'MM')) : params
+      const params = this.transformQueryUserParams()
       this.getUserIncrease(params)
     },
 
@@ -284,6 +352,35 @@ export default {
         type: 1,
         date: format(new Date(), 'YYYY-MM')
       }
+    },
+
+    // 导出会员增长数据
+    handleExportUser() {
+      const params = this.transformQueryUserParams()
+      window.open(`${BASE_URL}/api/v1/user/exportUserIncrease${expandParams(params)}`)
+    },
+
+    // 导出会员端口来源
+    handleExportUserPortSource() {
+      const { type, date } = this.queryUserPortSource
+      const params = this.formatQueryParams(type, date)
+      window.open(`${BASE_URL}/api/v1/user/exportUserSource${expandParams(params)}`)
+    },
+
+    // 导出会员消费金额
+    handleExportUserConsume() {
+      const { type, date } = this.queryUserConsume
+      const params = this.formatQueryParams(type, date)
+      window.open(`${BASE_URL}/api/v1/user/exportUserConsumption${expandParams(params)}`)
+    },
+
+    // 处理会员增长情况查询参数
+    transformQueryUserParams() {
+      const { type, date } = this.queryUserIncrease
+      const year = format(date, 'YYYY')
+      const params = { type, year, month: '' }
+      type === 1 ? (params.month = format(date, 'MM')) : params
+      return params
     }
   }
 }
