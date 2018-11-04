@@ -14,7 +14,7 @@
       padding: 0.875rem;
       text-align: center;
       color: #3a8ee6;
-      background-color: #e6f7ff;
+      background-color: #fdf6ec;
     }
     .step-one {
       .product-list {
@@ -42,7 +42,18 @@
         border-bottom: 0;
       }
     }
-    .step-two {
+    .step-two {}
+    .step-three {
+      padding: 1rem;
+      .success {
+        margin: 0 auto;
+        padding: 1rem;
+        width: 200px;
+        text-align: center;
+        color: #409eff;
+        border-radius: .25rem;
+        border: 1px solid #ebeef5;
+      }
     }
     .action {
       padding: 1rem;

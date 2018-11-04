@@ -9,7 +9,7 @@
       <el-step title="配置成功"></el-step>
     </el-steps>
     <div class="content">
-      <div class="title">选择产品分类</div>
+      <div class="title">{{stepTitle()}}</div>
       <div
         class="step-one"
         v-if="stepActive === 1"
@@ -48,10 +48,9 @@
             type="primary"
             :disabled="[0, 1, 2].indexOf(fromProduct.pType) < 0"
             @click="handleNext(2)"
-          >下一步，填写商品信息</el-button>
+          >下一步，填写产品信息</el-button>
         </div>
       </div>
-
       <div
         class="step-two"
         v-if="stepActive === 2"
@@ -345,6 +344,21 @@
           >完成，提交产品</el-button>
         </div>
       </div>
+      <div
+        class="step-three"
+        v-if="stepActive === 3"
+      >
+        <div class="success">
+          <i class="el-icon-circle-check" />
+          <span>保存成功！</span>
+        </div>
+        <div class="action">
+          <el-button
+            type="primary"
+            @click="handleConfirm"
+          >确定</el-button>
+        </div>
+      </div>
     </div>
   </div>
 </template>
@@ -359,7 +373,6 @@ export default {
     return {
       prefixCls: 'xcj-product-configure',
       stepActive: 1,
-      productType: null,
       couponTempOptions: [],
       washModeOptions: [
         {
@@ -379,31 +392,7 @@ export default {
           value: 4
         }
       ],
-      fromProduct: {
-        pType: '', // 产品类别 （1:套餐卡，2:次卡，3:限次卡）
-        advertisement: '', // 广告语
-        pAllnum: '', // 预备发行量
-        brand: '', // 商品品牌
-        details: '', // 产品详情
-        discountRate: '', // 折扣率
-        upTime: '', // 上架时间
-        downTime: '', // 下架时间
-        groupCustomer: '', // 集团客户
-        marketPrice: '', // 市场价
-        model: '', // 模式
-        navigation: '', //  导航
-        pCode: '', // 产品编码
-        pContent: '', // 简介
-        pCouponId: '', // 优惠券Id
-        pImg: '', // 产品图片
-        pName: '', // 产品名称
-        pNum: '', // 次数
-        pRice: '', // 售价
-        pSendNum: '', // 赠送数量
-        pValidateTime: '', // 有效期
-        recommend: '', // 推荐指数 0-100
-        style: '' // 风格
-      },
+      fromProduct: this.initProductTemp(),
       rules: {
         pType: [{ required: true, message: '终端名称不能为空', trigger: 'change' }],
         advertisement: [{ required: true, message: '广告语不能为空', trigger: 'change' }],
@@ -467,17 +456,57 @@ export default {
       this.$refs[refName].validate(valid => {
         if (valid) {
           _createProduct(this.fromProduct).then(response => {
-            this.$notify({
-              title: '成功',
-              message: '保存成功',
-              type: 'success',
-              duration: 2000
-            })
+            this.stepActive = 3
+            this.fromProduct = this.initProductTemp()
           })
         } else {
           return false
         }
       })
+    },
+
+    // 确定
+    handleConfirm() {
+      this.stepActive = 3
+      this.fromProduct = this.initProductTemp()
+    },
+
+    // 步骤标题
+    stepTitle() {
+      const titleMap = {
+        1: '选择产品分类',
+        2: '填写基本信息'
+      }
+      return titleMap[this.stepActive]
+    },
+
+    // 初始化产品配置模板
+    initProductTemp() {
+      return {
+        pType: '', // 产品类别 （1:套餐卡，2:次卡，3:限次卡）
+        advertisement: '', // 广告语
+        pAllnum: '', // 预备发行量
+        brand: '', // 商品品牌
+        details: '', // 产品详情
+        discountRate: '', // 折扣率
+        upTime: '', // 上架时间
+        downTime: '', // 下架时间
+        groupCustomer: '', // 集团客户
+        marketPrice: '', // 市场价
+        model: '', // 模式
+        navigation: '', //  导航
+        pCode: '', // 产品编码
+        pContent: '', // 简介
+        pCouponId: '', // 优惠券Id
+        pImg: '', // 产品图片
+        pName: '', // 产品名称
+        pNum: '', // 次数
+        pRice: '', // 售价
+        pSendNum: '', // 赠送数量
+        pValidateTime: '', // 有效期
+        recommend: '', // 推荐指数 0-100
+        style: '' // 风格
+      }
     }
   }
 }
