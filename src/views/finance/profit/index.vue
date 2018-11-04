@@ -5,6 +5,20 @@
       :inline="true"
       v-model="queryParams"
     >
+      <el-form-item label="门店">
+        <el-select
+          v-model="queryParams.storeId"
+          placeholder="请选择门店"
+          @input="handleSelectStore"
+        >
+          <el-option
+            v-for="store in storeOptions"
+            :key="store.value"
+            :label="store.label"
+            :value="store.value"
+          ></el-option>
+        </el-select>
+      </el-form-item>
       <el-form-item label="起止时间">
         <el-date-picker
           :clearable="false"
@@ -18,7 +32,7 @@
         />
       </el-form-item>
       <div class="paytotal">
-        <el-tag>合计金额：{{paytotal}} 元</el-tag>
+        <el-tag>合计到账服务额：{{profitTotal}} 元</el-tag>
       </div>
     </el-form>
 
@@ -35,42 +49,23 @@
         show-overflow-tooltip
       />
       <el-table-column
-        prop="orderNum"
-        label="订单总数"
+        prop="storeName"
+        label="门店名称"
         align="center"
         show-overflow-tooltip
       />
       <el-table-column
-        prop="payAmount"
-        label="支付金额"
+        prop="serverAmount"
+        label="服务额"
         align="center"
         show-overflow-tooltip
       />
       <el-table-column
-        prop="check"
-        label="核销状态"
+        prop="profitAmount"
+        label="到账服务额"
         align="center"
         show-overflow-tooltip
-      >
-        <template slot-scope="scope">
-          <el-tag :type="scope.row.check ? 'success' : 'danger'">{{scope.row.check | checkFilter}}</el-tag>
-        </template>
-      </el-table-column>
-      <el-table-column
-        fixed="right"
-        label="操作"
-        align="center"
-        width="100"
-      >
-        <template slot-scope="scope">
-          <el-button
-            type="text"
-            size="small"
-            :disabled="scope.row.check"
-            @click="handleWriteOff(scope.row.id)"
-          >核销</el-button>
-        </template>
-      </el-table-column>
+      />
     </el-table>
     <div :class="`${prefixCls}-pagination`">
       <el-pagination
@@ -89,84 +84,61 @@
 </template>
 
 <script>
-import $axios from '@/utils/axios'
+import './profit.scss'
 import DateUtils from '@/utils/date'
 import { debounce } from '@/utils/general'
-import './daily.scss'
-import { _getDailySales, _dailyWriteOff } from '@/service/daily'
+import { _getStoreListByLoginUser, _getProfitStatsList } from '@/service/profit'
 export default {
-  name: 'daily',
+  name: 'profit',
   data() {
     return {
-      prefixCls: 'xcj-finance-daily',
+      prefixCls: 'xcj-finance-profit',
+      storeOptions: [],
       queryParams: {
         date: this.initQueryDate(),
+        storeId: '',
         currentPage: 1,
         size: 10
       },
       listLoading: false,
       list: [],
       total: 0,
-      paytotal: 0,
+      profitTotal: 0,
       onDateChange: null
     }
   },
   created() {
-    this.getDailySales(this.queryParams)
+    this.initData()
     this.onDateChange = debounce(() => {
       this.queryParams.currentPage = 1
-      this.getDailySales(this.queryParams)
+      this.getProfitStatsList(this.queryParams)
     }, 200)
   },
   methods: {
+    handleSelectStore() {
+      this.getProfitStatsList(this.queryParams)
+    },
     handleSizeChange(val) {
       this.queryParams.size = val
-      this.getDailySales()
+      this.getProfitStatsList()
     },
 
     handleCurrentChange(val, key) {
       this.queryParams.currentPage = val
-      this.getDailySales()
-      switch (key) {
-        case 'order':
-          this.queryParams.currentPage = val
-          this.getDailySales()
-          break
-        case 'washDetail':
-          this.washDetail.currentPage = val
-          break
-      }
+      this.getProfitStatsList()
     },
 
-    // 核销
-    handleWriteOff(id) {
-      _dailyWriteOff(id).then(response => {
-        for (const v of this.list) {
-          if (v.id === id) {
-            const index = this.list.indexOf(v)
-            this.list[index] = Object.assign(this.list[index], { check: true })
-            this.$message.success('核销成功')
-            // this.$message({
-            //   message: '删除成功',
-            //   type: 'success'
-            // })
-            break
-          }
-        }
-      })
-    },
-
-    // 查询每日统计list
-    getDailySales() {
+    // 查询列表
+    getProfitStatsList() {
       const params = this.formatQueryParams()
       this.listLoading = true
-      _getDailySales(params)
+      _getProfitStatsList(params)
         .then(response => {
           const { resultObj, totalSize } = response
           this.listLoading = false
-          this.list = resultObj.orderstaticsList || []
+          this.list = resultObj.serverstaticsList || []
           this.total = totalSize
-          this.paytotal = resultObj.paytotal
+          this.paytotal = resultObj.profitTotal
         })
         .catch(error => {
           this.listLoading = false
@@ -184,16 +156,32 @@ export default {
     formatTime(row, column, cellValue) {
       return DateUtils.format(cellValue, 'YYYY-MM-DD')
     },
+
     initQueryDate() {
       const nowDate = DateUtils.format(+new Date(), 'YYYY-MM-DD')
       const pastThirtyDateTime = +new Date() - 60 * 60 * 24 * 1000 * 60
       const pastThirtyDate = DateUtils.format(pastThirtyDateTime, 'YYYY-MM-DD')
       return [pastThirtyDate, nowDate]
-    }
-  },
-  filters: {
-    checkFilter(val) {
-      return val ? '已核销' : '未核销'
+    },
+
+    // 初始化加载数据
+    initData() {
+      _getStoreListByLoginUser().then(response => {
+        const { resultObj } = response
+        if (resultObj && Array.isArray(resultObj) && resultObj.length > 0) {
+          this.storeOptions = resultObj.map((item, index) => {
+            const { storeId, storeName } = item
+            if (index === 0) {
+              this.queryParams.storeId = storeId
+            }
+            return {
+              label: storeName,
+              value: storeId
+            }
+          })
+          this.getProfitStatsList(this.queryParams)
+        }
+      })
     }
   }
 }

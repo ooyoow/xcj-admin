@@ -283,6 +283,7 @@ export default {
           if (v.organizationId === organizationId) {
             const index = this.list.indexOf(v)
             this.list.splice(index, 1)
+            this.total = this.total - 1
             this.$message({
               message: '删除成功',
               type: 'success'

@@ -20,6 +20,6 @@ export const _dailyWriteOff = id => {
   return $axios({
     url: '/api/v1/statistics/checkOrder',
     method: 'post',
-    data: { id }
+    params: { id }
   })
 }

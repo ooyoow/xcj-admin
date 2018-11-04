@@ -38,6 +38,6 @@ export const deleteOwner = organizationId => {
   return $axios({
     url: '/api/v1/organization/deletOrg',
     method: 'post',
-    body: { organizationId }
+    params: { organizationId }
   })
 }
