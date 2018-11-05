@@ -16,8 +16,9 @@
           @change="_getOrderList"
         />
       </el-form-item>
-      <el-form-item label="订单编号">
+      <el-form-item label="订单号">
         <el-input
+          type="number"
           v-model="queryOrderParams.orderNo"
           clearable
           @input="_getOrderList"
@@ -55,6 +56,7 @@
       :data="order.list"
     >
       <el-table-column
+        width="180"
         prop="orderNo"
         label="订单号"
         show-overflow-tooltip
@@ -84,6 +86,7 @@
         show-overflow-tooltip
       />
       <el-table-column
+        width="140"
         prop="phone"
         label="手机号码"
         align="center"

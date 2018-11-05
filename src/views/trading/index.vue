@@ -799,7 +799,7 @@ export default {
         date: []
       },
       productSalesParams: {
-        type: 0,
+        type: 1,
         date: []
       },
       productSalesChartOption: {
@@ -1096,7 +1096,7 @@ export default {
 
     // 查询订单详情
     loadOrderDetail(orderStatus) {
-      getOrderDetail().then(response => {
+      getOrderDetail(orderStatus).then(response => {
         const { resultObj } = response
         switch (orderStatus) {
           case 'paidOrder': // 已付款订单
@@ -1109,7 +1109,7 @@ export default {
             break
           case 'unpaymentOrder': // 待付款订单
             this.unpaymentOrder = {
-              ...this.unpaymentOrderList,
+              ...this.unpaymentOrder,
               list: resultObj || [],
               total: resultObj ? resultObj.length : 0
             }
@@ -1251,7 +1251,7 @@ export default {
         this.userView = response.resultObj
       })
       // 获取产品实时销量
-      this.getProductSales(0)
+      this.getProductSales(1)
 
       // 获取订单统计
       this.queryOrderStats(1)

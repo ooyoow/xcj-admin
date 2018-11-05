@@ -135,10 +135,11 @@ export default {
       _getProfitStatsList(params)
         .then(response => {
           const { resultObj, totalSize } = response
+          const { serverstaticsList, profitTotal } = resultObj
           this.listLoading = false
-          this.list = resultObj.serverstaticsList || []
+          this.list = serverstaticsList || []
           this.total = totalSize
-          this.paytotal = resultObj.profitTotal
+          this.profitTotal = profitTotal
         })
         .catch(error => {
           this.listLoading = false
