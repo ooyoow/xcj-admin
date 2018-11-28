@@ -173,6 +173,18 @@ const mainFrame = [
     meta: { meta, icon: 'el-icon-operation', title: '运营中心' },
     children: [
       {
+        path: '/oc/order/log',
+        name: 'order',
+        component: () => import('@/views/operation/order'),
+        meta: { meta, icon: 'el-icon-account-manage', title: '订单记录' }
+      },
+      {
+        path: '/oc/wash/log',
+        name: 'washLog',
+        component: () => import('@/views/operation/washLog'),
+        meta: { meta, icon: 'el-icon-account-manage', title: '洗车记录' }
+      },
+      {
         path: '/oc/user/list',
         name: 'list',
         component: () => import('@/views/operation/user'),
