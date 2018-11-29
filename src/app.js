@@ -5,13 +5,13 @@ import '@/libs/element-ui'
 import '@/assets/icon/iconfont.css'
 import router, { mainRoutes } from '@/router'
 import store from '@/store'
-import BASE_URL, { FILE_BASE_URL } from '../config/serve'
 import App from './App'
 import '@/components'
 import '@/permission'
+const appConfig = require('../config/app')
 
-Vue.prototype.$base_url = BASE_URL
-Vue.prototype.$file_base_url = FILE_BASE_URL
+Vue.prototype.$base_url = appConfig.baseUrl
+Vue.prototype.$file_base_url = appConfig.fileBaseUrl
 // 注册组件
 Vue.use(BaiduMap, { ak: 'ccL3AHgm0R1prHkC8XsrH9Vo16wf5V1W' })
 

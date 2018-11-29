@@ -221,7 +221,8 @@
 import $axios from '@/utils/axios'
 import './summary.scss'
 import { expandParams } from '@/utils/general'
-import BASE_URL from '../../../../config/serve'
+const appConfig = require('../../../../config/app')
+
 export default {
   name: 'Summary',
   data() {
@@ -260,7 +261,7 @@ export default {
         case 1:
         case 2:
         case 3:
-          window.open(`${BASE_URL}/api/v1/finance/exportGeneral?type=${this.type}`)
+          window.open(`${appConfig.baseUrl}/api/v1/finance/exportGeneral?type=${this.type}`)
           break
         case 4:
           const params = {
@@ -268,7 +269,7 @@ export default {
             start: this.date[0],
             end: this.date[1]
           }
-          window.open(`${BASE_URL}/api/v1/finance/exportGeneral${expandParams(params)}`)
+          window.open(`${appConfig.baseUrl}/api/v1/finance/exportGeneral${expandParams(params)}`)
           break
       }
     },

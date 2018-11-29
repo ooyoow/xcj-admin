@@ -23,14 +23,13 @@
         <el-form-item label="车牌号">
           <el-input
             clearable
-            type="number"
             v-model.number="formFilter.cardNo"
             placeholder="请输入车牌号"
           />
         </el-form-item>
         <el-form-item label="产品类别">
           <el-select
-            v-model="formFilter.pName"
+            v-model="formFilter.pType"
             clearable
             placeholder="请选择产品类别"
           >
@@ -160,15 +159,15 @@ export default {
   },
   methods: {
     handleSearch() {
-      this.getWashLogList();
+      this.getWashList();
     },
     handleSizeChange(value) {
       this.formFilter.size = value;
-      this.getWashLogList();
+      this.getWashList();
     },
     handleCurrentChange(value) {
       this.formFilter.currentPage = value;
-      this.getWashLogList();
+      this.getWashList();
     },
     // 查询门店下拉选项
     getStoreOptions() {

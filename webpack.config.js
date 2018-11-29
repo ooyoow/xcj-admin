@@ -6,6 +6,7 @@ const VueLoaderPlugin = require('vue-loader/lib/plugin')
 const env = process.env.NODE_ENV
 const devMode = env !== 'production'
 const cssLoader = { loader: 'css-loader' }
+const appConfig = require('./config/app')
 
 module.exports = {
   entry: {
@@ -13,7 +14,6 @@ module.exports = {
   },
   output: {
     path: path.resolve(__dirname, './dist'),
-    // publicPath: '/dist/',
     filename: '[name].[hash:8].js',
     chunkFilename: '[id].[hash:8].js',
     libraryTarget: 'umd'
@@ -81,6 +81,7 @@ module.exports = {
       chunkFilename: '[id].[hash:8].css'
     }),
     new HtmlWebpackPlugin({
+      title: appConfig.name,
       filename: 'index.html',
       template: 'src/index.html',
       // inject: true,

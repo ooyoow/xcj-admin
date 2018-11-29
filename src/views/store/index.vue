@@ -524,7 +524,8 @@
 import { mapState, mapActions } from 'vuex'
 import DateUtils from '@/utils/date'
 import { interceptFileName } from '@/utils/general'
-import BASE_URL from '../../../config/serve'
+const appConfig = require('../../../config/app')
+
 import './store.scss'
 import {
   getStoreList,
@@ -540,7 +541,7 @@ export default {
   data() {
     return {
       prefixCls: 'xcj-store',
-      BASE_URL: BASE_URL,
+      baseUrl: appConfig.baseUrl,
       formSearch: {
         storeName: '',
         state: '',

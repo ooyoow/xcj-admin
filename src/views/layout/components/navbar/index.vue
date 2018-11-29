@@ -2,32 +2,63 @@
   <section>
     <nav class="navbar">
       <div class="navbar-brand">
-        <div class="logo">福瑞道</div>
+        <div class="logo">{{appName}}</div>
       </div>
       <div class="navbar-menu">
         <menu-nav class="navbar-start"></menu-nav>
         <ul class="navbar-end">
           <li class="navbar-item">
-            <el-tooltip effect="dark" :content="isFullScreen ? '退出全屏' : '全屏'" placement="bottom">
-              <el-button class="btn-text can-hover" type="text" @click="appToggleFullScreen">
-                <i class="el-icon-rank" style="font-size: 1.25rem"></i>
+            <el-tooltip
+              effect="dark"
+              :content="isFullScreen ? '退出全屏' : '全屏'"
+              placement="bottom"
+            >
+              <el-button
+                class="btn-text can-hover"
+                type="text"
+                @click="appToggleFullScreen"
+              >
+                <i
+                  class="el-icon-rank"
+                  style="font-size: 1.25rem"
+                ></i>
               </el-button>
             </el-tooltip>
           </li>
           <li class="navbar-item">
-            <el-tooltip effect="dark" content="通知" placement="bottom">
-              <el-button class="btn-text can-hover" type="text">
-                <i class="el-icon-bell" style="font-size: 1.25rem"></i>
+            <el-tooltip
+              effect="dark"
+              content="通知"
+              placement="bottom"
+            >
+              <el-button
+                class="btn-text can-hover"
+                type="text"
+              >
+                <i
+                  class="el-icon-bell"
+                  style="font-size: 1.25rem"
+                ></i>
               </el-button>
             </el-tooltip>
           </li>
           <li class="navbar-item">
             <el-dropdown>
-              <el-button class="btn-text can-hover" type="text">
-                <i class="el-icon-menu" style="font-size: 1.25rem"></i>
+              <el-button
+                class="btn-text can-hover"
+                type="text"
+              >
+                <i
+                  class="el-icon-menu"
+                  style="font-size: 1.25rem"
+                ></i>
               </el-button>
               <el-dropdown-menu slot="dropdown">
-                <el-dropdown-item v-for="theme in themeList" :key="theme.key" @click.native="setTheme(theme.key)">
+                <el-dropdown-item
+                  v-for="theme in themeList"
+                  :key="theme.key"
+                  @click.native="setTheme(theme.key)"
+                >
                   {{theme.name}}
                 </el-dropdown-item>
                 <!-- <el-dropdown-item>
@@ -39,7 +70,11 @@
           <li class="navbar-item">
             <el-dropdown>
               <div>
-                <img class="img-user" src="@/assets/images/user.png" alt="用户">
+                <img
+                  class="img-user"
+                  src="@/assets/images/user.png"
+                  alt="用户"
+                >
                 <span class="btn-text">{{userInfo.name}}</span>
               </div>
               <el-dropdown-menu slot="dropdown">
@@ -55,7 +90,11 @@
         </ul>
       </div>
     </nav>
-    <change-password :show="showChangePassword" :onSubmit="handleSubmitPassword" :onCancel="cancelChangePassword" />
+    <change-password
+      :show="showChangePassword"
+      :onSubmit="handleSubmitPassword"
+      :onCancel="cancelChangePassword"
+    />
   </section>
 </template>
 <script>
@@ -63,11 +102,13 @@ import { mapState, mapActions } from "vuex";
 import { MessageBox } from "element-ui";
 import MenuNav from "./MenuNav";
 import ChangePassword from "./ChangePassword";
+const appConfig = require("../../../../../config/app");
 export default {
   name: "aside-menu",
   components: { MenuNav, ChangePassword },
   data() {
     return {
+      appName: appConfig.name,
       showChangePassword: false
     };
   },

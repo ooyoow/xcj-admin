@@ -30,7 +30,7 @@
         </el-form-item>
         <el-form-item label="产品类别">
           <el-select
-            v-model="formFilter.pName"
+            v-model="formFilter.pType"
             clearable
             placeholder="请选择产品类别"
           >

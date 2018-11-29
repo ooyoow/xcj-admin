@@ -127,7 +127,8 @@ import { getDateByInterval, createMonthByYear } from '@/utils/date'
 import { expandParams } from '@/utils/general'
 import './portrait.scss'
 import { _getUserIncreate } from '@/service/portrait'
-import BASE_URL from '../../../../config/serve'
+const appConfig = require('../../../../config/app')
+
 export default {
   data() {
     return {
@@ -357,21 +358,21 @@ export default {
     // 导出会员增长数据
     handleExportUser() {
       const params = this.transformQueryUserParams()
-      window.open(`${BASE_URL}/api/v1/user/exportUserIncrease${expandParams(params)}`)
+      window.open(`${appConfig.baseUrl}/api/v1/user/exportUserIncrease${expandParams(params)}`)
     },
 
     // 导出会员端口来源
     handleExportUserPortSource() {
       const { type, date } = this.queryUserPortSource
       const params = this.formatQueryParams(type, date)
-      window.open(`${BASE_URL}/api/v1/user/exportUserSource${expandParams(params)}`)
+      window.open(`${appConfig.baseUrl}/api/v1/user/exportUserSource${expandParams(params)}`)
     },
 
     // 导出会员消费金额
     handleExportUserConsume() {
       const { type, date } = this.queryUserConsume
       const params = this.formatQueryParams(type, date)
-      window.open(`${BASE_URL}/api/v1/user/exportUserConsumption${expandParams(params)}`)
+      window.open(`${app.baseUrl}/api/v1/user/exportUserConsumption${expandParams(params)}`)
     },
 
     // 处理会员增长情况查询参数

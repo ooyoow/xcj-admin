@@ -3,8 +3,8 @@ import { Message } from 'element-ui'
 import store from '@/store'
 import { getCookie } from '@/utils/cookie'
 import { deleteObjectEmptyValue } from '@/utils/general'
-import BASE_URL from '../../config/serve'
 
+const appConfig = require('../../config/app')
 const errorAlert = (message = '系统繁忙') => {
   Message({
     message: message,
@@ -14,7 +14,7 @@ const errorAlert = (message = '系统繁忙') => {
 }
 
 const $axios = axios.create({
-  baseURL: BASE_URL, // api的base_url
+  baseURL: appConfig.baseUrl,
   timeout: 30000 // 请求超时
 })
 
@@ -45,7 +45,7 @@ $axios.interceptors.response.use(
       const { success, message } = response.data
       if (!success) {
         errorAlert(message)
-        return new Promise(() => { })
+        return new Promise(() => {})
       }
     }
     return response.data
@@ -63,7 +63,7 @@ $axios.interceptors.response.use(
     if (error.message === 'Network Error') {
       error.message = '服务异常'
     }
-    errorAlert(error.message);
+    errorAlert(error.message)
     return Promise.reject(error)
   }
 )
