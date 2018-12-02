@@ -9,7 +9,7 @@
           <el-input
             clearable
             type="number"
-            v-model.number="formFilter.orderNo"
+            v-model="formFilter.orderNo"
             placeholder="请输入订单编号"
           />
         </el-form-item>
@@ -42,12 +42,29 @@
             />
           </el-select>
         </el-form-item>
+        <el-form-item label="起止时间">
+          <el-date-picker
+            v-model="formFilter.date"
+            type="daterange"
+            start-placeholder="开始日期"
+            end-placeholder="结束日期"
+            format="yyyy-MM-dd"
+            value-format="yyyy-MM-dd"
+          />
+        </el-form-item>
         <el-form-item>
           <el-button
             type="primary"
             icon="el-icon-search"
             @click="handleSearch"
           >查询</el-button>
+        </el-form-item>
+        <el-form-item>
+          <el-button
+            type="primary"
+            icon="el-icon-download"
+            @click="handleExport"
+          >导出数据</el-button>
         </el-form-item>
       </el-form>
     </div>
@@ -61,6 +78,12 @@
         label="订单编号"
         align="center"
         :width="200"
+        show-overflow-tooltip
+      />
+      <el-table-column
+        prop="pName"
+        label="产品名称"
+        align="center"
         show-overflow-tooltip
       />
       <el-table-column
@@ -78,20 +101,14 @@
         :formatter="formatDate"
       />
       <el-table-column
-        prop="userName"
-        label="用户昵称"
-        align="center"
-        show-overflow-tooltip
-      />
-      <el-table-column
         prop="phone"
         label="手机号"
         align="center"
         show-overflow-tooltip
       />
       <el-table-column
-        prop="pName"
-        label="产品名称"
+        prop="userName"
+        label="用户昵称"
         align="center"
         show-overflow-tooltip
       />
@@ -148,6 +165,15 @@ export default {
       this.formFilter.currentPage = value;
       this.getOrderList();
     },
+    handleExport() {
+      const params = this.formatFormFilter();
+      window.open(
+        `${appConfig.baseUrl}/api/v1/payRecd/exportPayOrderBypage${expandParams(
+          params
+        )}`
+      );
+    },
+
     // 查询门店下拉选项
     getStoreOptions() {
       _getStoreOptions().then(response => {
@@ -165,10 +191,10 @@ export default {
       });
     },
 
-    // 查询洗车记录
+    // 查询订单记录
     getOrderList() {
       this.loading = true;
-      _getOrderList(this.formFilter)
+      _getOrderList(this.formatFormFilter())
         .then(response => {
           this.loading = false;
           const { resultObj, totalSize } = response;
@@ -188,6 +214,14 @@ export default {
     },
     formatDate(row, column, cellValue) {
       return DateUtils.format(cellValue);
+    },
+    formatFormFilter() {
+      const { date, ...otherProps } = this.formFilter;
+      return {
+        start: date && Array.isArray(date) ? date[0] : "",
+        end: date && Array.isArray(date) ? date[1] : "",
+        ...otherProps
+      };
     }
   }
 };

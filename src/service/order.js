@@ -6,7 +6,7 @@
 
 import $axios from '@/utils/axios'
 
-// 查询洗车记录
+// 查询订单记录
 export const _getOrderList = params => {
   return $axios({
     url: '/api/v1/payRecd/queryPayOrderBypage',
