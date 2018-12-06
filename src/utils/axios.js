@@ -45,7 +45,7 @@ $axios.interceptors.response.use(
       const { success, message } = response.data
       if (!success) {
         errorAlert(message)
-        return new Promise(() => {})
+        return Promise.reject() // new Promise(() => {})
       }
     }
     return response.data

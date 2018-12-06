@@ -29,23 +29,31 @@
         </el-form-item>
         <el-form-item label="产品类别">
           <el-select
-            v-model="formFilter.pType"
+            multiple
             clearable
             placeholder="请选择产品类别"
+            v-model="formFilter.productIds"
           >
-            <el-option
-              v-for="item in productOptions"
-              :key="item.value"
-              :label="item.label"
-              :value="item.value"
-            />
+            <el-option-group
+              v-for="group in productOptions"
+              :key="group.type"
+              :label="group.typeName"
+            >
+              <el-option
+                v-for="item in group.productList"
+                :key="item.id"
+                :label="item.pName"
+                :value="item.id"
+              >
+              </el-option>
+            </el-option-group>
           </el-select>
         </el-form-item>
         <el-form-item label="门店">
           <el-select
-            v-model="formFilter.storeName"
             clearable
             placeholder="请选择门店"
+            v-model="formFilter.storeId"
           >
             <el-option
               v-for="item in storeOptions"
@@ -57,12 +65,13 @@
         </el-form-item>
         <el-form-item label="起止时间">
           <el-date-picker
-            v-model="formFilter.date"
             type="daterange"
+            v-model="formFilter.date"
             start-placeholder="开始日期"
             end-placeholder="结束日期"
             format="yyyy-MM-dd"
             value-format="yyyy-MM-dd"
+            :class="[`${prefixCls}-filter-date`]"
           />
         </el-form-item>
         <el-form-item>
@@ -105,11 +114,10 @@
         show-overflow-tooltip
       />
       <el-table-column
-        prop="pType"
+        prop="pName"
         label="产品名称"
         align="center"
         show-overflow-tooltip
-        :formatter="formatPtype"
       />
       <el-table-column
         prop="storeName"
@@ -151,15 +159,19 @@
 <script>
 import $axios from "@/utils/axios";
 import DateUtils from "@/utils/date";
+import { pTypeMap } from "@/constants";
+import { expandParams } from "@/utils/general";
+import { _getProductType } from "@/service/order";
 import { _getStoreOptions, _getWashList } from "@/service/washLog";
-import { productOptions, pTypeMap } from "@/constants";
 import "./index.scss";
+const appConfig = require("../../../../config/app");
+
 export default {
   name: "user",
   data() {
     return {
       prefixCls: "xcj-wash-log",
-      productOptions: productOptions,
+      productOptions: [],
       storeOptions: [],
       formFilter: {
         currentPage: 1,
@@ -173,9 +185,11 @@ export default {
   created() {
     this.getStoreOptions();
     this.getWashList();
+    this.getProductType();
   },
   methods: {
     handleSearch() {
+      this.formFilter.currentPage = 1;
       this.getWashList();
     },
     handleSizeChange(value) {
@@ -189,9 +203,14 @@ export default {
 
     // 导出数据
     handleExport() {
-      const params = this.formatFormFilter()
-      window.open(`${appConfig.baseUrl}/api/v1/payRecd/exportWashOrderBypage${expandParams(params)}`)
+      const { currentPage, size, ...anyParams } = this.formatFormFilter();
+      window.open(
+        `${
+          appConfig.baseUrl
+        }/api/v1/payRecd/exportWashOrderBypage${expandParams(anyParams)}`
+      );
     },
+
     // 查询门店下拉选项
     getStoreOptions() {
       _getStoreOptions().then(response => {
@@ -223,6 +242,14 @@ export default {
           this.loading = false;
         });
     },
+
+    // 查询产品分类
+    getProductType() {
+      _getProductType().then(response => {
+        this.productOptions = response.resultObj;
+      });
+    },
+
     formatPtype(row, column, cellValue) {
       return pTypeMap[cellValue] || "";
     },
@@ -234,8 +261,9 @@ export default {
       return DateUtils.format(cellValue);
     },
     formatFormFilter() {
-      const { date, ...otherProps } = this.formFilter;
+      const { date, productIds, ...otherProps } = this.formFilter;
       return {
+        productIds: productIds ? productIds.toString() : "",
         start: date && Array.isArray(date) ? date[0] : "",
         end: date && Array.isArray(date) ? date[1] : "",
         ...otherProps

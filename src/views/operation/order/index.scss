@@ -5,6 +5,12 @@
   border-radius: 0.375rem;
   &-filter {
     border-bottom: 1px solid #ebeef5;
+    &-date {
+      width: 220px !important;
+    }
+    &-order-no {
+      width: 210px !important;
+    }
   }
   &-pagination {
     margin-top: 1.25rem;

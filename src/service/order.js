@@ -14,3 +14,11 @@ export const _getOrderList = params => {
     params
   })
 }
+
+// 查询产品分类
+export const _getProductType = () => {
+  return $axios({
+    url: '/api/v1/product/queryProductByType',
+    method: 'get'
+  })
+}

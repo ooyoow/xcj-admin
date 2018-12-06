@@ -8,9 +8,9 @@
         <el-form-item label="订单编号">
           <el-input
             clearable
-            type="number"
             v-model="formFilter.orderNo"
             placeholder="请输入订单编号"
+            :class="[`${prefixCls}-filter-order-no`]"
           />
         </el-form-item>
         <el-form-item label="用户昵称">
@@ -30,26 +30,41 @@
         </el-form-item>
         <el-form-item label="产品类别">
           <el-select
-            v-model="formFilter.pType"
+            multiple
             clearable
+            v-model="formFilter.productIds"
             placeholder="请选择产品类别"
           >
-            <el-option
+            <!-- <el-option
               v-for="item in productOptions"
               :key="item.value"
               :label="item.label"
               :value="item.value"
-            />
+            /> -->
+            <el-option-group
+              v-for="group in productOptions"
+              :key="group.type"
+              :label="group.typeName"
+            >
+              <el-option
+                v-for="item in group.productList"
+                :key="item.id"
+                :label="item.pName"
+                :value="item.id"
+              >
+              </el-option>
+            </el-option-group>
           </el-select>
         </el-form-item>
         <el-form-item label="起止时间">
           <el-date-picker
-            v-model="formFilter.date"
             type="daterange"
+            v-model="formFilter.date"
             start-placeholder="开始日期"
             end-placeholder="结束日期"
             format="yyyy-MM-dd"
             value-format="yyyy-MM-dd"
+            :class="[`${prefixCls}-filter-date`]"
           />
         </el-form-item>
         <el-form-item>
@@ -132,15 +147,18 @@
 <script>
 import $axios from "@/utils/axios";
 import DateUtils from "@/utils/date";
-import { _getOrderList } from "@/service/order";
-import { productOptions, pTypeMap } from "@/constants";
+import { _getOrderList, _getProductType } from "@/service/order";
+import { pTypeMap } from "@/constants";
+import { expandParams } from "@/utils/general";
 import "./index.scss";
+const appConfig = require("../../../../config/app");
+
 export default {
   name: "user",
   data() {
     return {
       prefixCls: "xcj-oder-log",
-      productOptions: productOptions,
+      productOptions: [],
       formFilter: {
         currentPage: 1,
         size: 10
@@ -152,9 +170,11 @@ export default {
   },
   created() {
     this.getOrderList();
+    this.getProductType();
   },
   methods: {
     handleSearch() {
+      this.formFilter.currentPage = 1;
       this.getOrderList();
     },
     handleSizeChange(value) {
@@ -166,10 +186,10 @@ export default {
       this.getOrderList();
     },
     handleExport() {
-      const params = this.formatFormFilter();
+      const { currentPage, size, ...anyParams } = this.formatFormFilter();
       window.open(
         `${appConfig.baseUrl}/api/v1/payRecd/exportPayOrderBypage${expandParams(
-          params
+          anyParams
         )}`
       );
     },
@@ -205,6 +225,14 @@ export default {
           this.loading = false;
         });
     },
+
+    // 查询产品分类
+    getProductType() {
+      _getProductType().then(response => {
+        this.productOptions = response.resultObj;
+      });
+    },
+
     formatPtype(row, column, cellValue) {
       return pTypeMap[cellValue] || "";
     },
@@ -216,8 +244,9 @@ export default {
       return DateUtils.format(cellValue);
     },
     formatFormFilter() {
-      const { date, ...otherProps } = this.formFilter;
+      const { date, productIds, ...otherProps } = this.formFilter;
       return {
+        productIds: productIds ? productIds.toString() : "",
         start: date && Array.isArray(date) ? date[0] : "",
         end: date && Array.isArray(date) ? date[1] : "",
         ...otherProps
