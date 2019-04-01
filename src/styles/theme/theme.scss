@@ -1,96 +1,128 @@
 @import '../mixins.scss';
+
 // 每个主题特有的设置
 .theme-#{$theme-name} {
   // 菜单项目
   @mixin theme-menu-font-style {
     color: $theme-menu-font-color;
   }
+
   @mixin theme-menu-hover-style {
     color: $theme-menu-item-color-hover;
     background: $theme-menu-item-background-color-hover;
+
     i {
       color: $theme-menu-item-color-hover;
     }
+
     .el-submenu__icon-arrow {
       color: $theme-menu-item-color-hover;
     }
   }
+
   @mixin theme-menu-focus-style {
     color: $theme-menu-item-color-focus;
     background: $theme-menu-item-background-color-focus;
+
     i {
       color: $theme-menu-item-color-focus;
     }
+
     .el-submenu__icon-arrow {
       color: $theme-menu-item-color-focus;
     }
   }
+
   @mixin theme-menu-active-style {
     color: $theme-menu-item-color-active;
+
     i {
       color: $theme-menu-item-color-active;
     }
+
     background: $theme-menu-item-background-color-active;
   }
+
   el-menu-icon {
     i {
       display: inline-block;
       width: 15px;
       text-align: center;
       margin-right: 5px;
+
       svg {
         height: 14px;
         width: 14px;
       }
     }
   }
+
   /* 菜单 */
   .el-menu {
     @include theme-menu-font-style;
+
     .el-submenu {
       @include unable-select;
+      .el-submenu__title {
+        color: $theme-menu-font-color;
+      }
+
       .el-submenu__title:hover {
         @include theme-menu-hover-style;
       }
+
       .el-submenu__title:focus {
         @include theme-menu-focus-style;
       }
     }
+
     .el-menu-item {
+      color: $theme-menu-font-color;
+
       &:hover {
         @include theme-menu-hover-style;
       }
+
       &:focus {
         @include theme-menu-focus-style;
       }
+
       &.is-active {
         @include theme-menu-active-style;
       }
     }
   }
+
   .el-menu--horizontal .el-menu-item:not(.is-disabled):hover {
     @include theme-menu-hover-style;
   }
+
   .el-menu--horizontal .el-menu .el-submenu__title:hover {
     @include theme-menu-hover-style;
   }
+
   /* 主体 */
   .app {
     // 背景色
     background-color: $theme-bg-color;
+
     /* 导航栏 */
     .navbar {
       background-color: $theme-navbar-background-color;
+
       /* 应用名 */
       .navbar-brand {
+        background-color: $theme-logo-background-color;
         .logo {
-          color: $theme-logo-color;
+          color: $theme-logo-color;          
         }
       }
+
       /* 导航右侧按钮 */
       .navbar-end {
         .btn-text {
           color: $theme-nav-item-color;
+
           &.can-hover {
             &:hover {
               color: $theme-nav-item-color-hover;
@@ -99,6 +131,7 @@
         }
       }
     }
+
     /* 内容 */
     .app-container {
       /* 左侧菜单 */

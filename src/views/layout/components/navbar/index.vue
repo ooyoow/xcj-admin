@@ -25,7 +25,7 @@
               </el-button>
             </el-tooltip>
           </li>
-          <li class="navbar-item">
+          <!-- <li class="navbar-item">
             <el-tooltip
               effect="dark"
               content="通知"
@@ -41,7 +41,7 @@
                 ></i>
               </el-button>
             </el-tooltip>
-          </li>
+          </li> -->
           <li class="navbar-item">
             <el-dropdown>
               <el-button
