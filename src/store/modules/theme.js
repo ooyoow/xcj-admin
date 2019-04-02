@@ -1,5 +1,5 @@
 // 配置文件
-import themeList from '../../../config/theme'
+import themeList from '../../../config/theme';
 
 export default {
   state: {
@@ -10,7 +10,7 @@ export default {
   },
   mutations: {
     SET_THEME: (state, themeKey) => {
-      state.activeKey = themeKey
+      state.activeKey = themeKey;
     }
   },
   actions: {
@@ -19,7 +19,7 @@ export default {
      * @param {Object} state vuex state
      */
     setBodyClassName(state) {
-      document.body.className = `theme-${state.activeKey}`
+      document.body.className = `theme-${state.activeKey}`;
     },
     /**
      * @description 激活一个主题
@@ -27,8 +27,8 @@ export default {
      * @param {String} themeKey 需要激活的主题key
      */
     setTheme({ commit }, themeKey) {
-      document.body.className = `theme-${themeKey}`
-      commit('SET_THEME', themeKey)
+      document.body.className = `theme-${themeKey}`;
+      commit('SET_THEME', themeKey);
     }
   }
-}
+};

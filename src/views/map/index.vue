@@ -86,7 +86,7 @@ export default {
     Overlay
   },
   mounted() {
-    this.getStore(1)
+    this.getStore(2)
   },
   computed: {
     ...mapState({

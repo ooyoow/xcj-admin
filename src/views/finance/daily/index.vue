@@ -92,8 +92,8 @@
 import $axios from '@/utils/axios'
 import DateUtils from '@/utils/date'
 import { debounce } from '@/utils/general'
-import './daily.scss'
 import { _getDailySales, _dailyWriteOff } from '@/service/daily'
+import './daily.scss'
 export default {
   name: 'daily',
   data() {

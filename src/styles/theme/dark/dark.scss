@@ -3,11 +3,11 @@ $theme-name: 'dark';
 // 主题背景色
 $theme-bg-color: #f0f2f5;
 // log文字颜色
-$theme-logo-color: #ffffff;
+$theme-logo-color: rgba(255, 255, 255, 0.75);
 // logo背景颜色
 $theme-logo-background-color: #002140;
 // 菜单文字颜色
-$theme-menu-font-color: rgba(255, 255, 255, 0.65);
+$theme-menu-font-color: rgba(255, 255, 255, 0.75);
 // 菜单 hover 状态
 $theme-menu-item-color-hover: #fff;
 $theme-menu-item-background-color-hover: transparent;
@@ -16,14 +16,29 @@ $theme-menu-item-color-focus: #fff;
 $theme-menu-item-background-color-focus: transparent;
 // 菜单 active 状态
 $theme-menu-item-color-active: #ffffff;
-$theme-menu-item-background-color-active: #409EFF;
+$theme-menu-item-background-color-active: linear-gradient(
+  to right,
+  #1b73ff,
+  #339eff
+);
 // 顶部导航背景色
 $theme-navbar-background-color: #001529;
-// // 顶部导航栏项目文字颜色
+// 顶部导航栏项目文字颜色
 $theme-nav-item-color: #a9abac;
 $theme-nav-item-background-color: #001529;
-// // 顶部导航栏项目 hover 状态
+// 顶部导航栏项目 hover 状态
 $theme-nav-item-color-hover: #fff;
+
+// 顶部导航菜单 hover 状态
+$theme-horizontal-menu-item-color-hover: #409eff;
+$theme-horizontal-menu-item-background-color-hover: #eff6ff;
+// 顶部导航菜单 focus 状态
+$theme-horizontal-menu-item-color-focus: #409eff;
+$theme-horizontal-menu-item-background-color-focus: #eff6ff;
+// 顶部导航菜单 active 状态
+$theme-horizontal-menu-item-color-focus: #fff;
+$theme-horizontal-menu-item-background-color-focus: transparent;
+
 // // 顶部导航栏项目 focus 状态
 // $theme-nav-item-color-focus: #2f74ff;
 // $theme-nav-item-background-color-focus: rgba(#fff, 0.6);
@@ -36,3 +51,6 @@ $theme-menu-side-background-color: #001529;
 $theme-menu-side-border-color: #e5e5e5;
 // 侧边栏阴影
 $theme-menu-side-box-shadow: 2px 0 8px 0 rgba(29, 35, 41, 0.05);
+// 侧边栏收缩按钮颜色
+$theme-side-collapse-color: rgba(255, 255, 255, 0.75);
+$theme-side-collapse-hover-color: #fff;

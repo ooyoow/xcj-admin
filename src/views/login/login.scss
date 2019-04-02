@@ -8,12 +8,12 @@
   // background: radial-gradient(closest-corner, rgba(16, 47, 70, 0) 60%, rgba(16, 47, 70, 0.26)), linear-gradient(108deg, #1cb5e0, #3a8ee6 60%);
   background: linear-gradient(to right, #1cb5e0, #3a8ee6);
   .login-container {
-    display: flex;
+    position: fixed;
     justify-content: center;
     flex-direction: column;
-    padding: 30px 50px 25px 50px;
-    background-color: #fff;
+    padding: 10px 50px;
     border-radius: 6px;
+    background-color: #fff;
     box-shadow: 1px 1px 2px #eee;
     .app-name {
       padding: 1rem;

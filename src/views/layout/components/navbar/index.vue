@@ -10,8 +10,8 @@
           <li class="navbar-item">
             <el-tooltip
               effect="dark"
-              :content="isFullScreen ? '退出全屏' : '全屏'"
               placement="bottom"
+              :content="isFullScreen ? '退出全屏' : '全屏'"
             >
               <el-button
                 class="btn-text can-hover"
@@ -51,16 +51,32 @@
                 <i
                   class="el-icon-menu"
                   style="font-size: 1.25rem"
-                ></i>
+                />
               </el-button>
               <el-dropdown-menu slot="dropdown">
-                <el-dropdown-item
+                <el-radio-group
+                  v-model="theme"
+                  :change="setTheme(theme)"
+                >
+                  <div
+                    class="theme-wrap"
+                    style="padding: 0 .75rem"
+                    v-for="theme in themeList"
+                    :key="theme.key"
+                  >
+                    <el-radio
+                      style="padding: .25rem 0;"
+                      :label="theme.key"
+                    >{{theme.name}}</el-radio>
+                  </div>
+                </el-radio-group>
+                <!-- <el-dropdown-item
                   v-for="theme in themeList"
                   :key="theme.key"
                   @click.native="setTheme(theme.key)"
                 >
                   {{theme.name}}
-                </el-dropdown-item>
+                </el-dropdown-item> -->
                 <!-- <el-dropdown-item>
                 <theme-picker class="theme-switch right-menu-item"></theme-picker>
               </el-dropdown-item> -->
@@ -108,6 +124,7 @@ export default {
   components: { MenuNav, ChangePassword },
   data() {
     return {
+      theme: "dark",
       appName: appConfig.name,
       showChangePassword: false
     };

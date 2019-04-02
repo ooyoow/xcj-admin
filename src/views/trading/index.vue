@@ -5,110 +5,55 @@
       :gutter="12"
     >
       <el-col :span="6">
-        <el-card shadow="always">
-          <div class="order-overview">
-            <div class="icon">
-              <i
-                class="el-icon-square"
-                style="font-size: 2.5rem"
-              />
-            </div>
-            <div class=" content">
-              <div class="title ">订单（笔）</div>
-              <div class="today">
-                <div>{{orderInfo.todayPayRecd||0}}</div>
-                <div>今日</div>
-              </div>
-              <div class="yesterday">
-                <div>{{orderInfo.yesterdayPayRecd||0}}</div>
-                <div>昨日</div>
-              </div>
-              <div class="seven-days">
-                <div>{{orderInfo.last7DayPayRecd||0}}</div>
-                <div>近7天</div>
-              </div>
-            </div>
+        <el-card
+          shadow="always"
+          class="order-wrap"
+        >
+          <div class="data-overview">
+            <div class="title">今日订单（笔）</div>
+            <div class="today-count">{{orderInfo.todayPayRecd||0}}</div>
+            <div class="yesterday-count">昨日：{{orderInfo.yesterdayPayRecd||0}}</div>
+            <div class="seven-days-count">近七天：{{orderInfo.last7DayPayRecd||0}}</div>
           </div>
         </el-card>
       </el-col>
       <el-col :span="6">
-        <el-card shadow="always">
-          <div class="order-overview">
-            <div class="icon">
-              <i
-                class="el-icon-square"
-                style="font-size: 2.5rem"
-              />
-            </div>
-            <div class=" content">
-              <div class="title">洗车量（辆）</div>
-              <div class="today">
-                <div>{{orderInfo.todayWash||0}}</div>
-                <div>今日</div>
-              </div>
-              <div class="yesterday">
-                <div>{{orderInfo.yesterdayWash||0}}</div>
-                <div>昨日</div>
-              </div>
-              <div class="seven-days">
-                <div>{{orderInfo.last7DayWash||0}}</div>
-                <div>近7天</div>
-              </div>
-            </div>
+        <el-card
+          shadow="always"
+          class="wash-wrap"
+        >
+          <div class="data-overview">
+            <div class="title">今日洗车量（辆）</div>
+            <div class="today-count">{{orderInfo.todayWash||0}}</div>
+            <div class="yesterday-count">昨日：{{orderInfo.yesterdayWash||0}}</div>
+            <div class="seven-days-count">近七天：{{orderInfo.last7DayWash||0}}</div>
           </div>
         </el-card>
       </el-col>
       <el-col :span="6">
-        <el-card shadow="always">
-          <div class="order-overview">
-            <div class="icon">
-              <i
-                class="el-icon-square"
-                style="font-size: 2.5rem"
-              />
-            </div>
-            <div class="content">
-              <div class="title">销售额（元）</div>
-              <div class="today">
-                <div>{{orderInfo.salesToday||0}}</div>
-                <div>今日</div>
-              </div>
-              <div class="yesterday">
-                <div>{{orderInfo.salesYesterday||0}}</div>
-                <div>昨日</div>
-              </div>
-              <div class="seven-days">
-                <div>{{orderInfo.salesLast7Day||0}}</div>
-                <div>近7天</div>
-              </div>
-            </div>
+
+        <el-card
+          shadow="always"
+          class="sale-wrap"
+        >
+          <div class="data-overview">
+            <div class="title">今日销售额（元）</div>
+            <div class="today-count">{{orderInfo.salesToday||0}}</div>
+            <div class="yesterday-count">昨日：{{orderInfo.salesYesterday||0}}</div>
+            <div class="seven-days-count">近七天：{{orderInfo.salesLast7Day||0}}</div>
           </div>
         </el-card>
       </el-col>
       <el-col :span="6 ">
-        <el-card shadow="always">
-          <div class="order-overview">
-            <div class="icon">
-              <i
-                class="el-icon-square"
-                style="font-size: 2.5rem"
-              />
-            </div>
-            <div class="content">
-              <div class="title">服务额（元）</div>
-              <div class="today">
-                <div>{{orderInfo.serveToday||0}}</div>
-                <div>今日</div>
-              </div>
-              <div class="yesterday">
-                <div>{{orderInfo.serveYesterday||0}}</div>
-                <div>昨日</div>
-              </div>
-              <div class="seven-days">
-                <div>{{orderInfo.serveLast7Day||0}}</div>
-                <div>近7天</div>
-              </div>
-            </div>
+        <el-card
+          shadow="always"
+          class="service-wrap"
+        >
+          <div class="data-overview">
+            <div class="title">今日服务额（元）</div>
+            <div class="today-count">{{orderInfo.serveToday||0}}</div>
+            <div class="yesterday-count">昨日：{{orderInfo.serveYesterday||0}}</div>
+            <div class="seven-days-count">近七天：{{orderInfo.serveLast7Day||0}}</div>
           </div>
         </el-card>
       </el-col>
@@ -749,16 +694,16 @@
 </template>
 
 <script>
-import './order.scss'
-import { mapState, mapActions } from 'vuex'
-import { subDays } from 'date-fns'
-import { formatTimeStamp } from '@/utils/date'
-import { getDateByInterval } from '@/utils/date'
-import LineChart from '@/components/charts/line'
-import Bar from '@/components/charts/bar'
-import Stats from './stats'
-import AsideCard from './asideCard'
-import { dayHours } from './constants'
+import "./order.scss";
+import { mapState, mapActions } from "vuex";
+import { subDays } from "date-fns";
+import { formatTimeStamp } from "@/utils/date";
+import { getDateByInterval } from "@/utils/date";
+import LineChart from "@/components/charts/line";
+import Bar from "@/components/charts/bar";
+import Stats from "./stats";
+import AsideCard from "./asideCard";
+import { dayHours } from "./constants";
 import {
   getNearTrading,
   getOrderView,
@@ -771,10 +716,10 @@ import {
   getProfitStats,
   getOrderDetail,
   getStoreOptions
-} from '@/service/trading'
+} from "@/service/trading";
 
 export default {
-  name: 'order',
+  name: "order",
   components: {
     LineChart,
     Bar,
@@ -791,11 +736,11 @@ export default {
       completedOrder: this.defaultOrderDetail(), // 服务订单
       cancelledOrder: this.defaultOrderDetail(), // 已取消订单
       queryOrderStatsParams: {
-        type: '今日',
+        type: "今日",
         date: []
       },
       querySalesStatsParams: {
-        type: '今日',
+        type: "今日",
         date: []
       },
       productSalesParams: {
@@ -803,12 +748,12 @@ export default {
         date: []
       },
       productSalesChartOption: {
-        color: ['#c5c8ce', '#2db7f5'],
+        color: ["#c5c8ce", "#2db7f5"],
         tooltip: {
-          trigger: 'axis',
+          trigger: "axis",
           axisPointer: {
             // 坐标轴指示器，坐标轴触发有效
-            type: 'shadow' // 默认为直线，可选为：'line' | 'shadow'
+            type: "shadow" // 默认为直线，可选为：'line' | 'shadow'
           },
           formatter: (params, ticket, callback) => {
             return `<div>
@@ -819,7 +764,9 @@ export default {
                           };"></span>
                           <span>                           
                             余额：¥${params[1].data}，
-                            剩余次数：${this.realTimeSalesUnUsedNo[params[1].dataIndex]}
+                            剩余次数：${
+                              this.realTimeSalesUnUsedNo[params[1].dataIndex]
+                            }
                           </span>
                         </div>
                         <div>
@@ -828,21 +775,23 @@ export default {
                           };"></span>
                           <span>                           
                             服务额：¥${params[0].data}，
-                            使用次数：${this.realTimeSalesUsedNo[params[0].dataIndex]}
+                            使用次数：${
+                              this.realTimeSalesUsedNo[params[0].dataIndex]
+                            }
                           </span>
                         </div>                        
-                      </div>`
+                      </div>`;
           }
         },
         grid: {
-          left: '3%',
-          right: '4%',
-          bottom: '3%',
+          left: "3%",
+          right: "4%",
+          bottom: "3%",
           containLabel: true
         },
         xAxis: [
           {
-            type: 'category',
+            type: "category",
             data: [],
             axisTick: {
               alignWithLabel: true
@@ -851,8 +800,8 @@ export default {
         ],
         yAxis: [
           {
-            type: 'value',
-            name: '（元）'
+            type: "value",
+            name: "（元）"
           }
         ],
         series: []
@@ -867,10 +816,10 @@ export default {
       formWashParams: this.initFromSearchParams(),
       formServiceParams: this.initFromSearchParams(),
       formProfitParams: this.initFromSearchParams()
-    }
+    };
   },
   mounted() {
-    this.initData()
+    this.initData();
   },
   computed: {
     ...mapState({
@@ -880,65 +829,75 @@ export default {
     })
   },
   methods: {
-    ...mapActions(['getOrderInfo', 'getuserView', 'getOrgOptions']),
+    ...mapActions(["getOrderInfo", "getuserView", "getOrgOptions"]),
 
     // 订单统计：今日/本周/本月
     onOrderRadioChange(value) {
-      this.queryOrderStats(value)
+      this.queryOrderStats(value);
     },
 
     // 订单统计：按起止日期查询
     onOrderDateChange(value) {
       if (value) {
-        this.getOrderStats(4, value[0], value[1])
+        this.getOrderStats(4, value[0], value[1]);
       }
     },
 
     // 销售统计：今日/本周/本月
     onSalesRadioChange(value) {
-      this.querySalesStats(value)
+      this.querySalesStats(value);
     },
 
     // 销售统计：按起止日期查询
     onSalesDateChange(value) {
       if (value) {
-        this.querySalesStats(4, value[0], value[1])
+        this.querySalesStats(4, value[0], value[1]);
       }
     },
 
     // 洗车量统计：今日/本周/本月
     onWashRadioChange(value) {
-      this.queryWashStats(1, value)
+      this.queryWashStats(1, value);
     },
 
     // 洗车量统计：按起止日期查询
     onWashDateChange(value) {
       if (value) {
-        this.queryWashStats(this.formWashParams.storeId, 4, value[0], value[1])
+        this.queryWashStats(this.formWashParams.storeId, 4, value[0], value[1]);
       }
     },
 
     // 服务额统计：今日/本周/本月
     onServiceRadioChange(value) {
-      this.queryServiceStats(1, value)
+      this.queryServiceStats(1, value);
     },
 
     // 服务额统计：按起止日期查询
     onServiceDateChange(value) {
       if (value) {
-        this.queryServiceStats(this.formServiceParams.storeId, 4, value[0], value[1])
+        this.queryServiceStats(
+          this.formServiceParams.storeId,
+          4,
+          value[0],
+          value[1]
+        );
       }
     },
 
     // 分润统计：今日/本周/本月
     onProfitRadioChange(value) {
-      this.queryProfitStats(1, value)
+      this.queryProfitStats(1, value);
     },
 
     // 分润统计：按起止日期查询
     onProfitDateChange(value) {
       if (value) {
-        this.queryProfitStats(this.formProfitParams.storeId, 4, value[0], value[1])
+        this.queryProfitStats(
+          this.formProfitParams.storeId,
+          4,
+          value[0],
+          value[1]
+        );
       }
     },
 
@@ -946,262 +905,271 @@ export default {
     onOrgOptionChange(type, organizationId) {
       this.queryStoreOptions(organizationId, data => {
         switch (type) {
-          case 'wash': // 洗车量统计 -> 所有者
-            this.formWashParams.storeOptions = data
-            break
-          case 'service': // 服务额统计 -> 所有者
-            this.formServiceParams.storeOptions = data
-            break
-          case 'profit': // 分润统计 -> 所有者
-            this.formProfitParams.storeOptions = data
-            break
+          case "wash": // 洗车量统计 -> 所有者
+            this.formWashParams.storeOptions = data;
+            break;
+          case "service": // 服务额统计 -> 所有者
+            this.formServiceParams.storeOptions = data;
+            break;
+          case "profit": // 分润统计 -> 所有者
+            this.formProfitParams.storeOptions = data;
+            break;
           default:
-            break
+            break;
         }
-      })
+      });
     },
 
     // 产品实时销量：套餐卡/次卡/优惠券
     onProductSalesRadioChange(type) {
-      this.getProductSales(type)
+      this.getProductSales(type);
     },
 
     // 分润统计：按起止日期查询
     onProductSalesDateChange(value) {
-      this.getProductSales(this.productSalesParams.type, value[0], value[1])
+      this.getProductSales(this.productSalesParams.type, value[0], value[1]);
     },
 
     // 查询订单统计
-    queryOrderStats(type, start = '', end = '') {
+    queryOrderStats(type, start = "", end = "") {
       getOrderStats(type, start, end).then(response => {
-        const { resultObj } = response
-        const { staticList, sumList, ...otherProps } = resultObj
+        const { resultObj } = response;
+        const { staticList, sumList, ...otherProps } = resultObj;
         if (resultObj && staticList && Array.isArray(staticList)) {
-          const result = this.calcStatsData(type, staticList, start, end)
+          const result = this.calcStatsData(type, staticList, start, end);
           this.orderStats = {
             ...result,
             ...otherProps
-          }
+          };
         }
-      })
+      });
     },
 
     // 查询销售统计
-    querySalesStats(type, start = '', end = '') {
+    querySalesStats(type, start = "", end = "") {
       getSalesStats(type, start, end).then(response => {
-        const { resultObj } = response
-        const { staticList, sumList, ...otherProps } = resultObj
+        const { resultObj } = response;
+        const { staticList, sumList, ...otherProps } = resultObj;
         if (resultObj && sumList && Array.isArray(sumList)) {
-          const result = this.calcStatsData(type, sumList, start, end)
+          const result = this.calcStatsData(type, sumList, start, end);
           this.salesStats = {
             ...result,
             ...otherProps
-          }
+          };
         }
-      })
+      });
     },
 
     // 查询洗车量统计
-    queryWashStats(storeId, type, start = '', end = '') {
+    queryWashStats(storeId, type, start = "", end = "") {
       getWashStats(storeId, type, start, end).then(response => {
-        const { resultObj } = response
-        const { staticList, sumList, ...otherProps } = resultObj
+        const { resultObj } = response;
+        const { staticList, sumList, ...otherProps } = resultObj;
         if (resultObj && staticList && Array.isArray(staticList)) {
-          const result = this.calcStatsData(type, staticList, start, end)
+          const result = this.calcStatsData(type, staticList, start, end);
           this.washStats = {
             ...result,
             ...otherProps
-          }
+          };
         }
-      })
+      });
     },
 
     // 查询服务额统计
-    queryServiceStats(storeId, type, start = '', end = '') {
+    queryServiceStats(storeId, type, start = "", end = "") {
       getServiceStats(storeId, type, start, end).then(response => {
-        const { resultObj } = response
-        const { staticList, sumList, ...otherProps } = resultObj
+        const { resultObj } = response;
+        const { staticList, sumList, ...otherProps } = resultObj;
         if (resultObj && sumList && Array.isArray(sumList)) {
-          const result = this.calcStatsData(type, sumList, start, end)
+          const result = this.calcStatsData(type, sumList, start, end);
           this.serviceStats = {
             ...result,
             ...otherProps
-          }
+          };
         }
-      })
+      });
     },
 
     // 查询分润统计
-    queryProfitStats(storeId, type, start = '', end = '') {
+    queryProfitStats(storeId, type, start = "", end = "") {
       getProfitStats(storeId, type, start, end).then(response => {
-        const { resultObj } = response
-        const { staticList, sumList, ...otherProps } = resultObj
+        const { resultObj } = response;
+        const { staticList, sumList, ...otherProps } = resultObj;
         if (resultObj && sumList && Array.isArray(sumList)) {
-          const result = this.calcStatsData(type, sumList, start, end)
+          const result = this.calcStatsData(type, sumList, start, end);
           this.profitStats = {
             ...result,
             ...otherProps
-          }
+          };
         }
-      })
+      });
     },
 
     // 实时销量
-    getProductSales(type, start = '', end = '') {
+    getProductSales(type, start = "", end = "") {
       getRealTimeSales(type, start, end).then(response => {
-        const { resultObj } = response
-        let usedNoList = []
-        let unUsedNoList = []
-        let xAxisData = []
+        const { resultObj } = response;
+        let usedNoList = [];
+        let unUsedNoList = [];
+        let xAxisData = [];
         let seriesData = [
           {
-            type: 'bar',
-            stack: 'realTimeSales',
+            type: "bar",
+            stack: "realTimeSales",
             data: []
           },
           {
-            type: 'bar',
-            stack: 'realTimeSales',
+            type: "bar",
+            stack: "realTimeSales",
             data: []
           }
-        ]
+        ];
         if (resultObj && Array.isArray(resultObj)) {
           resultObj.forEach((item, index) => {
-            const { pName, usedCount, unUsedCount, serverAmount, unServerAmount } = item
-            xAxisData.push(pName)
-            usedNoList.push(usedCount)
-            unUsedNoList.push(unUsedCount)
-            seriesData[0].data.push(serverAmount)
-            seriesData[1].data.push(unServerAmount)
-          })
+            const {
+              pName,
+              usedCount,
+              unUsedCount,
+              serverAmount,
+              unServerAmount
+            } = item;
+            xAxisData.push(pName);
+            usedNoList.push(usedCount);
+            unUsedNoList.push(unUsedCount);
+            seriesData[0].data.push(serverAmount);
+            seriesData[1].data.push(unServerAmount);
+          });
         }
-        this.realTimeSalesUsedNo = usedNoList
-        this.realTimeSalesUnUsedNo = unUsedNoList
-        this.productSalesChartOption.xAxis[0].data = xAxisData
-        this.productSalesChartOption.series = seriesData
-      })
+        this.realTimeSalesUsedNo = usedNoList;
+        this.realTimeSalesUnUsedNo = unUsedNoList;
+        this.productSalesChartOption.xAxis[0].data = xAxisData;
+        this.productSalesChartOption.series = seriesData;
+      });
     },
 
     // 查询门店下拉选项
     queryStoreOptions(organizationId, callback) {
       getStoreOptions(organizationId).then(response => {
-        const { resultObj } = response
-        let storeOptions = []
+        const { resultObj } = response;
+        let storeOptions = [];
         if (resultObj && Array.isArray(resultObj)) {
-          storeOptions = resultObj
+          storeOptions = resultObj;
         }
-        callback(storeOptions)
-      })
+        callback(storeOptions);
+      });
     },
 
     // 查询订单详情
     loadOrderDetail(orderStatus) {
       getOrderDetail(orderStatus).then(response => {
-        const { resultObj } = response
+        const { resultObj } = response;
         switch (orderStatus) {
-          case 'paidOrder': // 已付款订单
+          case "paidOrder": // 已付款订单
             this.paidOrder = {
               ...this.paidOrder,
               currentPage: 1,
               list: resultObj || [],
               total: resultObj ? resultObj.length : 0
-            }
-            break
-          case 'unpaymentOrder': // 待付款订单
+            };
+            break;
+          case "unpaymentOrder": // 待付款订单
             this.unpaymentOrder = {
               ...this.unpaymentOrder,
               list: resultObj || [],
               total: resultObj ? resultObj.length : 0
-            }
-            break
-          case 'completedOrder': // 服务订单
+            };
+            break;
+          case "completedOrder": // 服务订单
             this.completedOrder = {
               ...this.completedOrder,
               list: resultObj || [],
               total: resultObj ? resultObj.length : 0
-            }
-            break
-          case 'cancelledOrder': // 已取消订单
+            };
+            break;
+          case "cancelledOrder": // 已取消订单
             this.cancelledOrder = {
               ...this.cancelledOrder,
               list: resultObj || [],
               total: resultObj ? resultObj.length : 0
-            }
-            break
+            };
+            break;
         }
-      })
+      });
     },
 
     // 分页查询
     handleCurrentChange(val, key) {
       switch (key) {
-        case 'paidOrder':
-          this.paidOrder.currentPage = val
-          break
-        case 'unpaymentOrder':
-          this.unpaymentOrder.currentPage = val
-          break
-        case 'completedOrder':
-          this.completedOrder.currentPage = val
-          break
-        case 'cancelledOrder':
-          this.cancelledOrder.currentPage = val
-          break
+        case "paidOrder":
+          this.paidOrder.currentPage = val;
+          break;
+        case "unpaymentOrder":
+          this.unpaymentOrder.currentPage = val;
+          break;
+        case "completedOrder":
+          this.completedOrder.currentPage = val;
+          break;
+        case "cancelledOrder":
+          this.cancelledOrder.currentPage = val;
+          break;
       }
     },
 
     calcStatsData(type, data, start, end) {
-      let seriesData = []
-      let xAxisData = []
-      let subtractDay
+      let seriesData = [];
+      let xAxisData = [];
+      let subtractDay;
       switch (type) {
         case 1:
-          xAxisData = Array.from(dayHours)
+          xAxisData = Array.from(dayHours);
           xAxisData.forEach(() => {
-            seriesData.push(0)
-          })
-          break
+            seriesData.push(0);
+          });
+          break;
         case 2:
         case 3:
           if (type === 2) {
-            subtractDay = 6
+            subtractDay = 6;
           }
           if (type === 3) {
-            subtractDay = 30
+            subtractDay = 30;
           }
-          xAxisData = getDateByInterval(+subDays(new Date(), subtractDay), +new Date())
+          xAxisData = getDateByInterval(
+            +subDays(new Date(), subtractDay),
+            +new Date()
+          );
           xAxisData.forEach(() => {
-            seriesData.push(0)
-          })
-          break
+            seriesData.push(0);
+          });
+          break;
         case 4:
-          xAxisData = getDateByInterval(+new Date(start), +new Date(end))
+          xAxisData = getDateByInterval(+new Date(start), +new Date(end));
           xAxisData.forEach(() => {
-            seriesData.push(0)
-          })
-          break
+            seriesData.push(0);
+          });
+          break;
         default:
-          break
+          break;
       }
       data.forEach(item => {
-        const { axis, totalcount } = item
+        const { axis, totalcount } = item;
         if (type === 1) {
-          seriesData[+axis] = totalcount
+          seriesData[+axis] = totalcount;
         } else {
-          seriesData[xAxisData.indexOf(axis)] = totalcount
+          seriesData[xAxisData.indexOf(axis)] = totalcount;
         }
-      })
-      return { xAxisData, seriesData }
+      });
+      return { xAxisData, seriesData };
     },
 
     // 分页显示订单数据
     calcOrderList(data) {
-      const { list, currentPage, size } = data
-      return list.slice((currentPage - 1) * size, currentPage * size)
+      const { list, currentPage, size } = data;
+      return list.slice((currentPage - 1) * size, currentPage * size);
     },
 
     formatTime(row, column, cellValue) {
-      return formatTimeStamp(cellValue)
+      return formatTimeStamp(cellValue);
     },
 
     // 默认订单详情
@@ -1211,7 +1179,7 @@ export default {
         size: 5,
         list: [],
         total: 0
-      }
+      };
     },
 
     initStatsData() {
@@ -1222,69 +1190,70 @@ export default {
         lastWeek: 0,
         presentMonth: 0,
         presentWeek: 0,
-        ratioMonth: '0%',
-        ratioWeek: '0%'
-      }
+        ratioMonth: "0%",
+        ratioWeek: "0%"
+      };
     },
 
     initFromSearchParams() {
       return {
-        organizationId: '',
-        storeId: '',
+        organizationId: "",
+        storeId: "",
         storeOptions: []
-      }
+      };
     },
 
     initData() {
       // 获取今日、昨日、近七天交易数据
       getNearTrading().then(response => {
-        this.orderInfo = response.resultObj
-      })
+        this.orderInfo = response.resultObj;
+      });
 
       // 获取订单总览
       getOrderView().then(response => {
-        this.orderView = response.resultObj
-      })
+        this.orderView = response.resultObj;
+      });
 
       // 获取用户总览
       getUserView().then(response => {
-        this.userView = response.resultObj
-      })
+        this.userView = response.resultObj;
+      });
+
       // 获取产品实时销量
-      this.getProductSales(1)
+      this.getProductSales(1);
 
       // 获取订单统计
-      this.queryOrderStats(1)
+      this.queryOrderStats(1);
 
       // 获取销售统计
-      this.querySalesStats(1)
+      this.querySalesStats(1);
 
       // 查询所有者
       this.getOrgOptions(data => {
         if (Array.isArray(data) && data.length) {
-          const { organizationId } = data[0]
+          const { organizationId } = data[0];
           this.queryStoreOptions(organizationId, storeOptions => {
             if (storeOptions.length) {
-              const { storeId } = storeOptions[0]
+              const { storeId } = storeOptions[0];
               const formSearchParams = () => {
                 return {
                   organizationId: organizationId,
                   storeId: storeId,
                   storeOptions: storeOptions
-                }
-              }
-              this.formWashParams = formSearchParams()
-              this.formServiceParams = formSearchParams()
-              this.formProfitParams = formSearchParams()
-              this.queryWashStats(storeId, 1)
-              this.queryServiceStats(storeId, 1)
-              this.queryProfitStats(storeId, 1)
+                };
+              };
+              this.formWashParams = formSearchParams();
+              this.formServiceParams = formSearchParams();
+              this.formProfitParams = formSearchParams();
+              this.queryWashStats(storeId, 1);
+              this.queryServiceStats(storeId, 1);
+              this.queryProfitStats(storeId, 1);
             }
-          })
+          });
         }
-      })
+      });
     }
   }
-}
+};
 </script>
 

@@ -2,9 +2,14 @@
 
 // 每个主题特有的设置
 .theme-#{$theme-name} {
+
   // 菜单项目
   @mixin theme-menu-font-style {
     color: $theme-menu-font-color;
+
+    i {
+      color: $theme-menu-font-color;
+    }
   }
 
   @mixin theme-menu-hover-style {
@@ -43,6 +48,24 @@
     background: $theme-menu-item-background-color-active;
   }
 
+  // 水平布局菜单
+  @mixin theme-horizontal-menu-hover-style {
+    color: $theme-horizontal-menu-item-color-hover;
+    background: $theme-horizontal-menu-item-background-color-hover;
+
+    i {
+      color: $theme-horizontal-menu-item-color-hover;
+    }
+
+    .el-submenu__icon-arrow {
+      color: $theme-horizontal-menu-item-color-hover;
+    }
+  }
+
+  @mixin theme-horizontal-menu-focus-style {}
+
+  @mixin theme-horizontal-menu-active-style {}
+
   el-menu-icon {
     i {
       display: inline-block;
@@ -57,27 +80,34 @@
     }
   }
 
-  /* 菜单 */
-  .el-menu {
-    @include theme-menu-font-style;
+  /* 导航菜单 */
+  @mixin app-nav-menu {
+    .el-menu {
+      @include theme-menu-font-style;
 
-    .el-submenu {
-      @include unable-select;
-      .el-submenu__title {
-        color: $theme-menu-font-color;
-      }
+      .el-submenu {
+        @include unable-select;
 
-      .el-submenu__title:hover {
-        @include theme-menu-hover-style;
-      }
+        .el-submenu__title {
+          color: $theme-menu-font-color;
+        }
 
-      .el-submenu__title:focus {
-        @include theme-menu-focus-style;
+        .el-submenu__title:hover {
+          @include theme-menu-hover-style;
+        }
+
+        .el-submenu__title:focus {
+          @include theme-menu-focus-style;
+        }
       }
     }
 
     .el-menu-item {
       color: $theme-menu-font-color;
+
+      .el-icon-location-outline {
+        color: $theme-menu-font-color;
+      }
 
       &:hover {
         @include theme-menu-hover-style;
@@ -94,7 +124,7 @@
   }
 
   .el-menu--horizontal .el-menu-item:not(.is-disabled):hover {
-    @include theme-menu-hover-style;
+    @include theme-horizontal-menu-hover-style;
   }
 
   .el-menu--horizontal .el-menu .el-submenu__title:hover {
@@ -113,9 +143,15 @@
       /* 应用名 */
       .navbar-brand {
         background-color: $theme-logo-background-color;
+
         .logo {
-          color: $theme-logo-color;          
+          color: $theme-logo-color;
         }
+      }
+
+      /* 导航菜单 */
+      .navbar-menu {
+        @include app-nav-menu;
       }
 
       /* 导航右侧按钮 */
@@ -134,10 +170,21 @@
 
     /* 内容 */
     .app-container {
+
       /* 左侧菜单 */
       .menu-side {
         box-shadow: $theme-menu-side-box-shadow;
         background-color: $theme-menu-side-background-color;
+        @include app-nav-menu;
+
+        /* 侧边栏按钮 */
+        .collapse-btn {
+          color: $theme-side-collapse-color;
+
+          &:hover {
+            color: $theme-side-collapse-hover-color;
+          }
+        }
       }
     }
   }
