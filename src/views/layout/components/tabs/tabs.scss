@@ -1,11 +1,25 @@
 .tabs {
   display: flex;
   align-items: center;
+
   &-content {
+    position: relative;
+    overflow: auto;
     flex-grow: 1;
     flex-shrink: 1;
+
+    .page-control {
+      .el-tabs__header.is-top {
+        margin: 0;
+      }
+
+      .el-tabs__nav-prev,
+      .el-tabs__nav-next {
+        font-size: 20px;
+      }
+    }
   }
-  .page-control .el-tabs__header.is-top {
-    margin: 0;
+  .page-control-btn {
+    padding: 0 10px;
   }
 }

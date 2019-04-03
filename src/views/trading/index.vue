@@ -6,7 +6,7 @@
     >
       <el-col :span="6">
         <el-card
-          shadow="always"
+          shadow="hover"
           class="order-wrap"
         >
           <div class="data-overview">
@@ -19,7 +19,7 @@
       </el-col>
       <el-col :span="6">
         <el-card
-          shadow="always"
+          shadow="hover"
           class="wash-wrap"
         >
           <div class="data-overview">
@@ -33,7 +33,7 @@
       <el-col :span="6">
 
         <el-card
-          shadow="always"
+          shadow="hover"
           class="sale-wrap"
         >
           <div class="data-overview">
@@ -46,7 +46,7 @@
       </el-col>
       <el-col :span="6 ">
         <el-card
-          shadow="always"
+          shadow="hover"
           class="service-wrap"
         >
           <div class="data-overview">
@@ -61,6 +61,7 @@
     <el-row>
       <el-card
         class="box-card"
+        shadow="hover"
         :body-style="{padding: 0}"
       >
         <div class="header">订单总览</div>
@@ -323,6 +324,7 @@
     </el-row>
     <el-card
       class="box-card"
+      shadow="hover"
       :body-style="{padding: 0}"
     >
       <div class="header">用户总览</div>
@@ -355,6 +357,7 @@
     <el-row>
       <el-card
         class="box-card"
+        shadow="hover"
         :body-style="{padding: 0}"
       >
         <div class="header">产品实时销量</div>
@@ -389,6 +392,7 @@
     <el-row>
       <el-card
         class="box-card"
+        shadow="hover"
         :body-style="{padding: 0}"
       >
         <div class="header">订单统计</div>
@@ -430,6 +434,7 @@
     <el-row>
       <el-card
         class="box-card"
+        shadow="hover"
         :body-style="{padding: 0}"
       >
         <div class="header">销售统计</div>
@@ -471,6 +476,7 @@
     <el-row>
       <el-card
         class="box-card"
+        shadow="hover"
         :body-style="{padding: 0}"
       >
         <div class="header">洗车量统计</div>
@@ -545,6 +551,7 @@
     <el-row>
       <el-card
         class="box-card"
+        shadow="hover"
         :body-style="{padding: 0}"
       >
         <div class="header">服务额统计</div>
@@ -619,6 +626,7 @@
     <el-row>
       <el-card
         class="box-card"
+        shadow="hover"
         :body-style="{padding: 0}"
       >
         <div class="header">分润统计</div>

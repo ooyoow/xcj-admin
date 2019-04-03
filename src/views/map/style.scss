@@ -2,9 +2,11 @@
   position: relative;
   height: 100%;
   width: 100%;
+
   &-content {
     width: 100%;
     height: 100%;
+
     .tips-box {
       // display: flex;
       // flex-flow: column;
@@ -39,81 +41,97 @@
       flex-flow: row nowrap;
       margin-top: 5px;
       font-size: 12px;
+
       .item {
         flex: 1;
+
         .wash-amount,
         .servie-amount {
           padding: 2px 4px;
           text-align: center;
           color: #fff;
         }
+
         .wash-amount {
           background: #00b7ee;
         }
+
         .servie-amount {
           background: #19be6b;
         }
       }
+
       .type {
         text-align: center;
         color: #666;
       }
     }
   }
+
   &-actions {
     position: absolute;
     top: 15px;
     right: 20px;
+
     .button {
       margin-bottom: 10px;
     }
   }
+
   &-store {
     position: absolute;
     top: 60px;
     right: 10px;
     height: 60%;
-    padding: 10px;
     width: 250px;
     overflow: auto;
     transition: width 0.5s;
     background: #fff;
     border-radius: 5px;
     box-shadow: 0 2px 3px hsla(0, 0%, 4%, 0.1), 0 0 0 1px hsla(0, 0%, 4%, 0.1);
+
     &-item {
       display: list-item;
-      padding: 6px 0;
+      padding: 10px;
       line-height: 20px;
       border-bottom: 1px solid #eaeaea;
+
       &:hover {
         background-color: #f6f6f6;
         cursor: pointer;
       }
+
       .store-name {
         color: #565656;
         font-size: 15px;
       }
+
       .servie-amount,
       .wash-amount,
       .store-number,
       .store-address {
         font-size: 13px;
         color: #999;
+
         span {
           font-size: 16px;
         }
       }
+
       .servie-amount>span {
         color: #f40;
       }
+
       .wash-amount>span {
         color: #3385ff;
       }
     }
   }
+
   .map-overlay {
     position: absolute;
     min-width: 200px;
+
     .point-tip {
       position: relative;
       background: #fff;
@@ -121,14 +139,17 @@
       margin-bottom: 10px;
       border-radius: 5px;
       z-index: 10;
+
       .text {
         padding: 10px;
       }
+
       .arrow {
         position: absolute;
         left: 50%;
         bottom: 0;
         margin-top: -7px;
+
         &:before,
         &:after {
           content: '';
@@ -141,6 +162,7 @@
           border: 7px solid transparent;
           border-top: 8px solid rgba(51, 51, 51, 0.2);
         }
+
         &:after {
           margin-left: -7px;
           border: 7px solid transparent;

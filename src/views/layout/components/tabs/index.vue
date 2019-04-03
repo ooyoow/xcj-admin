@@ -2,17 +2,46 @@
   <div class="tabs">
     <div class="tabs-content">
       <div class="tabs-content-inner">
-        <content-menu :visible.sync="contentmenuFlag" :x="contentmenuX" :y="contentmenuY">
-          <content-menu-list :menulist="tagName === 'index' ? contentmenuListIndex : contentmenuList" @rowClick="contentmenuClick" />
+        <content-menu
+          :visible.sync="contentmenuFlag"
+          :x="contentmenuX"
+          :y="contentmenuY"
+        >
+          <content-menu-list
+            :menulist="tagName === 'index' ? contentmenuListIndex : contentmenuList"
+            @rowClick="contentmenuClick"
+          />
         </content-menu>
-        <el-tabs class="page-control" :value="current" type="card" :closable="true" @tab-click="handleClick" @edit="handleTabsEdit" @contentmenu.native="handlecontentmenu">
-          <el-tab-pane v-for="(page, index) in opened" :key="index" :label="page.meta.title || '未命名'" :name="page.name" />
+        <el-tabs
+          class="page-control"
+          :value="current"
+          type="card"
+          :closable="true"
+          @tab-click="handleClick"
+          @edit="handleTabsEdit"
+          @contentmenu.native="handlecontentmenu"
+        >
+          <el-tab-pane
+            v-for="(page, index) in opened"
+            :key="index"
+            :label="page.meta.title || '未命名'"
+            :name="page.name"
+          />
         </el-tabs>
       </div>
     </div>
     <div class="page-control-btn">
-      <el-tooltip class="item" effect="dark" content="关闭其他" placement="bottom">
-        <el-button type="primary" icon="el-icon-circle-close-outline" @click="handleControlItemClick('all')"></el-button>
+      <el-tooltip
+        class="item"
+        effect="dark"
+        content="关闭其他"
+        placement="bottom"
+      >
+        <el-button
+          type="primary"
+          icon="el-icon-circle-close-outline"
+          @click="handleControlItemClick('all')"
+        ></el-button>
       </el-tooltip>
     </div>
   </div>

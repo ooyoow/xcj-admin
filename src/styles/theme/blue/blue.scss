@@ -6,17 +6,6 @@ $theme-bg-color: #f0f2f5;
 $theme-logo-color: #ff929a;
 // logo背景颜色
 $theme-logo-background-color: #002253;
-// 菜单文字颜色
-$theme-menu-font-color: #ff929a;
-// 菜单 hover 状态
-$theme-menu-item-color-hover: #ffb870;
-$theme-menu-item-background-color-hover: hsla(0, 0%, 100%, 0.05);
-// 菜单 focus 状态
-$theme-menu-item-color-focus: #ffb870;
-$theme-menu-item-background-color-focus: hsla(0, 0%, 100%, 0.05);
-// 菜单 active 状态
-$theme-menu-item-color-active: #ffb870;
-$theme-menu-item-background-color-active: hsla(0, 0%, 100%, 0.05);
 // 顶部导航背景色
 $theme-navbar-background-color: #002253;
 // 顶部导航栏操作项文字颜色
@@ -24,7 +13,6 @@ $theme-nav-item-color: #ff929a;
 $theme-nav-item-background-color: #002253;
 // 顶部导航栏操作项 hover 状态
 $theme-nav-item-color-hover: #ffb870;
-
 // 顶部导航菜单 hover 状态
 $theme-horizontal-menu-item-color-hover: #409eff;
 $theme-horizontal-menu-item-background-color-hover: #eff6ff;
@@ -50,3 +38,15 @@ $theme-menu-side-box-shadow: 2px 0 8px 0 rgba(29, 35, 41, 0.05);
 // 侧边栏收缩按钮颜色
 $theme-side-collapse-color: #ff929a;
 $theme-side-collapse-hover-color: #ffb870;
+
+// 菜单文字颜色
+$theme-menu-font-color: #ff929a;
+// 菜单 hover 状态
+$theme-menu-item-color-hover: #ffb870;
+$theme-menu-item-background-color-hover: hsla(0, 0%, 100%, 0.05);
+// 菜单 focus 状态
+$theme-menu-item-color-focus: #ffb870;
+$theme-menu-item-background-color-focus: hsla(0, 0%, 100%, 0.05);
+// 菜单 active 状态
+$theme-menu-item-color-active: #ffb870;
+$theme-menu-item-background-color-active: hsla(0, 0%, 100%, 0.05);
